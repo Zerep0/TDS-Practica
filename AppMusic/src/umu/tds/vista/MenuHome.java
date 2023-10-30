@@ -83,6 +83,7 @@ public class MenuHome extends JPanel {
 		PanelBienvenida.setLayout(new BorderLayout(0, 0));
 		
 		JLabel MsgBienvenida = new JLabel("Sigue escuchando, usuario");
+		MsgBienvenida.setForeground(new Color(255, 255, 255));
 		MsgBienvenida.setHorizontalAlignment(SwingConstants.CENTER);
 		MsgBienvenida.setFont(new Font("Arial", Font.BOLD, 24));
 		PanelBienvenida.add(MsgBienvenida, BorderLayout.CENTER);
@@ -148,6 +149,7 @@ public class MenuHome extends JPanel {
 		subPanelTiempo.add(barraReproduccion, BorderLayout.NORTH);
 		
 		JLabel msgDuracion = new JLabel("3:16");
+		msgDuracion.setForeground(new Color(255, 255, 255));
 		msgDuracion.setFont(new Font("Arial", Font.BOLD, 14));
 		GridBagConstraints gbc_msgDuracion = new GridBagConstraints();
 		gbc_msgDuracion.gridx = 3;
