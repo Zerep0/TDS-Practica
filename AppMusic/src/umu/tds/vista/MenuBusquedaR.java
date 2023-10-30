@@ -50,11 +50,11 @@ public class MenuBusquedaR extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel PanelReproduccion = new JPanel();
-		PanelReproduccion.setBackground(new Color(18, 159, 186));
+		PanelReproduccion.setBackground(new Color(18, 156, 189));
 		add(PanelReproduccion, BorderLayout.SOUTH);
 		
 		JLabel btnStop = new JLabel("");
-		btnStop.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/cuadrado.png")));
+		btnStop.setIcon(new ImageIcon(MenuBusquedaR.class.getResource("/ImagenesMenu/cuadrado.png")));
 		PanelReproduccion.add(btnStop);
 		
 		JLabel btnRedo = new JLabel("");
@@ -79,6 +79,7 @@ public class MenuBusquedaR extends JPanel {
 		PanelBienvenida.setLayout(new BorderLayout(0, 0));
 		
 		JLabel MsgBienvenida = new JLabel("Se han encontrado 5 resultados");
+		MsgBienvenida.setForeground(new Color(255, 255, 255));
 		MsgBienvenida.setHorizontalAlignment(SwingConstants.CENTER);
 		MsgBienvenida.setFont(new Font("Arial", Font.BOLD, 24));
 		PanelBienvenida.add(MsgBienvenida, BorderLayout.CENTER);
@@ -148,6 +149,7 @@ public class MenuBusquedaR extends JPanel {
 		subPanelTiempo.add(barraReproduccion, BorderLayout.NORTH);
 		
 		JLabel msgDuracion = new JLabel("3:16");
+		msgDuracion.setForeground(new Color(255, 255, 255));
 		msgDuracion.setFont(new Font("Arial", Font.BOLD, 14));
 		GridBagConstraints gbc_msgDuracion = new GridBagConstraints();
 		gbc_msgDuracion.gridx = 3;

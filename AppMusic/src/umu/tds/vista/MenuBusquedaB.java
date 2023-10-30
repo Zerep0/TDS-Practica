@@ -65,7 +65,7 @@ public class MenuBusquedaB extends JPanel {
 		panel.setLayout(gbl_panel);
 		
 		JLabel btnLupa = new JLabel("");
-		btnLupa.setIcon(new ImageIcon(MenuBusquedaB.class.getResource("/ImagenesMenu/lupa.png")));
+		btnLupa.setIcon(new ImageIcon(MenuBusquedaB.class.getResource("/ImagenesMenu/lupaMini.png")));
 		GridBagConstraints gbc_btnLupa = new GridBagConstraints();
 		gbc_btnLupa.insets = new Insets(0, 0, 5, 5);
 		gbc_btnLupa.anchor = GridBagConstraints.EAST;

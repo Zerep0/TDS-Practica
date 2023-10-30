@@ -45,13 +45,22 @@ public class Menu extends JPanel {
 		btnHome.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/home_icon_190886.png")));
 		PanelBotonesMenu.add(btnHome);
 		
+		JLabel lblNewLabel_1 = new JLabel("   ");
+		PanelBotonesMenu.add(lblNewLabel_1);
+		
 		JLabel btnLupa = new JLabel("");
 		btnLupa.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/lupa.png")));
 		PanelBotonesMenu.add(btnLupa);
 		
+		JLabel lblNewLabel_2 = new JLabel("  ");
+		PanelBotonesMenu.add(lblNewLabel_2);
+		
 		JLabel btnPlaylist = new JLabel("");
 		btnPlaylist.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/libros.png")));
 		PanelBotonesMenu.add(btnPlaylist);
+		
+		JLabel lblNewLabel_3 = new JLabel("   ");
+		PanelBotonesMenu.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/descargar.png")));
