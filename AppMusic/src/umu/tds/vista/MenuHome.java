@@ -8,21 +8,16 @@ import javax.swing.ImageIcon;
 import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
-import javax.swing.JProgressBar;
 import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListCellRenderer;
 
 import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.ListSelectionModel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.SliderUI;
 import javax.swing.plaf.basic.BasicSliderUI;
 
 import umu.tds.helper.AlineamientoLista;
