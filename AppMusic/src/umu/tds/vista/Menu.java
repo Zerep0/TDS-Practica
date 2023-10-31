@@ -6,17 +6,12 @@ import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import java.awt.Color;
-import javax.swing.JToolBar;
-import javax.swing.JTabbedPane;
-import java.awt.Choice;
 import javax.swing.JPopupMenu;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import java.awt.GridBagLayout;
-import javax.swing.JButton;
-import java.awt.GridBagConstraints;
 import javax.swing.SwingConstants;
 
 public class Menu extends JPanel {

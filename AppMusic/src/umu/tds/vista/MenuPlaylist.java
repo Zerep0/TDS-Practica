@@ -223,7 +223,6 @@ public class MenuPlaylist extends JPanel {
 		JLabel btnRandom = new JLabel("");
 		btnRandom.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/aleatorio.png")));
 		PanelReproduccion.add(btnRandom);
-		EmptyBorder border = new EmptyBorder(0, 100, 10, 10);
 		
 		JPanel panel = new JPanel();
 		add(panel, BorderLayout.CENTER);

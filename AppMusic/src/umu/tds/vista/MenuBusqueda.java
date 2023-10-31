@@ -1,7 +1,6 @@
 package umu.tds.vista;
 
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 
 public class MenuBusqueda extends JPanel {

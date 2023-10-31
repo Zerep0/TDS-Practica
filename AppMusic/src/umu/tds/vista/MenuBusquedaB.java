@@ -11,15 +11,12 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Dimension;
 import java.awt.Color;
-import java.awt.Container;
 
-import javax.swing.SwingConstants;
 
 import umu.tds.helper.Placeholder;
 
 import java.awt.Font;
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
