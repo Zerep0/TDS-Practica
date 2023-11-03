@@ -31,12 +31,14 @@ public class MenuBusquedaR extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private CardLayout menuBusqueda;
 	private String ruta;
+	private boolean pausa;
 	/**
 	 * Create the panel.
 	 */
 	public MenuBusquedaR(CardLayout menuBusqueda, String ruta) {
 		this.menuBusqueda = menuBusqueda;
 		this.ruta = ruta;
+		this.pausa = true;
 		initialize();
 	}
 	
@@ -160,6 +162,25 @@ public class MenuBusquedaR extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				menuBusqueda.show(MenuBusquedaR.this.getParent(), ruta);
+			}
+		});
+		
+		btnPlay.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(pausa)
+				{
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					btnPlay.setVisible(true);
+					pausa = false;
+				}
+				else
+				{
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+					btnPlay.setVisible(true);
+					pausa = true;
+				}
+
 			}
 		});
 	}

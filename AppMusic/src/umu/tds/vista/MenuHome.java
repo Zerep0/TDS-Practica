@@ -7,6 +7,8 @@ import java.awt.GridBagConstraints;
 import javax.swing.ImageIcon;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.Color;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
@@ -30,12 +32,13 @@ public class MenuHome extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private AlineamientoLista alineamientoListaMenu;
+	private boolean pausa;
 
 	/**
 	 * Create the panel.
 	 */
 	public MenuHome() {
-		
+		this.pausa = true;
 		initialize();
 	}
 	
@@ -151,8 +154,29 @@ public class MenuHome extends JPanel {
 		gbc_msgDuracion.gridy = 0;
 		LayoutTiempo.add(msgDuracion, gbc_msgDuracion);
 		
+		
+		btnPlay.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(pausa)
+				{
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					btnPlay.setVisible(true);
+					pausa = false;
+				}
+				else
+				{
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+					btnPlay.setVisible(true);
+					pausa = true;
+				}
+
+			}
+		});
+		
 	}
 	
+
 	static class SlideCustomizado extends BasicSliderUI  {
 		public SlideCustomizado(JSlider slider) {
 	        super(slider);
@@ -164,4 +188,8 @@ public class MenuHome extends JPanel {
 	        g.fillRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height);
 	    }
 	}
+	
+	
+	
+	
 }

@@ -17,6 +17,8 @@ import umu.tds.negocio.Cancion;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
@@ -43,11 +45,13 @@ public class MenuPlaylist extends JPanel {
 	private JTable tablaCancionesPlaylist;
 	private Placeholder placeholder;
 	private RenderizadorLetrasCabecera renderizadorLetras;
+	private boolean pausa;
 	/**
 	 * Create the panel.
 	 */
 	
 	public MenuPlaylist() {
+		this.pausa = true;
 		initialize();
 	}
 	
@@ -269,5 +273,25 @@ public class MenuPlaylist extends JPanel {
 		
 		
 		placeholder.crearPlaceholderText(creadorPlaylist, PLACEHOLDER_PLAYLIST);
+		
+		
+		btnPlay.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(pausa)
+				{
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					btnPlay.setVisible(true);
+					pausa = false;
+				}
+				else
+				{
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+					btnPlay.setVisible(true);
+					pausa = true;
+				}
+
+			}
+		});
 	}
 }
