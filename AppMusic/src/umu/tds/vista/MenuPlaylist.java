@@ -13,6 +13,7 @@ import javax.swing.table.JTableHeader;
 
 import umu.tds.helper.*;
 import umu.tds.negocio.Cancion;
+import umu.tds.negocio.Interprete;
 
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -94,7 +95,7 @@ public class MenuPlaylist extends JPanel {
 	                case 0:
 	                    return cancion.getTitulo();
 	                case 1:
-	                    return cancion.getInterprete();
+	                    return cancion.getInterprete().getNombre();
 	                case 2:
 	                    return cancion.getEstilo();
 	                case 3:
@@ -256,8 +257,9 @@ public class MenuPlaylist extends JPanel {
 		panel.add(panel_4, BorderLayout.EAST);
 		
 		
-		
-		Cancion [] cancionesPrueba = {new Cancion("ANDROMEDA","ruta","rap","Wos"), new Cancion("Aqua Girl","rutaa","pop","Barbie")};
+		Interprete Wos = new Interprete("Wos");
+		Interprete Barbie = new Interprete("Barbie");
+		Cancion [] cancionesPrueba = {new Cancion("ANDROMEDA","ruta","rap",Wos), new Cancion("Aqua Girl","rutaa","pop",Barbie)};
 		MiTablaPersonalizada modeloPlaylist = new MiTablaPersonalizada(cancionesPrueba);
 		tablaCancionesPlaylist = new JTable(modeloPlaylist);	
 		
