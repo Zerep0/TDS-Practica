@@ -1,5 +1,7 @@
 package umu.tds.negocio;
 
+import java.time.LocalDate;
+
 public class Usuario {
 	private int id;
 	private String nombre;
@@ -7,11 +9,11 @@ public class Usuario {
 	private String email;
 	private String login;
 	private String password;
-	private String fechaNacimiento;
+	private LocalDate fechaNacimiento;
 	private boolean Premium;
 
 	public Usuario(String nombre, String apellidos, String email, String login, String password,
-			String fechaNacimiento) {
+			LocalDate fechaNacimiento) {
 		this.id = 0;
 		this.nombre = nombre;
 		this.apellidos = apellidos;
@@ -70,11 +72,11 @@ public class Usuario {
 		this.password = password;
 	}
 
-	public String getFechaNacimiento() {
+	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(String fechaNacimiento) {
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 	

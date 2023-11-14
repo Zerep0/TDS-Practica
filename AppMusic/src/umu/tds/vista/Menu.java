@@ -69,7 +69,7 @@ public class Menu extends JPanel {
 		JLabel btnIcono = new JLabel("");
 		btnIcono.setBackground(new Color(18, 156, 189));
 		btnIcono.setVerticalAlignment(SwingConstants.TOP);
-		btnIcono.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/lavado-en-seco.png")));
+		btnIcono.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/usuario.png")));
 		PanelBotonIcono.add(btnIcono, BorderLayout.CENTER);
 		
 		JPopupMenu desplegableIcono = new JPopupMenu();
