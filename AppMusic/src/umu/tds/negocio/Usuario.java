@@ -24,6 +24,10 @@ public class Usuario {
 		this.Premium = false;
 	}
 
+	/**
+	 * 
+	 * @return id
+	 */
 	public int getId() {
 		return id;
 	}
