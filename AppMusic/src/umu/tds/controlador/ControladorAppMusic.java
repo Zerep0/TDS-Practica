@@ -56,14 +56,17 @@ public class ControladorAppMusic {
 	
 	public void registrarUsuario(String login, String password, String email, LocalDate fechaNacimiento, Registro ventana)
 	{
+		// TODOS: PRECONCIONES IMPRIMIR UNA ALERTA GENRICA SI ALGUNA DE ELLAS NO SE CUMPLE
 		Usuario user = new Usuario(login,password,email,fechaNacimiento);
 		if(!adaptadorUsuario.registrarUsuario(user))
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
-			return;
+		}else
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
+			catalogoUsuarios.addUsuario(user);
 		}
-		Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
-		catalogoUsuarios.addUsuario(user);
+		
 	}
 
 }
