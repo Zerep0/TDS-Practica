@@ -104,7 +104,7 @@ public class MenuHome extends JPanel {
 		
 		JList<String> listaCanciones = new JList();
 		listaCanciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listaCanciones.setFont(new Font("Arial", Font.PLAIN, 16));
+		listaCanciones.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
 		listaCanciones.setModel(new AbstractListModel() {
 			String[] values = new String[] {"Movie Dizzie", "Cancion de lax", "Wos Andromeda","Cancion de prueba", "Alfa"};
 			public int getSize() {

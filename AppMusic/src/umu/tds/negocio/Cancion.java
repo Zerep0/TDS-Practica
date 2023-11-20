@@ -1,12 +1,11 @@
 package umu.tds.negocio;
 
 public class Cancion {
-	private String titulo, ruta,estilo;
+	private String titulo, ruta, estilo, interprete;
 	private int numReproducciones;
 	private boolean marcado;
-	private Interprete interprete;
 	
-	public Cancion(String titulo,String ruta, String estilo, Interprete interprete) {
+	public Cancion(String titulo,String ruta, String estilo, String interprete) {
 		
 		this.titulo = titulo;
 		this.ruta = ruta;
@@ -40,7 +39,7 @@ public class Cancion {
 	/**
 	 * @return the interprete
 	 */
-	public Interprete getInterprete() {
+	public String getInterprete() {
 		return interprete;
 	}
 

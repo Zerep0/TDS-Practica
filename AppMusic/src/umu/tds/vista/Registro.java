@@ -6,10 +6,16 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import com.toedter.calendar.JDateChooser;
+
+import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class Registro extends JPanel {
 
@@ -23,7 +29,7 @@ public class Registro extends JPanel {
 	private JLabel lblNewLabel_1;
 	private JPasswordField RPassword;
 	private JTextField RUsuario;
-	private JTextField nombreCompleto;
+	private JTextField REmail;
 	private JButton btnVisibilidad;
 	private boolean visibilidad;
 	private JLabel etq1;
@@ -33,7 +39,7 @@ public class Registro extends JPanel {
 	private JDateChooser Calendario;
 	private static final String PLACEHOLDER_USUARIO = "User";
 	private static final String PLACEHOLDER_PASSWORD = "Password";
-	private static final String PLACEHOLDER_FULLNAME = "Full Name";
+	private static final String PLACEHOLDER_EMAIL = "Email";
 	private static final String INICIO = "Inicio";
 	private static final String LINK_INICIO = "go to Login";
 	private JFrame frame;
@@ -114,18 +120,18 @@ public class Registro extends JPanel {
 		gbc_btnVisibilidad.gridy = 1;
 		PanelCentrado.add(btnVisibilidad, gbc_btnVisibilidad);
 		
-		nombreCompleto = new JTextField();
-		nombreCompleto.setText(PLACEHOLDER_FULLNAME);
-		nombreCompleto.setFont(new Font("Arial", Font.ITALIC, 14));
-		GridBagConstraints gbc_nombreCompleto = new GridBagConstraints();
-		gbc_nombreCompleto.anchor = GridBagConstraints.EAST;
-		gbc_nombreCompleto.gridwidth = 3;
-		gbc_nombreCompleto.insets = new Insets(0, 0, 5, 5);
-		gbc_nombreCompleto.gridx = 1;
-		gbc_nombreCompleto.gridy = 3;
-		PanelCentrado.add(nombreCompleto, gbc_nombreCompleto);
-		nombreCompleto.setColumns(34);
-		nombreCompleto.setPreferredSize(new Dimension(150,30));
+		REmail = new JTextField(); //Este mismo
+		REmail.setText(PLACEHOLDER_EMAIL);
+		REmail.setFont(new Font("Arial", Font.ITALIC, 14));
+		GridBagConstraints gbc_email = new GridBagConstraints();
+		gbc_email.anchor = GridBagConstraints.EAST;
+		gbc_email.gridwidth = 3;
+		gbc_email.insets = new Insets(0, 0, 5, 5);
+		gbc_email.gridx = 1;
+		gbc_email.gridy = 3;
+		PanelCentrado.add(REmail, gbc_email);
+		REmail.setColumns(34);
+		REmail.setPreferredSize(new Dimension(150,30));
 		
 		etqFecha = new JLabel("Fecha de nacimiento");
 		etqFecha.setFont(new Font("Arial", Font.BOLD, 14));
@@ -191,7 +197,7 @@ public class Registro extends JPanel {
 		
 		placeholder.crearPlaceholderText(RUsuario, PLACEHOLDER_USUARIO);
 		placeholder.crearPlaceholderPassword(RPassword, PLACEHOLDER_PASSWORD,btnVisibilidad);
-		placeholder.crearPlaceholderText(nombreCompleto, PLACEHOLDER_FULLNAME);
+		placeholder.crearPlaceholderText(REmail, PLACEHOLDER_EMAIL);
 		
 		RPassword.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) {
@@ -227,9 +233,25 @@ public class Registro extends JPanel {
 			}
 		});
 		
+		btnSign.addActionListener((e) -> {
+			String login = RUsuario.getText();
+			String password = new String(RPassword.getPassword());
+			String email = REmail.getText();
+			LocalDate fechaNacimiento = convertirFecha();
+			ControladorAppMusic.getInstancia().registrarUsuario(login,password,email,fechaNacimiento, this);
+		});
+		
 		hiperVinculo.crearHiperVinculo(etqGoLogin,INICIO,LINK_INICIO,frame);
+		
+		
 		
 	}
 	
+	private LocalDate convertirFecha() {
+        Date fechaSeleccionada = Calendario.getDate();
+        Instant instant = fechaSeleccionada.toInstant();
+        LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+        return localDate;
+    }
 
 }
