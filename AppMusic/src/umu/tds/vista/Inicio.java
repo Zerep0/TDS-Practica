@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
+import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.Fuente;
 import umu.tds.helper.HiperVinculo;
 import umu.tds.helper.Placeholder;
@@ -183,13 +185,17 @@ public class Inicio extends JPanel {
 		placeholder.crearPlaceholderText(Usuario, PLACEHOLDER_USUARIO);
 		placeholder.crearPlaceholderPassword(Password, PLACEHOLDER_PASSWORD);
 		hiperVinculo.crearHiperVinculo(etqRegistro,REGISTRO,LINK_REGISTRO,frame);
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+
+		
+		btnLogin.addActionListener((e) -> {
+			@SuppressWarnings("deprecation")
+			Boolean iniciar = ControladorAppMusic.getInstancia().loginUsuario(Usuario.getText(), Password.getText(), this);
+			if(iniciar)
+			{
 				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
 				cardlayout.show(frame.getContentPane(), "Menu");
 			}
 		});
-		
 		
 		
 	}

@@ -14,6 +14,12 @@ public enum Alerta {
 				JOptionPane.PLAIN_MESSAGE);
 	}
 	
+
+	public void mostrarAlerta(String mensaje, String asunto, Inicio ventana)
+	{
+		JOptionPane.showMessageDialog(ventana, mensaje, asunto,
+				JOptionPane.PLAIN_MESSAGE);
+	}
 	
 	
 	

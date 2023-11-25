@@ -15,7 +15,6 @@ public class Launcher {
 	private static final String INICIO = "Inicio";
 	private static final int ANCHO_DEFECTO = 500;
 	private static final int ALTO_DEFECTO = 800;
-	
 	private JFrame frame;
 	private JPanel splash, inicio, registro, menu;
 

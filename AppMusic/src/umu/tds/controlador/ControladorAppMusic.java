@@ -4,7 +4,7 @@ package umu.tds.controlador;
 import umu.tds.persistencia.DAOException;
 
 import java.time.LocalDate;
-
+import java.util.List;
 
 import umu.tds.negocio.CatalogoUsuarios;
 import umu.tds.negocio.Usuario;
@@ -12,14 +12,30 @@ import umu.tds.persistencia.AdaptadorUsuarioTDS;
 import umu.tds.persistencia.FactoriaDAO;
 import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.vista.Alerta;
+import umu.tds.vista.Inicio;
 import umu.tds.vista.Registro;
 
 public class ControladorAppMusic {
 	private static final String MENSAJE_USUARIO_REPETIDO = "El nombre de usuario ya esta cogido";
 	private static final String MENSAJE_USUARIO_REGISTRADO = "Se ha registrado con exito";
+	private static final String MENSAJE_USUARIO_LOGIN = "Se ha iniciado sesion correctamente";
+	private static final String MENSAJE_USUARIO_LOGIN_FALLO = "No existe tal usuario, registrate";
+	private static final String MENSAJE_CONTRASEÑA_LOGIN_FALLO = "Contraseña erronea";
+	private static final String MENSAJE_FECHA_VACIA = "Rellena el campo Fecha";
+	private static final String MENSAJE_EMAIL_VACIO = "Rellena el campo Email";
+	private static final String MENSAJE_PASSWORD_VACIA = "Rellena el campo Contraseña";
+	private static final String MENSAJE_USER_VACIO = "Rellena el campo Usuario";
+	
 	private static final String ASUNTO_ERROR = "Usuario repetido";
+	private static final String ASUNTO_ERROR_CAMPO = "Campo Faltante";
 	private static final String ASUNTO_REGISTRO = "Registrado";
 
+	private static final String ASUNTO_ERROR_LOGIN = "Login error";
+	private static final String ASUNTO_LOGIN = "Login exitoso";
+	
+	
+	
+	
 	private static ControladorAppMusic unicaInstancia;
 	
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
@@ -54,18 +70,60 @@ public class ControladorAppMusic {
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 	}
 	
-	public void registrarUsuario(String login, String password, String email, LocalDate fechaNacimiento, Registro ventana)
+	public Boolean registrarUsuario(String login, String password, String email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
 	{
-		// TODOS: PRECONCIONES IMPRIMIR UNA ALERTA GENRICA SI ALGUNA DE ELLAS NO SE CUMPLE
 		Usuario user = new Usuario(login,password,email,fechaNacimiento);
-		if(!adaptadorUsuario.registrarUsuario(user))
+		if(login.equals("User"))
 		{
-			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
-		}else
-		{
-			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
-			catalogoUsuarios.addUsuario(user);
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USER_VACIO, ASUNTO_ERROR_CAMPO, ventana);
+			return false;
 		}
+		if(password.equals("Password"))
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_PASSWORD_VACIA, ASUNTO_ERROR_CAMPO, ventana);
+			return false;
+		}
+		if(email.equals("Email"))
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_EMAIL_VACIO, ASUNTO_ERROR_CAMPO, ventana);
+			return false;
+		}
+		if(fechaNacimiento == null)
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_FECHA_VACIA, ASUNTO_ERROR_CAMPO, ventana);
+			return false;
+		}
+			if(!adaptadorUsuario.registrarUsuario(user))
+			{
+				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
+				return false;
+			}else
+			{
+				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
+				catalogoUsuarios.addUsuario(user);
+				return true;
+			}
+		
+	}
+	
+	public Boolean loginUsuario(String login, String password,Inicio ventana)
+	{
+		List<Usuario> lista = adaptadorUsuario.recuperarTodosUsuarios();
+		for(Usuario us : lista)
+		{
+			if(us.getLogin().equals(login) && us.getPassword().equals(password))
+			{
+				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , ventana);
+				return true;
+			}
+			else if(us.getLogin().equals(login) && !us.getPassword().equals(password))
+			{
+				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_CONTRASEÑA_LOGIN_FALLO,ASUNTO_ERROR_LOGIN , ventana);
+				return false;
+			}
+		}
+		Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN_FALLO,ASUNTO_ERROR_LOGIN , ventana);
+		return false;
 		
 	}
 

@@ -50,8 +50,6 @@ public class Registro extends JPanel {
 	public Registro(JFrame frame) throws FontFormatException, IOException {
 		this.frame = frame;
 		inicialize();
-		
-
 	}
 	
 	void inicialize() throws FontFormatException, IOException
@@ -238,7 +236,12 @@ public class Registro extends JPanel {
 			String password = new String(RPassword.getPassword());
 			String email = REmail.getText();
 			LocalDate fechaNacimiento = convertirFecha();
-			ControladorAppMusic.getInstancia().registrarUsuario(login,password,email,fechaNacimiento, this);
+			Boolean iniciar = ControladorAppMusic.getInstancia().registrarUsuario(login,password,email,fechaNacimiento, this);
+			if(iniciar)
+			{		
+				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
+				cardlayout.show(frame.getContentPane(), "Menu");
+			}
 		});
 		
 		hiperVinculo.crearHiperVinculo(etqGoLogin,INICIO,LINK_INICIO,frame);
@@ -249,6 +252,10 @@ public class Registro extends JPanel {
 	
 	private LocalDate convertirFecha() {
         Date fechaSeleccionada = Calendario.getDate();
+        if(fechaSeleccionada == null)
+        {
+        	return null;
+        }
         Instant instant = fechaSeleccionada.toInstant();
         LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
         return localDate;

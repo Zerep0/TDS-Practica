@@ -14,6 +14,8 @@ import javax.swing.JMenuItem;
 import java.awt.GridBagLayout;
 import javax.swing.SwingConstants;
 
+import umu.tds.controlador.ControladorAppMusic;
+
 public class Menu extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -146,6 +148,10 @@ public class Menu extends JPanel {
 				cardlayout.show(PanelNavegacion, "Busqueda");
 			}
 		});
+		
+		btnLogout.addActionListener((e) -> {
+
+		});
 	}
 
 	
@@ -174,6 +180,7 @@ public class Menu extends JPanel {
 	}
 	
 	
+
 	
 	
 	
