@@ -3,8 +3,12 @@ package umu.tds.controlador;
 
 import umu.tds.persistencia.DAOException;
 
+import java.awt.Font;
 import java.time.LocalDate;
 import java.util.List;
+
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import umu.tds.negocio.CatalogoUsuarios;
 import umu.tds.negocio.Usuario;
@@ -70,20 +74,21 @@ public class ControladorAppMusic {
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 	}
 	
-	public Boolean registrarUsuario(String login, String password, String email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
+	public Boolean registrarUsuario(JTextField login, JPasswordField password, JTextField email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
 	{
-		Usuario user = new Usuario(login,password,email,fechaNacimiento);
-		if(login.equals("User"))
+		Usuario user = new Usuario(login.getText(),new String(password.getPassword()),email.getText(),fechaNacimiento);
+		Font fuente = new Font("Arial", Font.ITALIC, 14);
+		if(login.getText().equals("User") && login.getFont().equals(fuente))
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USER_VACIO, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
 		}
-		if(password.equals("Password"))
+		if(new String(password.getPassword()).equals("Password") && password.getFont().equals(fuente))
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_PASSWORD_VACIA, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
 		}
-		if(email.equals("Email"))
+		if(email.getText().equals("Email") && password.getFont().equals(fuente))
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_EMAIL_VACIO, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
@@ -106,17 +111,18 @@ public class ControladorAppMusic {
 		
 	}
 	
-	public Boolean loginUsuario(String login, String password,Inicio ventana)
+	public Boolean loginUsuario(JTextField login, JPasswordField password,Inicio ventana)
 	{
 		List<Usuario> lista = adaptadorUsuario.recuperarTodosUsuarios();
+		Font fuente = new Font("Arial", Font.ITALIC, 14);
 		for(Usuario us : lista)
 		{
-			if(us.getLogin().equals(login) && us.getPassword().equals(password))
+			if(us.getLogin().equals(login.getText()) && us.getPassword().equals(new String(password.getPassword()) ) && !login.getFont().equals(fuente) && !password.getFont().equals(fuente))
 			{
 				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , ventana);
 				return true;
 			}
-			else if(us.getLogin().equals(login) && !us.getPassword().equals(password))
+			else if(us.getLogin().equals(login.getText()) && !us.getPassword().equals(new String(password.getPassword())))
 			{
 				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_CONTRASEÑA_LOGIN_FALLO,ASUNTO_ERROR_LOGIN , ventana);
 				return false;

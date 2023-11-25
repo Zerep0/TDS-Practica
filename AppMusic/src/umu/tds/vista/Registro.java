@@ -236,7 +236,7 @@ public class Registro extends JPanel {
 			String password = new String(RPassword.getPassword());
 			String email = REmail.getText();
 			LocalDate fechaNacimiento = convertirFecha();
-			Boolean iniciar = ControladorAppMusic.getInstancia().registrarUsuario(login,password,email,fechaNacimiento, this);
+			Boolean iniciar = ControladorAppMusic.getInstancia().registrarUsuario(RUsuario,RPassword,REmail,fechaNacimiento, this);
 			if(iniciar)
 			{		
 				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
