@@ -192,7 +192,7 @@ public class Inicio extends JPanel {
 		
 		btnLogin.addActionListener((e) -> {
 			@SuppressWarnings("deprecation")
-			Boolean iniciar = ControladorAppMusic.getInstancia().loginUsuario(Usuario.getText(), Password.getText(), this);
+			Boolean iniciar = ControladorAppMusic.getInstancia().loginUsuario(Usuario, Password, this);
 			if(iniciar)
 			{
 				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
