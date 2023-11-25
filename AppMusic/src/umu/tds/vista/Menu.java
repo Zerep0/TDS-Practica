@@ -8,24 +8,28 @@ import javax.swing.ImageIcon;
 import java.awt.Color;
 import javax.swing.JPopupMenu;
 import java.awt.Component;
+import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import java.awt.GridBagLayout;
+import java.awt.Window;
+
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import umu.tds.controlador.ControladorAppMusic;
 
 public class Menu extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+	private Window launcher;
 	/**
 	 * Create the panel.
 	 */
 	private JPanel home,playlist,busqueda; //Panel que te lleva al home
-	public Menu() {
-		
+	public Menu(Window launcher) {
+		this.launcher = launcher;
 		initialize();
 	}
 	
@@ -77,9 +81,6 @@ public class Menu extends JPanel {
 		JPopupMenu desplegableIcono = new JPopupMenu();
 		addPopup(btnIcono, desplegableIcono);
 		
-		
-		JMenuItem btnRename = new JMenuItem("Rename");
-		desplegableIcono.add(btnRename);
 		
 		JMenuItem btnPremium = new JMenuItem("Premium");
 		desplegableIcono.add(btnPremium);
@@ -150,7 +151,18 @@ public class Menu extends JPanel {
 		});
 		
 		btnLogout.addActionListener((e) -> {
-
+			launcher.dispose();
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
+						Launcher window = new Launcher();
+						window.getFrame().setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		});
 	}
 

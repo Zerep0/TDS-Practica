@@ -69,10 +69,15 @@ public class Launcher {
 		frame.getContentPane().add(registro,"Registro");
 		
 		//MENU
-		menu = new Menu();
+		menu = new Menu(this.frame);
 		frame.getContentPane().add(menu,"Menu");
 		
 		
+	}
+	
+	public JFrame getFrame()
+	{
+		return frame;
 	}
 
 }

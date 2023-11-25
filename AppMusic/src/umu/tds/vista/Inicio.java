@@ -10,7 +10,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
-import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,12 +24,6 @@ import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.Fuente;
 import umu.tds.helper.HiperVinculo;
 import umu.tds.helper.Placeholder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import org.kohsuke.github.GitHub;
-import org.kohsuke.github.GitHubBuilder;
-
 public class Inicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -191,7 +184,6 @@ public class Inicio extends JPanel {
 
 		
 		btnLogin.addActionListener((e) -> {
-			@SuppressWarnings("deprecation")
 			Boolean iniciar = ControladorAppMusic.getInstancia().loginUsuario(Usuario, Password, this);
 			if(iniciar)
 			{

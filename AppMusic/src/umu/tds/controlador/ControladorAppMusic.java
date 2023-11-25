@@ -86,26 +86,21 @@ public class ControladorAppMusic {
 	
 	public Boolean registrarUsuario(JTextField login, JPasswordField password, JTextField email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
 	{
-
-		Usuario user = new Usuario(login.getText(),new String(password.getPassword()),email.getText(),fechaNacimiento);
+		// TODO: guardas aquellos errores que sucedan y muestras una unica alerta concatenada de los errrores, retornas false;
+		
 		Font fuente = new Font("Arial", Font.ITALIC, 14);
 		if(login.getText().equals("User") && login.getFont().equals(fuente))
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USER_VACIO, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
 			//Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
-		}else
-		{
-			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
-			catalogoUsuarios.addUsuario(user);
-			// TODO: CAMBIAR DE VENTANA
 		}
 		if(new String(password.getPassword()).equals("Password") && password.getFont().equals(fuente))
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_PASSWORD_VACIA, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
 		}
-		if(email.getText().equals("Email") && password.getFont().equals(fuente))
+		if(email.getText().equals("Email") && email.getFont().isItalic())
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_EMAIL_VACIO, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
@@ -115,16 +110,17 @@ public class ControladorAppMusic {
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_FECHA_VACIA, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
 		}
-			if(!adaptadorUsuario.registrarUsuario(user))
-			{
-				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
-				return false;
-			}else
-			{
-				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
-				catalogoUsuarios.addUsuario(user);
-				return true;
-			}
+		Usuario user = new Usuario(login.getText(),new String(password.getPassword()),email.getText(),fechaNacimiento);
+		if(!adaptadorUsuario.registrarUsuario(user))
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
+			return false;
+		}else
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
+			catalogoUsuarios.addUsuario(user);
+			return true;
+		}
 		
 	}
 	
@@ -164,4 +160,11 @@ public class ControladorAppMusic {
 		}
 
 	}
+	
+	
+	
+	
+	//--------------------------------------METODOS AUXILIARES---------------------------------------------
+	
+	
 }
