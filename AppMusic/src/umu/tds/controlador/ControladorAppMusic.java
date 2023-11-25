@@ -3,8 +3,15 @@ package umu.tds.controlador;
 
 import umu.tds.persistencia.DAOException;
 
+import java.io.IOException;
 import java.time.LocalDate;
+<<<<<<< Updated upstream
 import java.util.List;
+=======
+
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
+>>>>>>> Stashed changes
 
 import umu.tds.negocio.CatalogoUsuarios;
 import umu.tds.negocio.Usuario;
@@ -72,11 +79,38 @@ public class ControladorAppMusic {
 	
 	public Boolean registrarUsuario(String login, String password, String email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
 	{
+<<<<<<< Updated upstream
+=======
+		// TODO: PRECONCIONES IMPRIMIR UNA ALERTA GENRICA SI ALGUNA DE ELLAS NO SE CUMPLE
+>>>>>>> Stashed changes
 		Usuario user = new Usuario(login,password,email,fechaNacimiento);
 		if(login.equals("User"))
 		{
+<<<<<<< Updated upstream
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USER_VACIO, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
+=======
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
+		}else
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
+			catalogoUsuarios.addUsuario(user);
+			// TODO: CAMBIAR DE VENTANA
+		}
+		
+	}
+	
+	public void registrarGit(String user, String password)
+	{
+		GitHub github = null;
+		try {
+			github = new GitHubBuilder().withPassword(user,password).build();
+			new GitHubBuilder().
+			System.out.println("¿Login válido?:" + github.isCredentialValid());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+>>>>>>> Stashed changes
 		}
 		if(password.equals("Password"))
 		{

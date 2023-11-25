@@ -28,6 +28,9 @@ import umu.tds.helper.Placeholder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
+
 public class Inicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -195,6 +198,13 @@ public class Inicio extends JPanel {
 				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
 				cardlayout.show(frame.getContentPane(), "Menu");
 			}
+		});
+		
+		btnGit.addActionListener((e) -> {
+			
+			ControladorAppMusic.getInstancia().registrarGit(Usuario.getText(), new String(Password.getPassword()));
+			
+			
 		});
 		
 		
