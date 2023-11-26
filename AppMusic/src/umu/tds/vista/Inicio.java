@@ -189,6 +189,7 @@ public class Inicio extends JPanel {
 			{
 				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
 				cardlayout.show(frame.getContentPane(), "Menu");
+				
 			}
 		});
 		

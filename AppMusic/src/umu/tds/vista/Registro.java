@@ -232,9 +232,6 @@ public class Registro extends JPanel {
 		});
 		
 		btnSign.addActionListener((e) -> {
-			String login = RUsuario.getText();
-			String password = new String(RPassword.getPassword());
-			String email = REmail.getText();
 			LocalDate fechaNacimiento = convertirFecha();
 			Boolean iniciar = ControladorAppMusic.getInstancia().registrarUsuario(RUsuario,RPassword,REmail,fechaNacimiento, this);
 			if(iniciar)

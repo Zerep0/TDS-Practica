@@ -22,6 +22,7 @@ import java.awt.Graphics;
 import javax.swing.ListSelectionModel;
 import javax.swing.plaf.basic.BasicSliderUI;
 
+import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.AlineamientoLista;
 
 import javax.swing.JSlider;
@@ -80,7 +81,7 @@ public class MenuHome extends JPanel {
 		add(PanelBienvenida, BorderLayout.NORTH);
 		PanelBienvenida.setLayout(new BorderLayout(0, 0));
 		
-		JLabel MsgBienvenida = new JLabel("Sigue escuchando, usuario");
+		JLabel MsgBienvenida = new JLabel("Sigue escuchando, " + ControladorAppMusic.getInstancia().getUsuario());
 		MsgBienvenida.setForeground(new Color(255, 255, 255));
 		MsgBienvenida.setHorizontalAlignment(SwingConstants.CENTER);
 		MsgBienvenida.setFont(new Font("Arial", Font.BOLD, 24));

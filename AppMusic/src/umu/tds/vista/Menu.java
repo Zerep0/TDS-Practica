@@ -192,8 +192,6 @@ public class Menu extends JPanel {
 	}
 	
 	
-
-	
 	
 	
 	

@@ -47,8 +47,9 @@ public class ControladorAppMusic {
 	private static final String ASUNTO_ERROR_LOGIN = "Login error";
 	private static final String ASUNTO_LOGIN = "Login exitoso";
 	
+	private String mensaje_error = "No estan los siguientes campos rellenados: "; //Variable global para errores de falta de campos rellenados
 	
-	
+	private String usuario; //Variable para usar en la aplicacion
 	
 	private static ControladorAppMusic unicaInstancia;
 	
@@ -86,28 +87,12 @@ public class ControladorAppMusic {
 	
 	public Boolean registrarUsuario(JTextField login, JPasswordField password, JTextField email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
 	{
-		// TODO: guardas aquellos errores que sucedan y muestras una unica alerta concatenada de los errrores, retornas false;
 		
-		Font fuente = new Font("Arial", Font.ITALIC, 14);
-		if(login.getText().equals("User") && login.getFont().equals(fuente))
+		boolean error = errorCreacion(login,password,email,fechaNacimiento);
+		mensaje_error += ".";
+		if(error)
 		{
-			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USER_VACIO, ASUNTO_ERROR_CAMPO, ventana);
-			return false;
-			//Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
-		}
-		if(new String(password.getPassword()).equals("Password") && password.getFont().equals(fuente))
-		{
-			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_PASSWORD_VACIA, ASUNTO_ERROR_CAMPO, ventana);
-			return false;
-		}
-		if(email.getText().equals("Email") && email.getFont().isItalic())
-		{
-			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_EMAIL_VACIO, ASUNTO_ERROR_CAMPO, ventana);
-			return false;
-		}
-		if(fechaNacimiento == null)
-		{
-			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_FECHA_VACIA, ASUNTO_ERROR_CAMPO, ventana);
+			Alerta.INSTANCIA.mostrarAlerta(mensaje_error, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
 		}
 		Usuario user = new Usuario(login.getText(),new String(password.getPassword()),email.getText(),fechaNacimiento);
@@ -119,6 +104,7 @@ public class ControladorAppMusic {
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
 			catalogoUsuarios.addUsuario(user);
+			setUsuario(user);
 			return true;
 		}
 		
@@ -126,13 +112,13 @@ public class ControladorAppMusic {
 	
 	public Boolean loginUsuario(JTextField login, JPasswordField password,Inicio ventana)
 	{
-		List<Usuario> lista = adaptadorUsuario.recuperarTodosUsuarios();
-		Font fuente = new Font("Arial", Font.ITALIC, 14);
+		List<Usuario> lista = adaptadorUsuario.recuperarTodosUsuarios();	
 		for(Usuario us : lista)
 		{
-			if(us.getLogin().equals(login.getText()) && us.getPassword().equals(new String(password.getPassword()) ) && !login.getFont().equals(fuente) && !password.getFont().equals(fuente))
+			if(us.getLogin().equals(login.getText()) && us.getPassword().equals(new String(password.getPassword()) ) && !login.getFont().isItalic() && !password.getFont().isItalic())
 			{
 				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , ventana);
+				setUsuario(us);
 				return true;
 			}
 			else if(us.getLogin().equals(login.getText()) && !us.getPassword().equals(new String(password.getPassword())))
@@ -165,6 +151,58 @@ public class ControladorAppMusic {
 	
 	
 	//--------------------------------------METODOS AUXILIARES---------------------------------------------
+	private boolean isErrorTexto(JTextField text,String campo)
+	{
+		if(text.getText().equals(campo) && text.getFont().isItalic())
+		{
+			return true;
+		}
+		return false;
+	}
 	
+	private boolean isErrorContraseña(JPasswordField password,String campo)
+	{
+		if(new String(password.getPassword()).equals(campo) && password.getFont().isItalic())
+		{
+			return true;
+		}
+		return false;
+	}
 	
+	private boolean errorCreacion(JTextField login, JPasswordField password, JTextField email, LocalDate fechaNacimiento)
+	{
+		Boolean error = false;
+		if(isErrorTexto(login,"User"))
+		{
+			error = true;
+			mensaje_error += "Login ";
+		}
+		if(isErrorContraseña(password, "Password"))
+		{
+			error = true;
+			mensaje_error += "Password ";
+		}
+		if(isErrorTexto(email,"Email"))
+		{
+			error = true;
+			mensaje_error += "Email ";
+		}
+		if(fechaNacimiento == null)
+		{
+			error = true;
+			mensaje_error += "FechaNacimiento";
+		}
+		System.out.println(mensaje_error);
+		return error;
+	}
+	
+	private void setUsuario(Usuario us)
+	{
+		this.usuario = (String) us.getLogin();
+	}
+	
+	public String getUsuario()
+	{
+		return this.usuario;
+	}
 }
