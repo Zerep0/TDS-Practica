@@ -1,12 +1,13 @@
 package umu.tds.negocio;
 
 public class Cancion {
+	private int id;
 	private String titulo, ruta, estilo, interprete;
 	private int numReproducciones;
 	private boolean marcado;
 	
 	public Cancion(String titulo,String ruta, String estilo, String interprete) {
-		
+		this.id = 0;
 		this.titulo = titulo;
 		this.ruta = ruta;
 		this.estilo = estilo;
@@ -15,6 +16,13 @@ public class Cancion {
 		marcado = false;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	/**
 	 * @return the titulo
 	 */
@@ -65,5 +73,10 @@ public class Cancion {
 	public void setEstilo(String estilo)
 	{
 		this.estilo = estilo;
+	}
+	
+	public void setNumReproducciones(int numReproducciones)
+	{
+		this.numReproducciones = numReproducciones;
 	}
 }

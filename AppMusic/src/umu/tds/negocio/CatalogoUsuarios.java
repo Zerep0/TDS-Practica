@@ -28,7 +28,7 @@ public class CatalogoUsuarios {
 	private CatalogoUsuarios() {
 		try {
   			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
-  			adaptadorUsuario = dao.getClienteDAO();
+  			adaptadorUsuario = dao.getUsuarioDAO();
   			usuarios = new HashMap<String,Usuario>();
   			this.cargarCatalogo();
   		} catch (DAOException eDAO) {

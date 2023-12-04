@@ -78,7 +78,7 @@ public class ControladorAppMusic {
 		} catch (DAOException e) {
 			e.printStackTrace();
 		}
-		adaptadorUsuario = factoria.getClienteDAO();
+		adaptadorUsuario = factoria.getUsuarioDAO();
 	}
 
 	private void inicializarCatalogos() {

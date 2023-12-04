@@ -196,7 +196,7 @@ public class Menu extends JPanel {
 		            java.io.File selectedFile = fileChooser.getSelectedFile();
 		            System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
 		        } else {
-		            System.out.println("Selección de archivo cancelada por el usuario");
+		            System.out.println("Selección de archivo cancelada por el usuario"); 
 		        }
 			}
 		});
