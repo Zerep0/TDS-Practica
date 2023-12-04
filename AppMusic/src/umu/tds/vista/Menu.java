@@ -5,24 +5,34 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+
 import java.awt.Color;
 import javax.swing.JPopupMenu;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+
 import javax.swing.JMenuItem;
 import java.awt.GridBagLayout;
 import java.awt.Window;
 
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import umu.tds.controlador.ControladorAppMusic;
+import pulsador.Luz;
 
 public class Menu extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	JFrame frame = new JFrame("File Chooser");
 	private Window launcher;
 	/**
 	 * Create the panel.
@@ -100,6 +110,10 @@ public class Menu extends JPanel {
 		rellenoIcono3.setBackground(new Color(18, 156, 189));
 		PanelBotonIcono.add(rellenoIcono3, BorderLayout.NORTH);
 		
+		Luz btnLuz = new Luz();
+		PanelBotonIcono.add(btnLuz, BorderLayout.SOUTH);
+		btnLuz.setColor(Color.white);
+		
 		JPanel PanelNavegacion = new JPanel();
 		PanelNavegacion.setBackground(new Color(18, 159, 186));
 		add(PanelNavegacion, BorderLayout.CENTER);
@@ -163,6 +177,28 @@ public class Menu extends JPanel {
 					}
 				}
 			});
+		});
+		
+		btnLuz.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+		        JFileChooser fileChooser = new JFileChooser();
+		        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		        FileNameExtensionFilter filter = new FileNameExtensionFilter("Archivos xml (.xml)", "xml");
+		        fileChooser.setFileFilter(filter);
+		        fileChooser.setAcceptAllFileFilterUsed(false);
+
+		        int result = fileChooser.showOpenDialog(frame);
+		        
+		        // Verificar si el usuario seleccionó un archivo
+		        if (result == JFileChooser.APPROVE_OPTION) {
+		            // Obtener el archivo seleccionado
+		            java.io.File selectedFile = fileChooser.getSelectedFile();
+		            System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
+		        } else {
+		            System.out.println("Selección de archivo cancelada por el usuario");
+		        }
+			}
 		});
 	}
 

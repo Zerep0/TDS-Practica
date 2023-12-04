@@ -2,12 +2,13 @@ package umu.tds.controlador;
 
 
 import umu.tds.persistencia.DAOException;
-
+import umu.tds.observer.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
@@ -33,8 +34,7 @@ public class ControladorAppMusic {
 	private static final String MENSAJE_USUARIO_REPETIDO = "El nombre de usuario ya esta cogido";
 	private static final String MENSAJE_USUARIO_REGISTRADO = "Se ha registrado con exito";
 	private static final String MENSAJE_USUARIO_LOGIN = "Se ha iniciado sesion correctamente";
-	private static final String MENSAJE_USUARIO_LOGIN_FALLO = "No existe tal usuario, registrate";
-	private static final String MENSAJE_CONTRASEÑA_LOGIN_FALLO = "Contraseña erronea";
+	private static final String MENSAJE_LOGIN_FALLO = "Usuario o contraseña inválidos";
 	private static final String MENSAJE_FECHA_VACIA = "Rellena el campo Fecha";
 	private static final String MENSAJE_EMAIL_VACIO = "Rellena el campo Email";
 	private static final String MENSAJE_PASSWORD_VACIA = "Rellena el campo Contraseña";
@@ -47,15 +47,15 @@ public class ControladorAppMusic {
 	private static final String ASUNTO_ERROR_LOGIN = "Login error";
 	private static final String ASUNTO_LOGIN = "Login exitoso";
 	
-	private String mensaje_error = "No estan los siguientes campos rellenados: "; //Variable global para errores de falta de campos rellenados
-	
-	private String usuario; //Variable para usar en la aplicacion
+	private String mensaje_error;  //Variable global para errores de falta de campos rellenados
 	
 	private static ControladorAppMusic unicaInstancia;
 	
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 		
 	private CatalogoUsuarios catalogoUsuarios;
+	
+	private ArrayList<IUsuarioListener> listeners = new ArrayList<IUsuarioListener>();
 	
 	private ControladorAppMusic()
 	{
@@ -87,49 +87,54 @@ public class ControladorAppMusic {
 	
 	public Boolean registrarUsuario(JTextField login, JPasswordField password, JTextField email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
 	{
-		
+		mensaje_error = "No estan los siguientes campos rellenados: ";
 		boolean error = errorCreacion(login,password,email,fechaNacimiento);
-		mensaje_error += ".";
 		if(error)
 		{
 			Alerta.INSTANCIA.mostrarAlerta(mensaje_error, ASUNTO_ERROR_CAMPO, ventana);
 			return false;
 		}
+		
 		Usuario user = new Usuario(login.getText(),new String(password.getPassword()),email.getText(),fechaNacimiento);
-		if(!adaptadorUsuario.registrarUsuario(user))
+		
+		if(!catalogoUsuarios.addUsuario(user))
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REPETIDO, ASUNTO_ERROR, ventana);
 			return false;
 		}else
 		{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
-			catalogoUsuarios.addUsuario(user);
-			setUsuario(user);
+			UsuarioEvent e = new UsuarioEvent(user.getLogin());
+			notificarCambioNombre(e);
 			return true;
 		}
-		
 	}
 	
 	public Boolean loginUsuario(JTextField login, JPasswordField password,Inicio ventana)
 	{
-		List<Usuario> lista = adaptadorUsuario.recuperarTodosUsuarios();	
-		for(Usuario us : lista)
+		// precondiciones
+		if(login.getFont().isItalic() || password.getFont().isItalic())
 		{
-			if(us.getLogin().equals(login.getText()) && us.getPassword().equals(new String(password.getPassword()) ) && !login.getFont().isItalic() && !password.getFont().isItalic())
-			{
-				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , ventana);
-				setUsuario(us);
-				return true;
-			}
-			else if(us.getLogin().equals(login.getText()) && !us.getPassword().equals(new String(password.getPassword())))
-			{
-				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_CONTRASEÑA_LOGIN_FALLO,ASUNTO_ERROR_LOGIN , ventana);
-				return false;
-			}
+			// alertas
+			return false;
 		}
-		Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN_FALLO,ASUNTO_ERROR_LOGIN , ventana);
-		return false;
+		List<Usuario> lista = CatalogoUsuarios.getUnicaInstancia().getUsuarios();
+		// encuentra si existe un usuario dada una lista de usuarios con el mismo usuario y contraseña
 		
+		Usuario usuario = lista.stream().filter(us -> us.getLogin().equals(login.getText()) && us.getPassword().equals(new String(password.getPassword())))
+												  .findFirst().orElse(null);
+		if(usuario != null)
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , ventana);
+			UsuarioEvent e = new UsuarioEvent(usuario.getLogin());
+			notificarCambioNombre(e);
+			return true;
+		}else 
+		{
+			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_LOGIN_FALLO,ASUNTO_ERROR_LOGIN , ventana);
+			return false;
+		}
+			
 	}
 	
 	public void registrarGit(String user, String password)
@@ -192,17 +197,18 @@ public class ControladorAppMusic {
 			error = true;
 			mensaje_error += "FechaNacimiento";
 		}
-		System.out.println(mensaje_error);
 		return error;
 	}
 	
-	private void setUsuario(Usuario us)
-	{
-		this.usuario = (String) us.getLogin();
+	public synchronized void addUsuarioListener(IUsuarioListener listener){
+		listeners.add(listener);
 	}
 	
-	public String getUsuario()
+	void notificarCambioNombre(UsuarioEvent e)
 	{
-		return this.usuario;
+		for(IUsuarioListener users : listeners)
+		{
+			users.actualizar(e);
+		}
 	}
 }

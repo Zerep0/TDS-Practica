@@ -23,12 +23,12 @@ public class CatalogoUsuarios {
 	private static CatalogoUsuarios unicaInstancia = new CatalogoUsuarios();
 	
 	private FactoriaDAO dao;
-	private IAdaptadorUsuarioDAO adaptadorCliente;
+	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	
 	private CatalogoUsuarios() {
 		try {
   			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
-  			adaptadorCliente = dao.getClienteDAO();
+  			adaptadorUsuario = dao.getClienteDAO();
   			usuarios = new HashMap<String,Usuario>();
   			this.cargarCatalogo();
   		} catch (DAOException eDAO) {
@@ -58,14 +58,18 @@ public class CatalogoUsuarios {
 		return usuarios.get(login); 
 	}
 	
-	public void addUsuario(Usuario usu) {
-		usuarios.put(usu.getLogin(),usu);
+	public boolean addUsuario(Usuario usu) {
+		if(!adaptadorUsuario.registrarUsuario(usu))
+		{
+			return false;
+		}else usuarios.put(usu.getLogin(),usu);
+		return true;
 	}
 	
 	/*Recupera todos los clientes para trabajar con ellos en memoria*/
 	private void cargarCatalogo() throws DAOException {
-		 List<Usuario> clientesBD = adaptadorCliente.recuperarTodosUsuarios();
-		 for (Usuario user : clientesBD) 
+		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
+		 for (Usuario user : usuariosBD) 
 			     usuarios.put(user.getLogin(), user);
 	}
 	

@@ -7,6 +7,9 @@ import java.awt.GridBagConstraints;
 import javax.swing.ImageIcon;
 import java.awt.Insets;
 import java.awt.Rectangle;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Color;
@@ -24,17 +27,19 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.AlineamientoLista;
+import umu.tds.observer.IUsuarioListener;
+import umu.tds.observer.UsuarioEvent;
 
 import javax.swing.JSlider;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
-public class MenuHome extends JPanel {
+public class MenuHome extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	private AlineamientoLista alineamientoListaMenu;
 	private boolean pausa;
-
+	private JLabel MsgBienvenida;
 	/**
 	 * Create the panel.
 	 */
@@ -81,7 +86,7 @@ public class MenuHome extends JPanel {
 		add(PanelBienvenida, BorderLayout.NORTH);
 		PanelBienvenida.setLayout(new BorderLayout(0, 0));
 		
-		JLabel MsgBienvenida = new JLabel("Sigue escuchando, " + ControladorAppMusic.getInstancia().getUsuario());
+		MsgBienvenida = new JLabel("Sigue escuchando, ");
 		MsgBienvenida.setForeground(new Color(255, 255, 255));
 		MsgBienvenida.setHorizontalAlignment(SwingConstants.CENTER);
 		MsgBienvenida.setFont(new Font("Arial", Font.BOLD, 24));
@@ -175,6 +180,16 @@ public class MenuHome extends JPanel {
 			}
 		});
 		
+		ControladorAppMusic.getInstancia().addUsuarioListener(new IUsuarioListener() {
+			
+			@Override
+			public void actualizar(UsuarioEvent e) {
+				MsgBienvenida.setText(MsgBienvenida.getText() + e.getNombreUsuario());
+				
+			}
+		});
+		
+		
 	}
 	
 
@@ -189,6 +204,12 @@ public class MenuHome extends JPanel {
 	        g.fillRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height);
 	    }
 	}
+
+
+	
+
+
+	
 	
 	
 	
