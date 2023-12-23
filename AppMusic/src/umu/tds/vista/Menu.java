@@ -194,12 +194,15 @@ public class Menu extends JPanel {
 		        if (result == JFileChooser.APPROVE_OPTION) {
 		            // Obtener el archivo seleccionado
 		            java.io.File selectedFile = fileChooser.getSelectedFile();
-		            System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
+		            //System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
+		            ControladorAppMusic.getInstancia().cargarCanciones(selectedFile.getAbsolutePath());
 		        } else {
 		            System.out.println("Selección de archivo cancelada por el usuario"); 
 		        }
 			}
 		});
+		
+		
 	}
 
 	

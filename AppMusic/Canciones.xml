@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+
+<canciones xmlns="http://www.tds.es/canciones" xmlns:xs="http://www.w3.org/2001/XMLSchemainstance"
+xs:schemaLocation="http://www.tds.es/canciones canciones.xsd">
+	<cancion titulo="Byllys Strings">
+		<URL><![CDATA[https://ia801200.us.archive.org/30/items/billystrings2023-12-06.ck950/billy2023-12-06flac24t01.mp3]]></URL>
+		<estilo>Cabaret</estilo>
+		<interprete>Edith Piaf</interprete>
+	</cancion>
+</canciones>

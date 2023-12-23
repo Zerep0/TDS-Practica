@@ -1,44 +1,36 @@
 package umu.tds.controlador;
 
 
-import umu.tds.persistencia.DAOException;
+
 import umu.tds.observer.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 
-import java.awt.Font;
-import java.time.LocalDate;
-import java.util.List;
-
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-
+import umu.tds.negocio.CargadorCanciones;
+import umu.tds.negocio.CatalogoCanciones;
 import umu.tds.negocio.CatalogoUsuarios;
 import umu.tds.negocio.Usuario;
-import umu.tds.persistencia.AdaptadorUsuarioTDS;
-import umu.tds.persistencia.FactoriaDAO;
+
 import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.vista.Alerta;
 import umu.tds.vista.Inicio;
 import umu.tds.vista.Registro;
 
-public class ControladorAppMusic {
+public class ControladorAppMusic implements ICancionesListener{
 	private static final String MENSAJE_USUARIO_REPETIDO = "El nombre de usuario ya esta cogido";
 	private static final String MENSAJE_USUARIO_REGISTRADO = "Se ha registrado con exito";
 	private static final String MENSAJE_USUARIO_LOGIN = "Se ha iniciado sesion correctamente";
 	private static final String MENSAJE_LOGIN_FALLO = "Usuario o contraseña inválidos";
-	private static final String MENSAJE_FECHA_VACIA = "Rellena el campo Fecha";
-	private static final String MENSAJE_EMAIL_VACIO = "Rellena el campo Email";
-	private static final String MENSAJE_PASSWORD_VACIA = "Rellena el campo Contraseña";
-	private static final String MENSAJE_USER_VACIO = "Rellena el campo Usuario";
 	
 	private static final String ASUNTO_ERROR = "Usuario repetido";
 	private static final String ASUNTO_ERROR_CAMPO = "Campo Faltante";
@@ -50,18 +42,19 @@ public class ControladorAppMusic {
 	private String mensaje_error;  //Variable global para errores de falta de campos rellenados
 	
 	private static ControladorAppMusic unicaInstancia;
-	
-	private IAdaptadorUsuarioDAO adaptadorUsuario;
 		
 	private CatalogoUsuarios catalogoUsuarios;
+	
+	private CatalogoCanciones catalogoCanciones;
 	
 	private ArrayList<IUsuarioListener> listeners = new ArrayList<IUsuarioListener>();
 	
 	private ControladorAppMusic()
 	{
-		inicializarAdaptadores();
 		
 		inicializarCatalogos();
+		
+		CargadorCanciones.INSTANCE.addListener(this);
 	}
 	
 	public static ControladorAppMusic getInstancia()
@@ -70,19 +63,10 @@ public class ControladorAppMusic {
 			unicaInstancia = new ControladorAppMusic();
 		return unicaInstancia;
 	}
-	
-	private void inicializarAdaptadores() {
-		FactoriaDAO factoria = null;
-		try {
-			factoria = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
-		} catch (DAOException e) {
-			e.printStackTrace();
-		}
-		adaptadorUsuario = factoria.getUsuarioDAO();
-	}
 
 	private void inicializarCatalogos() {
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
+		catalogoCanciones = CatalogoCanciones.getUnicaInstancia();
 	}
 	
 	public Boolean registrarUsuario(JTextField login, JPasswordField password, JTextField email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
@@ -152,6 +136,13 @@ public class ControladorAppMusic {
 
 	}
 	
+	public void cargarCanciones(String rutaArchivo)
+	{
+		umu.tds.negocio.CargadorCanciones.INSTANCE.setArchivoCanciones(rutaArchivo);
+	}
+	
+
+	
 	
 	
 	
@@ -204,11 +195,25 @@ public class ControladorAppMusic {
 		listeners.add(listener);
 	}
 	
+	@SuppressWarnings("unchecked")
 	void notificarCambioNombre(UsuarioEvent e)
 	{
-		for(IUsuarioListener users : listeners)
+		ArrayList<IUsuarioListener> lista;
+		synchronized (this) {
+			lista = (ArrayList<IUsuarioListener>) listeners.clone();
+		}
+		for(IUsuarioListener users : lista)
 		{
 			users.actualizar(e);
 		}
 	}
+
+	@Override
+	public void actualizarCanciones(CancionEvent e) {
+		// TODO: convertir de Cancion a Cancion jaja
+		// TODO: sincronizar list
+		
+	}
+	
+	
 }
