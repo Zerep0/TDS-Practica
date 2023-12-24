@@ -11,7 +11,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Dimension;
 import java.awt.Color;
-
+import java.awt.Component;
 
 import umu.tds.helper.Placeholder;
 
@@ -29,12 +29,12 @@ public class MenuBusquedaB extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JTextField Interprete;
 	private boolean filtroActivado;
-	private CardLayout menuBusqueda;
+	private MenuBusqueda menuBusqueda;
 	private String ruta;
 	/**
 	 * Create the panel.
 	 */
-	public MenuBusquedaB(CardLayout menuBusqueda, String ruta) {
+	public MenuBusquedaB(MenuBusqueda menuBusqueda, String ruta) {
 		filtroActivado = false;
 		this.menuBusqueda = menuBusqueda;
 		this.ruta = ruta;
@@ -142,7 +142,13 @@ public class MenuBusquedaB extends JPanel {
 		btnLupa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				menuBusqueda.show(MenuBusquedaB.this.getParent(), ruta);
+				((CardLayout) menuBusqueda.getLayout()).show(MenuBusquedaB.this.getParent(), ruta);
+				Component componente = menuBusqueda.getComponent(1);
+				((MenuBusquedaR)componente).refrescar();
+				
+				
+				
+				
 			}
 		});
 	}

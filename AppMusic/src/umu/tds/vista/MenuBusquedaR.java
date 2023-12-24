@@ -20,9 +20,15 @@ import javax.swing.JSlider;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
+import CargadorCanciones.Cancion;
 import umu.tds.helper.AlineamientoLista;
+import umu.tds.negocio.CatalogoCanciones;
+import umu.tds.negocio.CatalogoUsuarios;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MenuBusquedaR extends JPanel {
@@ -32,6 +38,8 @@ public class MenuBusquedaR extends JPanel {
 	private CardLayout menuBusqueda;
 	private String ruta;
 	private boolean pausa;
+	JList<String> listaCanciones;
+	ListaModelo miModelo;
 	/**
 	 * Create the panel.
 	 */
@@ -106,18 +114,11 @@ public class MenuBusquedaR extends JPanel {
 		JScrollPane scrollPane = new JScrollPane();
 		PanelRecientes.add(scrollPane, BorderLayout.CENTER);
 		
-		JList<String> listaCanciones = new JList();
+		miModelo = new ListaModelo();
+		listaCanciones = new JList();
 		listaCanciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listaCanciones.setFont(new Font("Arial", Font.PLAIN, 16));
-		listaCanciones.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Movie Dizzie", "Cancion de lax", "Wos Andromeda","Cancion de prueba", "Alfa"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		listaCanciones.setModel(miModelo);
 		scrollPane.setViewportView(listaCanciones);
 		listaCanciones.setBorder(BorderFactory.createLineBorder(Color.black));
 		listaCanciones.setCellRenderer(alinamientoListaBusqueda);
@@ -184,4 +185,19 @@ public class MenuBusquedaR extends JPanel {
 			}
 		});
 	}
+	
+	public void refrescar()
+	{
+		
+		List<umu.tds.negocio.Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
+		ArrayList<String> cancionesString = new ArrayList<>();
+		for(umu.tds.negocio.Cancion can : canciones)
+		{
+			cancionesString.add(can.getTitulo() + " - " + can.getInterprete());
+		}
+	
+		miModelo.actualizarLista(cancionesString);
+	}
+	
 }
+

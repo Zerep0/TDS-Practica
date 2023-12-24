@@ -3,10 +3,13 @@ package umu.tds.controlador;
 
 
 import umu.tds.observer.*;
+import CargadorCanciones.Cancion;
+import CargadorCanciones.Canciones;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -208,10 +211,19 @@ public class ControladorAppMusic implements ICancionesListener{
 		}
 	}
 
+	
 	@Override
 	public void actualizarCanciones(CancionEvent e) {
 		// TODO: convertir de Cancion a Cancion jaja
+		List<umu.tds.negocio.Cancion> lista = new LinkedList<umu.tds.negocio.Cancion>();
+		for (Cancion c : e.getCanciones().getCancion()) {
+			umu.tds.negocio.Cancion can = new umu.tds.negocio.Cancion(c.getTitulo(),c.getURL(),c.getEstilo(),c.getInterprete());
+			System.out.println("Cancion: " + c.getTitulo() + " " + c.getURL() + " " + c.getEstilo() + " " + c.getInterprete()+ " ");
+			lista.add(can);
+		}
+		
 		// TODO: sincronizar list
+		catalogoCanciones.registrarCanciones(lista);
 		
 	}
 	

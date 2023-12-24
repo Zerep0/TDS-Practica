@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -24,6 +25,9 @@ import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.Fuente;
 import umu.tds.helper.HiperVinculo;
 import umu.tds.helper.Placeholder;
+import CargadorCanciones.Canciones;
+import CargadorCanciones.MapperCancionesXMLtoJava;
+
 public class Inicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;

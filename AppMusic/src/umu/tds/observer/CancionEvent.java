@@ -4,8 +4,8 @@ import CargadorCanciones.Canciones;
 import umu.tds.negocio.CargadorCanciones;
 
 public class CancionEvent {
-	CargadorCanciones source;
-	Canciones canciones;
+	private CargadorCanciones source;
+	private Canciones canciones;
 	public CancionEvent(CargadorCanciones source, Canciones canciones)
 	{
 		this.source = source;
@@ -13,4 +13,13 @@ public class CancionEvent {
 	}
 	
 	// getter
+	public Canciones getCanciones()
+	{
+		return canciones;
+	}
+	
+	public CargadorCanciones getCargadorCanciones()
+	{
+		return source;
+	}
 }

@@ -23,7 +23,7 @@ public class MenuBusqueda extends JPanel {
 		setLayout(miCardLayout);
 		
 		// AÑADIR MENU DE BUSQUEDA CON LA LUPA
-		menuBusquedaB = new MenuBusquedaB(miCardLayout,RUTA_RESULTADO);
+		menuBusquedaB = new MenuBusquedaB(this,RUTA_RESULTADO);
 		add(menuBusquedaB,RUTA_BUSQUEDA);
 		// AÑADIR MENU DE BUSQUEDA DE RESULTADO
 		menuBusquedaR = new MenuBusquedaR(miCardLayout,RUTA_BUSQUEDA);

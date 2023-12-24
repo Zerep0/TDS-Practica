@@ -1,6 +1,7 @@
 package umu.tds.negocio;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import umu.tds.persistencia.DAOException;
@@ -41,28 +42,48 @@ public class CatalogoCanciones {
 	public void registrarCanciones(List<Cancion> canciones)
 	{
 		// TODO: dada una lista de canciones las registra
+		for (Cancion c : canciones) {
+			registrarCancion(c);
+		}
 	}
 	
-	public void registrarCancion(Cancion cancion)
+	public boolean registrarCancion(Cancion cancion)
 	{
 		// TODO: registra una cancion en el catalogo y en la base de datos
+		if(!adaptadorCancion.registrarCancion(cancion))
+		{
+			return false;
+		}
+		else
+		{
+			canciones.put(cancion.getInterprete()  + "_" + cancion.getTitulo(), cancion);
+			return true;
+		}
 	}
 	
 	public List<Cancion> getCanciones()
 	{
 		// TODO:
-		return null;
+		List<Cancion> listaCanciones = new LinkedList<Cancion>();
+		for(Cancion c:canciones.values())
+		{
+			listaCanciones.add(c);
+		}
+		return listaCanciones;
 	}
 	
 	public Cancion getCancion(String titulo, String interprete)
 	{
-		// TODO:
-		return null;
+		String clave = interprete + "_" + titulo;
+		return canciones.get(clave);
 	}
 	
 	public void cargarCatalogo()
 	{
 		// TODO: cargar Canciones de la BBDD
+		 List<Cancion> cancionesBD = adaptadorCancion.recuperarTodasCanciones();
+		 for (Cancion can : cancionesBD) 
+			     canciones.put(can.getInterprete()  + "_" + can.getTitulo(), can);
 	}
 
 }
