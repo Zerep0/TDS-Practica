@@ -4,7 +4,7 @@ public class Cancion {
 	private int id;
 	private String titulo, ruta, estilo, interprete;
 	private int numReproducciones;
-	private boolean marcado;
+	private boolean favorita;
 	
 	public Cancion(String titulo,String ruta, String estilo, String interprete) {
 		this.id = 0;
@@ -13,7 +13,7 @@ public class Cancion {
 		this.estilo = estilo;
 		this.interprete = interprete;
 		numReproducciones = 0;
-		marcado = false;
+		favorita = false;
 	}
 
 	public int getId() {
@@ -61,13 +61,13 @@ public class Cancion {
 	/**
 	 * @return the marcado
 	 */
-	public boolean isMarcado() {
-		return marcado;
+	public boolean isFavorita() {
+		return favorita;
 	}
 	
-	public void setMarcado(boolean marcado)
+	public void setFavorita(boolean favorita)
 	{
-		this.marcado = marcado;
+		this.favorita = favorita;
 	}
 	
 	public void setEstilo(String estilo)
@@ -78,5 +78,10 @@ public class Cancion {
 	public void setNumReproducciones(int numReproducciones)
 	{
 		this.numReproducciones = numReproducciones;
+	}
+	
+	public String toString()
+	{
+		return titulo + " ~ " + interprete;
 	}
 }

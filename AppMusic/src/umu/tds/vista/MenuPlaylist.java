@@ -98,7 +98,7 @@ public class MenuPlaylist extends JPanel {
 	                case 2:
 	                    return cancion.getEstilo();
 	                case 3:
-	                    return cancion.isMarcado();
+	                    return cancion.isFavorita();
 	                default:
 	                    return null;
 	            }
@@ -108,7 +108,7 @@ public class MenuPlaylist extends JPanel {
 	            Cancion cancion = cancionesPrueba.get(row);
 	            if (column == 3) {
 	            	
-	                cancion.setMarcado((Boolean) value);
+	                cancion.setFavorita((Boolean) value);
 	            }
 	            fireTableCellUpdated(row, column);
 	        }

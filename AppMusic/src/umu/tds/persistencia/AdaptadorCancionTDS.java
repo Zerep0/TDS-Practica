@@ -20,41 +20,45 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO{
 
 	}
 	@Override
-	public boolean registrarCancion(Cancion cancion) {
+	public int registrarCancion(Cancion cancion) {
 		Entidad eCancion = null;
 
 		// Si la entidad esta registrada no la registra de nuevo
 		try {
 			eCancion = servPersistencia.recuperarEntidad(cancion.getId());
 		} catch (NullPointerException e) {}
-		if (eCancion != null) return false;
-		
-		Boolean existeCancion = recuperarTodasCanciones().stream().anyMatch(c -> c.getTitulo().equals(cancion.getTitulo()) && c.getInterprete().equals(cancion.getInterprete()));		
-				
-		if(!existeCancion)
+		if (eCancion == null) 
 		{
-			// crear entidad Cliente
-			eCancion = new Entidad();
-			eCancion.setNombre("cancion");
-			eCancion.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(new Propiedad("titulo", cancion.getTitulo()), new Propiedad("ruta",cancion.getRuta()),new Propiedad("estilo",cancion.getEstilo()),
-							new Propiedad("interprete",cancion.getInterprete()),new Propiedad("marcado",String.valueOf(cancion.isMarcado())),
-							new Propiedad("numReproducciones",String.valueOf(cancion.getNumReproducciones())))));
+			Boolean existeCancion = recuperarTodasCanciones().stream()
+					.anyMatch(c -> c.getTitulo().equals(cancion.getTitulo()) && c.getInterprete().equals(cancion.getInterprete()));		
+					
+			if(!existeCancion)
+			{
+				// crear entidad Cliente
+				eCancion = new Entidad();
+				eCancion.setNombre("cancion");
+				eCancion.setPropiedades(new ArrayList<Propiedad>(
+						Arrays.asList(new Propiedad("titulo", cancion.getTitulo()), new Propiedad("ruta",cancion.getRuta()),new Propiedad("estilo",cancion.getEstilo()),
+								new Propiedad("interprete",cancion.getInterprete()),new Propiedad("favorito",String.valueOf(cancion.isFavorita())),
+								new Propiedad("numReproducciones",String.valueOf(cancion.getNumReproducciones())))));
 
-			// registrar entidad cliente
-			eCancion = servPersistencia.registrarEntidad(eCancion);
-			// asignar identificador unico
-			// Se aprovecha el que genera el servicio de persistencia
-			cancion.setId(eCancion.getId());
-			return true;
+				// registrar entidad cliente
+				eCancion = servPersistencia.registrarEntidad(eCancion);
+				// asignar identificador unico
+				// Se aprovecha el que genera el servicio de persistencia
+				cancion.setId(eCancion.getId());
+			}
+		}
+		
+		
+		return cancion.getId();
 	}
-		return false;
-	}
+	
 	@Override
 	public Cancion recuperarCancion(int codigo) {
 		// si no, la recupera de la base de datos
 		Entidad eCancion;
-		String titulo, ruta, estilo, interprete,marcado,numReproducciones;
+		String titulo, ruta, estilo, interprete,favorito,numReproducciones;
 		// recuperar entidad
 		eCancion = servPersistencia.recuperarEntidad(codigo);
 
@@ -63,14 +67,14 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO{
 		ruta = servPersistencia.recuperarPropiedadEntidad(eCancion, "ruta");
 		estilo = servPersistencia.recuperarPropiedadEntidad(eCancion, "estilo");
 		interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, "interprete");
-		marcado = servPersistencia.recuperarPropiedadEntidad(eCancion, "marcado");
+		favorito = servPersistencia.recuperarPropiedadEntidad(eCancion, "favorito");
 		numReproducciones = servPersistencia.recuperarPropiedadEntidad(eCancion, "numReproducciones");
 
 		// recuperar playlist
 		Cancion cancion = new Cancion(titulo,ruta, estilo, interprete);
 		cancion.setId(codigo);
 		cancion.setNumReproducciones(Integer.parseInt(numReproducciones));
-		cancion.setMarcado(Boolean.parseBoolean(marcado));
+		cancion.setFavorita(Boolean.parseBoolean(favorito));
 		return cancion;
 	}
 
@@ -91,5 +95,14 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO{
 		else
 			return unicaInstancia;
 	}
+	
+	@Override
+	public void actualizarFavorito(Cancion c) {
+		Entidad recuperaCancion = servPersistencia.recuperarEntidad(c.getId());
+		recuperaCancion.getPropiedades().stream().filter(p -> p.getNombre().equals("favorito"))
+		.forEach(p -> {p.setValor(String.valueOf(c.isFavorita()));
+		servPersistencia.modificarPropiedad(p);});
+	}
+
 
 }

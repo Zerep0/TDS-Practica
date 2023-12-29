@@ -11,7 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
@@ -41,6 +41,10 @@ public class ControladorAppMusic implements ICancionesListener{
 
 	private static final String ASUNTO_ERROR_LOGIN = "Login error";
 	private static final String ASUNTO_LOGIN = "Login exitoso";
+	
+	private static final String CADENA_VACIA = "";
+	private static final String ESTILO = "Estilo";
+	
 	
 	private String mensaje_error;  //Variable global para errores de falta de campos rellenados
 	
@@ -210,7 +214,8 @@ public class ControladorAppMusic implements ICancionesListener{
 			users.actualizar(e);
 		}
 	}
-
+	
+	
 	
 	@Override
 	public void actualizarCanciones(CancionEvent e) {
@@ -225,6 +230,41 @@ public class ControladorAppMusic implements ICancionesListener{
 		// TODO: sincronizar list
 		catalogoCanciones.registrarCanciones(lista);
 		
+	}
+	
+	public ArrayList<umu.tds.negocio.Cancion> aplicarFiltros(JTextField titulo, JTextField interprete, String estilo, boolean cancionFavorita)
+	{
+		ArrayList<umu.tds.negocio.Cancion> cancionesEncontradas = new ArrayList<>(CatalogoCanciones.getUnicaInstancia().getCanciones());
+		for(umu.tds.negocio.Cancion c : cancionesEncontradas)
+		{
+			System.out.println(c);
+		}
+		if(!titulo.getText().equals(CADENA_VACIA) && !titulo.getFont().isItalic())
+		{
+			cancionesEncontradas = (ArrayList<umu.tds.negocio.Cancion>) cancionesEncontradas.stream()
+					.filter(c -> c.getTitulo().contains(titulo.getText())).collect(Collectors.toList());
+		}
+		if(!interprete.getText().equals(CADENA_VACIA) && !interprete.getFont().isItalic())
+		{
+			cancionesEncontradas = (ArrayList<umu.tds.negocio.Cancion>) cancionesEncontradas.stream()
+					.filter(c -> c.getInterprete().contains(interprete.getText())).collect(Collectors.toList());
+		}
+		if(!estilo.equals(ESTILO))
+		{
+			cancionesEncontradas = (ArrayList<umu.tds.negocio.Cancion>) cancionesEncontradas.stream()
+					.filter(c -> c.getEstilo().equals(estilo)).collect(Collectors.toList());
+		}
+		if(cancionFavorita)
+		{
+			cancionesEncontradas = (ArrayList<umu.tds.negocio.Cancion>) cancionesEncontradas.stream()
+					.filter(c -> c.isFavorita()).collect(Collectors.toList());
+		}
+		return cancionesEncontradas;
+	}
+	
+	public void actualizarFavorito(umu.tds.negocio.Cancion c)
+	{
+		catalogoCanciones.actualizarFavorito(c);
 	}
 	
 	

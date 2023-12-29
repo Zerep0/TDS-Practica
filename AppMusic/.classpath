@@ -20,6 +20,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/DriverPersistencia.jar"/>
 	<classpathentry kind="lib" path="lib/miLuz.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Pedro Rubio/Documents/GitHub/TDS-Practica/AppMusic/lib/CargadorCanciones.jar"/>
+	<classpathentry kind="lib" path="lib/CargadorCanciones.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -47,18 +47,12 @@ public class CatalogoCanciones {
 		}
 	}
 	
-	public boolean registrarCancion(Cancion cancion)
+	public void registrarCancion(Cancion cancion)
 	{
 		// TODO: registra una cancion en el catalogo y en la base de datos
-		if(!adaptadorCancion.registrarCancion(cancion))
-		{
-			return false;
-		}
-		else
-		{
-			canciones.put(cancion.getInterprete()  + "_" + cancion.getTitulo(), cancion);
-			return true;
-		}
+		int id = adaptadorCancion.registrarCancion(cancion);
+		cancion.setId(id);
+		canciones.put(cancion.getInterprete()  + "_" + cancion.getTitulo(), cancion);
 	}
 	
 	public List<Cancion> getCanciones()
@@ -84,6 +78,13 @@ public class CatalogoCanciones {
 		 List<Cancion> cancionesBD = adaptadorCancion.recuperarTodasCanciones();
 		 for (Cancion can : cancionesBD) 
 			     canciones.put(can.getInterprete()  + "_" + can.getTitulo(), can);
+	}
+	
+	public void actualizarFavorito(Cancion c)
+	{
+		String clave = c.getTitulo() + "-" + c.getInterprete();
+		canciones.put(clave, c);
+		adaptadorCancion.actualizarFavorito(c);
 	}
 
 }

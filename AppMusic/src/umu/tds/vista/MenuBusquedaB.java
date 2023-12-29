@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Component;
 
+import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.Placeholder;
 
 import java.awt.Font;
@@ -20,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class MenuBusquedaB extends JPanel {
 
@@ -143,8 +145,12 @@ public class MenuBusquedaB extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				((CardLayout) menuBusqueda.getLayout()).show(MenuBusquedaB.this.getParent(), ruta);
+				
+				ArrayList<umu.tds.negocio.Cancion> canciones = ControladorAppMusic.getInstancia()
+						.aplicarFiltros(Buscador,Interprete,estilos.getSelectedItem().toString(),chckbxFavoritas.isSelected());
+				
 				Component componente = menuBusqueda.getComponent(1);
-				((MenuBusquedaR)componente).refrescar();
+				((MenuBusquedaR)componente).cargarCanciones(canciones);
 				
 				
 				
