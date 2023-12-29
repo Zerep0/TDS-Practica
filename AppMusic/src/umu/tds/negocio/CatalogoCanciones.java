@@ -82,7 +82,7 @@ public class CatalogoCanciones {
 	
 	public void actualizarFavorito(Cancion c)
 	{
-		String clave = c.getTitulo() + "-" + c.getInterprete();
+		String clave =  c.getInterprete() + "_" + c.getTitulo();
 		canciones.put(clave, c);
 		adaptadorCancion.actualizarFavorito(c);
 	}
