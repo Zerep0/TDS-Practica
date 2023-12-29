@@ -80,7 +80,7 @@ public class Player {
 
 			Media hit = new Media(mp3.toFile().toURI().toString());
 			mediaPlayer = new MediaPlayer(hit);
-
+			
 		}
 		
 		

@@ -178,31 +178,36 @@ public class MenuBusquedaR extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
-				if(pausa == "play")
+				if(c != null)
 				{
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
-					btnPlay.setVisible(true);
-					reproductor.play(pausa, c);
-					pausa = "pause";
+					if(pausa == "play")
+					{
+						btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+						btnPlay.setVisible(true);
+						reproductor.play(pausa, c);
+						pausa = "pause";
+					}
+					else
+					{
+						btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+						btnPlay.setVisible(true);
+						reproductor.play(pausa, c);
+						pausa = "play";
+					}
 				}
-				else
-				{
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-					btnPlay.setVisible(true);
-					reproductor.play(pausa, c);
-					pausa = "play";
-				}
-
 			}
 		});
 		
 		btnStop.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
-				reproductor.play("stop",c);
-				btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-				btnPlay.setVisible(true);
-				pausa = "play";
+				if(c!=null)
+				{
+					reproductor.play("stop",c);
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+					btnPlay.setVisible(true);
+					pausa = "play";
+				}
 			}
 		});
 		
@@ -210,30 +215,36 @@ public class MenuBusquedaR extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				umu.tds.negocio.Cancion cancionSeleccionada = listaCanciones.getSelectedValue();
-				if(cancionSeleccionada.isFavorita())
+				if(cancionSeleccionada != null)
 				{
-					quitaIconoFavorito();
-					cancionSeleccionada.setFavorita(false);
+					if(cancionSeleccionada.isFavorita())
+					{
+						quitaIconoFavorito();
+						cancionSeleccionada.setFavorita(false);
+					}
+					else
+					{
+						cambiaIconoFavorito();
+						cancionSeleccionada.setFavorita(true);
+					}
+					ControladorAppMusic.getInstancia().actualizarFavorito(cancionSeleccionada);
 				}
-				else
-				{
-					cambiaIconoFavorito();
-					cancionSeleccionada.setFavorita(true);
-				}
-				ControladorAppMusic.getInstancia().actualizarFavorito(cancionSeleccionada);
 			}
 		});
 		
 		listaCanciones.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent e) {
 				umu.tds.negocio.Cancion cancionSeleccionada = listaCanciones.getSelectedValue();
-				if(cancionSeleccionada.isFavorita())
+				if(cancionSeleccionada != null)
 				{
-					cambiaIconoFavorito();
-				}
-				else
-				{
-					quitaIconoFavorito();
+					if(cancionSeleccionada.isFavorita())
+					{
+						cambiaIconoFavorito();
+					}
+					else
+					{
+						quitaIconoFavorito();
+					}
 				}
 			}
 		});
