@@ -1,6 +1,6 @@
 package umu.tds.observer;
 
-import CargadorCanciones.Canciones;
+import cargadorCanciones.Canciones;
 import umu.tds.negocio.CargadorCanciones;
 
 public class CancionEvent {

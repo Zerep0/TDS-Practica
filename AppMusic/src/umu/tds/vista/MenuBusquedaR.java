@@ -20,10 +20,12 @@ import javax.swing.JSlider;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
-import CargadorCanciones.Cancion;
+import cargadorCanciones.Cancion;
+import javafx.scene.media.MediaPlayer;
 import umu.tds.helper.AlineamientoLista;
 import umu.tds.negocio.CatalogoCanciones;
 import umu.tds.negocio.CatalogoUsuarios;
+import umu.tds.utils.Player;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -37,7 +39,9 @@ public class MenuBusquedaR extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private CardLayout menuBusqueda;
 	private String ruta;
-	private boolean pausa;
+	private String pausa;
+	private int numResultados;
+	Player reproductor = new Player();
 	JList<String> listaCanciones;
 	ListaModelo miModelo;
 	/**
@@ -46,7 +50,8 @@ public class MenuBusquedaR extends JPanel {
 	public MenuBusquedaR(CardLayout menuBusqueda, String ruta) {
 		this.menuBusqueda = menuBusqueda;
 		this.ruta = ruta;
-		this.pausa = true;
+		this.pausa = "play";
+		this.numResultados = 0;
 		initialize();
 	}
 	
@@ -88,7 +93,7 @@ public class MenuBusquedaR extends JPanel {
 		add(PanelBienvenida, BorderLayout.NORTH);
 		PanelBienvenida.setLayout(new BorderLayout(0, 0));
 		
-		JLabel MsgBienvenida = new JLabel("Se han encontrado 5 resultados");
+		JLabel MsgBienvenida = new JLabel("Se han encontrado " + numResultados + " resultados");
 		MsgBienvenida.setForeground(new Color(255, 255, 255));
 		MsgBienvenida.setHorizontalAlignment(SwingConstants.CENTER);
 		MsgBienvenida.setFont(new Font("Arial", Font.BOLD, 24));
@@ -169,21 +174,40 @@ public class MenuBusquedaR extends JPanel {
 		btnPlay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(pausa)
+				umu.tds.negocio.Cancion c = buscaCancion(listaCanciones.getSelectedValue());
+				if(pausa == "play")
 				{
 					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
 					btnPlay.setVisible(true);
-					pausa = false;
+					reproductor.play(pausa, c);
+					pausa = "pause";
 				}
 				else
 				{
 					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
 					btnPlay.setVisible(true);
-					pausa = true;
+					reproductor.play(pausa, c);
+					pausa = "play";
 				}
 
 			}
 		});
+		
+		btnStop.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				umu.tds.negocio.Cancion c = buscaCancion(listaCanciones.getSelectedValue());
+				reproductor.play("stop",c);
+				btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+				btnPlay.setVisible(true);
+				pausa = "play";
+			}
+		});
+		
+	}
+	
+	void setNumResultados(int num)
+	{
+		this.numResultados = num;
 	}
 	
 	public void refrescar()
@@ -195,9 +219,23 @@ public class MenuBusquedaR extends JPanel {
 		{
 			cancionesString.add(can.getTitulo() + " - " + can.getInterprete());
 		}
-	
+		setNumResultados(cancionesString.size());
 		miModelo.actualizarLista(cancionesString);
 	}
 	
+	public umu.tds.negocio.Cancion buscaCancion(String cancion)
+	{
+		umu.tds.negocio.Cancion c;
+		List<umu.tds.negocio.Cancion> canciones = CatalogoCanciones.getUnicaInstancia().getCanciones();
+		for (umu.tds.negocio.Cancion can : canciones) {
+			String aux = can.getTitulo() + " - " + can.getInterprete();
+			if(aux.equals(cancion))
+			{
+				c = can;
+				return c;
+			}
+		}
+		return null;
+	}
 }
 

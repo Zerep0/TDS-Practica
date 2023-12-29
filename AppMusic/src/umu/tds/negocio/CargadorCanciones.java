@@ -3,8 +3,8 @@ package umu.tds.negocio;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-import CargadorCanciones.Canciones;
-import CargadorCanciones.MapperCancionesXMLtoJava;
+import cargadorCanciones.Canciones;
+import cargadorCanciones.MapperCancionesXMLtoJava;
 import umu.tds.observer.CancionEvent;
 import umu.tds.observer.ICancionesListener;
 

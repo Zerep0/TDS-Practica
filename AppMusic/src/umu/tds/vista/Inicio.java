@@ -25,8 +25,8 @@ import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.Fuente;
 import umu.tds.helper.HiperVinculo;
 import umu.tds.helper.Placeholder;
-import CargadorCanciones.Canciones;
-import CargadorCanciones.MapperCancionesXMLtoJava;
+import cargadorCanciones.Canciones;
+import cargadorCanciones.MapperCancionesXMLtoJava;
 
 public class Inicio extends JPanel {
 

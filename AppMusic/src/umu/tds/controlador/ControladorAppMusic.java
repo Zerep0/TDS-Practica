@@ -3,8 +3,8 @@ package umu.tds.controlador;
 
 
 import umu.tds.observer.*;
-import CargadorCanciones.Cancion;
-import CargadorCanciones.Canciones;
+import cargadorCanciones.Cancion;
+import cargadorCanciones.Canciones;
 
 import java.io.IOException;
 import java.time.LocalDate;

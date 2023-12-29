@@ -1,8 +1,12 @@
 package umu.tds.vista;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractListModel;
+import javax.swing.ListModel;
+
+import umu.tds.negocio.Cancion;
 
 public class ListaModelo extends AbstractListModel<String> {
 	
@@ -21,11 +25,12 @@ public class ListaModelo extends AbstractListModel<String> {
 			return canciones.get(index);
 		}
 		
-		public void actualizarLista(ArrayList<String> canciones)
+		public void actualizarLista(List<String> canciones)
 		{
-			this.canciones = canciones;
+			this.canciones = (ArrayList<String>) canciones;
 			fireContentsChanged(canciones, 0, getSize());
+
 		}
-	
+
 
 }
