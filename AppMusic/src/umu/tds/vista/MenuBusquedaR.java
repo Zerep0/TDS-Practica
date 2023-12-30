@@ -26,6 +26,8 @@ import umu.tds.utils.Player;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.ResourceBundle.Control;
+
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.ListSelectionEvent;
 
@@ -37,7 +39,6 @@ public class MenuBusquedaR extends JPanel {
 	private CardLayout menuBusqueda;
 	private String ruta;
 	private String pausa;
-	private Player reproductor = new Player();
 	private JList<umu.tds.negocio.Cancion> listaCanciones;
 	private ListaModelo miModelo;
 	private JLabel MsgCancionesEncontradas;
@@ -180,18 +181,15 @@ public class MenuBusquedaR extends JPanel {
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
 				if(c != null)
 				{
-					if(pausa == "play")
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					if(pausa.equals("play"))
 					{
 						btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
-						btnPlay.setVisible(true);
-						reproductor.play(pausa, c);
 						pausa = "pause";
 					}
 					else
 					{
 						btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-						btnPlay.setVisible(true);
-						reproductor.play(pausa, c);
 						pausa = "play";
 					}
 				}
@@ -203,9 +201,8 @@ public class MenuBusquedaR extends JPanel {
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
 				if(c!=null)
 				{
-					reproductor.play("stop",c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-					btnPlay.setVisible(true);
 					pausa = "play";
 				}
 			}
@@ -266,6 +263,7 @@ public class MenuBusquedaR extends JPanel {
 	{
 		btnFavorito.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/favoritos.png")));
 	}
+	
 	
 	
 }

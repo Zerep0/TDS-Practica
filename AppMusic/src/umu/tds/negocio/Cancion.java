@@ -1,10 +1,13 @@
 package umu.tds.negocio;
 
+import java.util.Objects;
+
 public class Cancion {
 	private int id;
 	private String titulo, ruta, estilo, interprete;
 	private int numReproducciones;
 	private boolean favorita;
+	private Reciente reciente;
 	
 	public Cancion(String titulo,String ruta, String estilo, String interprete) {
 		this.id = 0;
@@ -14,6 +17,7 @@ public class Cancion {
 		this.interprete = interprete;
 		numReproducciones = 0;
 		favorita = false;
+		reciente = Reciente.NORECIENTE;
 	}
 
 	public int getId() {
@@ -75,6 +79,8 @@ public class Cancion {
 		this.estilo = estilo;
 	}
 	
+	
+
 	public void setNumReproducciones(int numReproducciones)
 	{
 		this.numReproducciones = numReproducciones;
@@ -83,5 +89,34 @@ public class Cancion {
 	public String toString()
 	{
 		return titulo + " ~ " + interprete;
+	}
+	
+	public Reciente getReciente()
+	{
+		return reciente;
+	}
+	
+	public void setReciente(int posicion)
+	{
+		this.reciente = Reciente.fromValor(posicion);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(estilo, id, interprete, reciente, ruta, titulo);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cancion other = (Cancion) obj;
+		return Objects.equals(estilo, other.estilo) && id == other.id && Objects.equals(interprete, other.interprete)
+				&& reciente == other.reciente && Objects.equals(ruta, other.ruta)
+				&& Objects.equals(titulo, other.titulo);
 	}
 }

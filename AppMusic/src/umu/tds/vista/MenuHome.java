@@ -12,6 +12,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.awt.Color;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
@@ -27,6 +29,7 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.AlineamientoLista;
+import umu.tds.negocio.Cancion;
 import umu.tds.observer.IUsuarioListener;
 import umu.tds.observer.UsuarioEvent;
 
@@ -40,11 +43,14 @@ public class MenuHome extends JPanel{
 	private AlineamientoLista alineamientoListaMenu;
 	private boolean pausa;
 	private JLabel MsgBienvenida;
+	private ListaModelo miModelo;
 	/**
 	 * Create the panel.
 	 */
 	public MenuHome() {
 		this.pausa = true;
+		miModelo = new ListaModelo();
+		ControladorAppMusic.getInstancia().setMenuHome(this);
 		initialize();
 	}
 	
@@ -53,6 +59,7 @@ public class MenuHome extends JPanel{
 	{
 		// HELPER
 		alineamientoListaMenu = new AlineamientoLista();
+		
 		
 		setBackground(new Color(18, 159, 186));
 		setLayout(new BorderLayout(0, 0));
@@ -108,18 +115,10 @@ public class MenuHome extends JPanel{
 		JScrollPane scrollPane = new JScrollPane();
 		PanelRecientes.add(scrollPane, BorderLayout.CENTER);
 		
-		JList<String> listaCanciones = new JList();
+		JList<Cancion> listaCanciones = new JList();
 		listaCanciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listaCanciones.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
-		listaCanciones.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Movie Dizzie", "Cancion de lax", "Wos Andromeda","Cancion de prueba", "Alfa"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
+		listaCanciones.setModel(miModelo);
 		scrollPane.setViewportView(listaCanciones);
 		listaCanciones.setBorder(BorderFactory.createLineBorder(Color.black));
 		listaCanciones.setCellRenderer(alineamientoListaMenu);
@@ -167,13 +166,11 @@ public class MenuHome extends JPanel{
 				if(pausa)
 				{
 					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
-					btnPlay.setVisible(true);
 					pausa = false;
 				}
 				else
 				{
 					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-					btnPlay.setVisible(true);
 					pausa = true;
 				}
 
@@ -190,6 +187,14 @@ public class MenuHome extends JPanel{
 		});
 		
 		
+		
+		
+	}
+	
+	public void refrescarRecientes(LinkedList<Cancion> cancionesRecientes)
+	{
+		// refrescarRecientes
+		miModelo.actualizarLista(new ArrayList<Cancion>(cancionesRecientes));
 	}
 	
 

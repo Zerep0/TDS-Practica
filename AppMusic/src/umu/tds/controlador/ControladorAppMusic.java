@@ -3,8 +3,8 @@ package umu.tds.controlador;
 
 
 import umu.tds.observer.*;
+import umu.tds.utils.Player;
 import cargadorCanciones.Cancion;
-import cargadorCanciones.Canciones;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,9 +24,9 @@ import umu.tds.negocio.CatalogoCanciones;
 import umu.tds.negocio.CatalogoUsuarios;
 import umu.tds.negocio.Usuario;
 
-import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.vista.Alerta;
 import umu.tds.vista.Inicio;
+import umu.tds.vista.MenuHome;
 import umu.tds.vista.Registro;
 
 public class ControladorAppMusic implements ICancionesListener{
@@ -56,12 +56,17 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	private ArrayList<IUsuarioListener> listeners = new ArrayList<IUsuarioListener>();
 	
+	private MenuHome menuHome;
+	
+	private Player reproductor = new Player();
+	
 	private ControladorAppMusic()
 	{
 		
 		inicializarCatalogos();
 		
 		CargadorCanciones.INSTANCE.addListener(this);
+		
 	}
 	
 	public static ControladorAppMusic getInstancia()
@@ -267,5 +272,25 @@ public class ControladorAppMusic implements ICancionesListener{
 		catalogoCanciones.actualizarFavorito(c);
 	}
 	
+	public void setMenuHome(MenuHome menuHome)
+	{
+		this.menuHome = menuHome;
+		this.menuHome.refrescarRecientes(catalogoCanciones.getRecientes());
+	}
+	
+	public LinkedList<umu.tds.negocio.Cancion> refrescarRecientes()
+	{
+		return catalogoCanciones.getRecientes();
+	}
+	
+	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
+	{
+		reproductor.play(play,c);
+		if(play.equals("play"))
+		{
+			catalogoCanciones.agregarReciente(c);
+			menuHome.refrescarRecientes(catalogoCanciones.getRecientes());
+		}
+	}
 	
 }
