@@ -108,7 +108,7 @@ public class CatalogoCanciones {
 	    if (!cancionesRecientes.contains(nuevaCancion)) {
 	    	
 	    	cancionesRecientes.addFirst(nuevaCancion);  // Agregar al principio de la lista
-	    	if(cancionesRecientes.size() == 5)
+	    	if(cancionesRecientes.size() == Reciente.values().length)
 	    	{
 	    		Cancion antigua = cancionesRecientes.removeLast();
 	            antigua.setReciente(Reciente.NORECIENTE.ordinal());
@@ -120,13 +120,14 @@ public class CatalogoCanciones {
 	    	if(nuevaCancion.getReciente() != Reciente.PRIMERA)
 	    	{
 	    		cancionesRecientes.remove(nuevaCancion);
-	    		cancionesRecientes.add(nuevaCancion);
+	    		cancionesRecientes.addFirst(nuevaCancion);
 	    	}
 	    }
 	    for (int i = 0; i < cancionesRecientes.size(); i++) {
             Cancion cancionActual = cancionesRecientes.get(i);
             cancionActual.setReciente(i);
         }
+	    adaptadorCancion.actualizarRecientes(cancionesRecientes);
 	}
 	
 	public LinkedList<Cancion> getRecientes()

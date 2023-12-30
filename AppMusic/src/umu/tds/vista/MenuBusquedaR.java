@@ -53,7 +53,7 @@ public class MenuBusquedaR extends JPanel {
 		initialize();
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+	@SuppressWarnings({ "rawtypes", "unchecked"})
 	private void initialize()
 	{
 		// HELPER
