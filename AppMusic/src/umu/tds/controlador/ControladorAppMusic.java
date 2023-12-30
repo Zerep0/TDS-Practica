@@ -285,7 +285,7 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
 	{
-		//reproductor.play(play,c);
+		reproductor.play(play,c);
 		if(play.equals("play"))
 		{
 			catalogoCanciones.agregarReciente(c);
