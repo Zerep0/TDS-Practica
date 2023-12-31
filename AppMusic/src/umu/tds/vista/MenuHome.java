@@ -34,6 +34,8 @@ import umu.tds.observer.IUsuarioListener;
 import umu.tds.observer.UsuarioEvent;
 
 import javax.swing.JSlider;
+import javax.swing.ListModel;
+
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
@@ -41,14 +43,16 @@ public class MenuHome extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	private AlineamientoLista alineamientoListaMenu;
-	private boolean pausa;
+	private String pausa;
+	private boolean Aleatorio;
 	private JLabel MsgBienvenida;
 	private ListaModelo miModelo;
 	/**
 	 * Create the panel.
 	 */
 	public MenuHome() {
-		this.pausa = true;
+		this.pausa = "play";
+		this.Aleatorio = false;
 		miModelo = new ListaModelo();
 		ControladorAppMusic.getInstancia().setMenuHome(this);
 		initialize();
@@ -160,23 +164,6 @@ public class MenuHome extends JPanel{
 		LayoutTiempo.add(msgDuracion, gbc_msgDuracion);
 		
 		
-		btnPlay.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(pausa)
-				{
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
-					pausa = false;
-				}
-				else
-				{
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-					pausa = true;
-				}
-
-			}
-		});
-		
 		ControladorAppMusic.getInstancia().addUsuarioListener(new IUsuarioListener() {
 			
 			@Override
@@ -186,9 +173,107 @@ public class MenuHome extends JPanel{
 			}
 		});
 		
+		btnPlay.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
+				if(c != null)
+				{
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					if(pausa.equals("play"))
+					{
+						btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+						pausa = "pause";
+					}
+					else
+					{
+						btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+						pausa = "play";
+					}
+				}
+			}
+		});
+		
+		btnRedo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				if(c != null)
+				{
+					pausa = "stop";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					pausa = "play";
+					ListModel<umu.tds.negocio.Cancion> modelo = listaCanciones.getModel();
+					int j = 0;
+					for (int i = 0; i < modelo.getSize(); i++) {
+				            if (modelo.getElementAt(i).equals(c)) {
+				                j = i;
+				                i = modelo.getSize();
+				           }
+				     }
+					j = (j-1) % modelo.getSize();
+					if(j<0)
+					{
+						j = modelo.getSize()-1;
+					}
+					c = modelo.getElementAt(j);
+					pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					pausa = "pause";
+					
+				}
+			}
+		});
 		
 		
+		btnForwa.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				if(c != null)
+				{
+					pausa = "stop";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					pausa = "play";
+					ListModel<umu.tds.negocio.Cancion> modelo = listaCanciones.getModel();
+					int j = 0;
+					for (int i = 0; i < modelo.getSize(); i++) {
+				            if (modelo.getElementAt(i).equals(c)) {
+				                j = i;
+				                i = modelo.getSize();
+				           }
+				     }
+					j = (j+1) % modelo.getSize();
+					c = modelo.getElementAt(j);
+					pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					pausa = "pause";
+					
+				}
+			}
+		});
 		
+		
+		btnStop.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
+				pausa = "stop";
+				if(c!=null)
+				{
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+				}
+				btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+				pausa = "play";
+			}
+		});
+		
+		btnRandom.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
 	}
 	
 	public void refrescarRecientes(LinkedList<Cancion> cancionesRecientes)

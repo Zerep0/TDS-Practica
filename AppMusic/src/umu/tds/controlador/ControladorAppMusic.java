@@ -293,4 +293,11 @@ public class ControladorAppMusic implements ICancionesListener{
 		}
 	}
 	
+	public umu.tds.negocio.Cancion getCancionReproduciendose()
+	{
+		return reproductor.getCancionReproduciendo();
+	}
+	
+	
+	
 }

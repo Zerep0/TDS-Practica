@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+import javax.swing.ListModel;
+
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import umu.tds.negocio.Cancion;
@@ -83,7 +85,11 @@ public class Player {
 			
 		}
 		
-		
 	}
-
+	
+	public Cancion getCancionReproduciendo()
+	{
+		return cancionActual;
+	}
+	
 }

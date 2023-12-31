@@ -16,6 +16,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
@@ -196,15 +197,78 @@ public class MenuBusquedaR extends JPanel {
 			}
 		});
 		
+		btnRedo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				if(c != null)
+				{
+					pausa = "stop";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					pausa = "play";
+					ListModel<umu.tds.negocio.Cancion> modelo = listaCanciones.getModel();
+					int j = 0;
+					for (int i = 0; i < modelo.getSize(); i++) {
+				            if (modelo.getElementAt(i).equals(c)) {
+				                j = i;
+				                i = modelo.getSize();
+				           }
+				     }
+					j = (j-1) % modelo.getSize();
+					if(j<0)
+					{
+						j = modelo.getSize()-1;
+					}
+					c = modelo.getElementAt(j);
+					pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					pausa = "pause";
+					
+				}
+			}
+		});
+		
+		
+		btnForwa.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				if(c != null)
+				{
+					pausa = "stop";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					pausa = "play";
+					ListModel<umu.tds.negocio.Cancion> modelo = listaCanciones.getModel();
+					int j = 0;
+					for (int i = 0; i < modelo.getSize(); i++) {
+				            if (modelo.getElementAt(i).equals(c)) {
+				                j = i;
+				                i = modelo.getSize();
+				           }
+				     }
+					j = (j+1) % modelo.getSize();
+					c = modelo.getElementAt(j);
+					pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					pausa = "pause";
+					
+				}
+			}
+		});
+		
+		
 		btnStop.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
+				pausa = "stop";
 				if(c!=null)
 				{
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-					pausa = "play";
 				}
+				btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+				pausa = "play";
 			}
 		});
 		
@@ -245,6 +309,9 @@ public class MenuBusquedaR extends JPanel {
 				}
 			}
 		});
+		
+		
+		
 	}
 	
 
