@@ -156,6 +156,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		JSlider barraReproduccion = new JSlider();
 		barraReproduccion.setBackground(new Color(18, 156, 189));
 		barraReproduccion.setPreferredSize(new Dimension(400, 26));
+		barraReproduccion.setValue(0);
 		subPanelTiempo.add(barraReproduccion, BorderLayout.NORTH);
 		
 		JLabel msgDuracion = new JLabel("3:16");

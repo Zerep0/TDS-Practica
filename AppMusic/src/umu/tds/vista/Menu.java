@@ -27,6 +27,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import umu.tds.controlador.ControladorAppMusic;
+import umu.tds.negocio.Cancion;
 import pulsador.Luz;
 
 public class Menu extends JPanel {
@@ -166,6 +167,8 @@ public class Menu extends JPanel {
 		
 		btnLogout.addActionListener((e) -> {
 			launcher.dispose();
+			Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+			ControladorAppMusic.getInstancia().reproducirCancion("stop", c);
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {

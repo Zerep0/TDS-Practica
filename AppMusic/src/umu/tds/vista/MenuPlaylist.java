@@ -110,7 +110,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	                case 2:
 	                    return cancion.getEstilo();
 	                case 3:
-	                    return cancion.isFavorita();
+	                    return true;
 	                default:
 	                    return null;
 	            }
@@ -120,7 +120,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	            Cancion cancion = cancionesPrueba.get(row);
 	            if (column == 3) {
 	            	
-	                cancion.setFavorita((Boolean) value);
+	                //cancion.setFavorita((Boolean) value);
 	            }
 	            fireTableCellUpdated(row, column);
 	        }

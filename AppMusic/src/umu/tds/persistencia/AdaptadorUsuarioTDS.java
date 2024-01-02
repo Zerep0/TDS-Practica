@@ -8,6 +8,7 @@ import java.util.List;
 
 import tds.driver.FactoriaServicioPersistencia;
 import tds.driver.ServicioPersistencia;
+import umu.tds.negocio.Cancion;
 import umu.tds.negocio.Usuario;
 import beans.Entidad;
 import beans.Propiedad;
@@ -50,9 +51,9 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			eCliente = new Entidad();
 			eCliente.setNombre("usuario");
 			eCliente.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(new Propiedad("login", usuario.getLogin()), new Propiedad("password",usuario.getPassword()),new Propiedad("email",usuario.getEmail()),
+					Arrays.asList(new Propiedad("login", usuario.getLogin()),new Propiedad("favoritas",""), new Propiedad("password",usuario.getPassword()),new Propiedad("email",usuario.getEmail()),
 							new Propiedad("fechaNacimiento",usuario.getFechaNacimiento().toString()),new Propiedad("premium",String.valueOf(usuario.isPremium())),
-							new Propiedad("playlist",""))));
+							new Propiedad("recientes",""))));
 
 			// registrar entidad cliente
 			eCliente = servPersistencia.registrarEntidad(eCliente);
@@ -98,7 +99,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 		// si no, la recupera de la base de datos
 		Entidad eUsuario;
-		String nombre, email, fechaNacimiento, password, premium, playlist;
+		String nombre, email, fechaNacimiento, password, premium, recientes, favoritas;
 		
 
 		// recuperar entidad
@@ -110,10 +111,34 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		fechaNacimiento = servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento");
 		password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
 		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium");
+		Usuario usuario = new Usuario(nombre,password,email, LocalDate.parse(fechaNacimiento));
 		
 		// recuperar playlist
+		recientes = servPersistencia.recuperarPropiedadEntidad(eUsuario, "recientes");
+		String [] canciones = recientes.split(",");
+		Cancion c;
+		for(String s : canciones)
+		{
+			if(!s.equals(""))
+			{
+				c = AdaptadorCancionTDS.getUnicaInstancia().recuperarCancion(Integer.parseInt(s));
+				usuario.addReciente(c);
+			}
+			
+		}
+		favoritas = servPersistencia.recuperarPropiedadEntidad(eUsuario, "favoritas");
+		canciones = favoritas.split(",");
+		for(String s : canciones)
+		{
+			if(!s.equals(""))
+			{
+				c = AdaptadorCancionTDS.getUnicaInstancia().recuperarCancion(Integer.parseInt(s));
+				usuario.addFavorita(c);
+			}
+			
+		}
 		
-		Usuario usuario = new Usuario(nombre,password,email, LocalDate.parse(fechaNacimiento));
+		
 		usuario.setId(codigo);
 		usuario.setPremium(Boolean.parseBoolean(premium));
 
@@ -130,5 +155,35 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		}
 		return usuarios;
 	}
+	
+	public void actualizar(LinkedList<Integer> nums, Usuario u, String propiedad)
+	{
+		String informacion = IntegerListToString(nums);
+		modificarUsuario(informacion, u,propiedad);
+	}
 
+	
+	public String IntegerListToString(LinkedList<Integer> nums)
+	{
+		String listaCan = "";
+		int i;
+		for (i = 0;i<nums.size()-1;i++) {
+			listaCan += nums.get(i).toString() + ",";
+		}
+		listaCan += nums.get(i).toString(); 
+		return listaCan;
+	}
+	
+	public void modificarUsuario(String informacion, Usuario u, String propiedad)
+	{
+		Entidad recuperaCancion = servPersistencia.recuperarEntidad(u.getId());
+		recuperaCancion.getPropiedades().stream().filter(p -> p.getNombre().equals(propiedad))
+		.forEach(p -> {p.setValor(informacion);
+		servPersistencia.modificarPropiedad(p);});
+	}
+	
+
+	
+	
+	
 }

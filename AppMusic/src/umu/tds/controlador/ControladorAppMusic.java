@@ -3,12 +3,16 @@ package umu.tds.controlador;
 
 
 import umu.tds.observer.*;
+import umu.tds.persistencia.DAOException;
+import umu.tds.persistencia.FactoriaDAO;
+import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 import umu.tds.utils.Player;
 import cargadorCanciones.Cancion;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -64,11 +68,21 @@ public class ControladorAppMusic implements ICancionesListener{
 	private MenuHome menuHome;
 	private JPanel panelActualReproduccion;
 	
+	private FactoriaDAO dao;
+	private Usuario usuarioActual;
+	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	
 	private ControladorAppMusic()
 	{
-		
+		usuarioActual = null;
+		try {
+			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		inicializarCatalogos();
+		inicializarAdaptadores();
 		
 		CargadorCanciones.INSTANCE.addListener(this);
 		
@@ -85,7 +99,10 @@ public class ControladorAppMusic implements ICancionesListener{
 		catalogoUsuarios = CatalogoUsuarios.getUnicaInstancia();
 		catalogoCanciones = CatalogoCanciones.getUnicaInstancia();
 	}
-	
+	public void inicializarAdaptadores()
+	{
+		adaptadorUsuario = dao.getUsuarioDAO();
+	}
 	public Boolean registrarUsuario(JTextField login, JPasswordField password, JTextField email, LocalDate fechaNacimiento, Registro ventana) //JTextField pasar en vez de string
 	{
 		mensaje_error = "No estan los siguientes campos rellenados: ";
@@ -107,6 +124,8 @@ public class ControladorAppMusic implements ICancionesListener{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, ventana);
 			UsuarioEvent e = new UsuarioEvent(user.getLogin());
 			notificarCambioNombre(e);
+			usuarioActual = user;
+			this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
 			return true;
 		}
 	}
@@ -129,6 +148,8 @@ public class ControladorAppMusic implements ICancionesListener{
 			Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , ventana);
 			UsuarioEvent e = new UsuarioEvent(usuario.getLogin());
 			notificarCambioNombre(e);
+			usuarioActual = usuario;
+			this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
 			return true;
 		}else 
 		{
@@ -267,20 +288,23 @@ public class ControladorAppMusic implements ICancionesListener{
 		if(cancionFavorita)
 		{
 			cancionesEncontradas = (ArrayList<umu.tds.negocio.Cancion>) cancionesEncontradas.stream()
-					.filter(c -> c.isFavorita()).collect(Collectors.toList());
+					.filter(c -> usuarioActual.getFavoritas().contains(c)).collect(Collectors.toList());
 		}
 		return cancionesEncontradas;
 	}
 	
-	public void actualizarFavorito(umu.tds.negocio.Cancion c)
+	public void actualizarFavorito(boolean esFavorita, umu.tds.negocio.Cancion c)
 	{
-		catalogoCanciones.actualizarFavorito(c);
+		if(esFavorita)
+			
+			usuarioActual.addFavorita(c);
+		else usuarioActual.removeFavorita(c);
+		adaptadorUsuario.actualizar(usuarioActual.getFavoritasNum(),usuarioActual, "favoritas");
 	}
 	
 	public void setMenuHome(MenuHome menuHome)
 	{
 		this.menuHome = menuHome;
-		this.menuHome.refrescarRecientes(catalogoCanciones.getRecientes());
 		listenerReproductor.add(menuHome);
 	}
 	
@@ -294,18 +318,16 @@ public class ControladorAppMusic implements ICancionesListener{
 		listenerReproductor.add(menuBusquedaR);
 	}
 	
-	public LinkedList<umu.tds.negocio.Cancion> refrescarRecientes()
-	{
-		return catalogoCanciones.getRecientes();
-	}
+	
 	
 	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
 	{
 		Player.INSTANCE.play(play,c);
 		if(play.equals("play"))
 		{
-			catalogoCanciones.agregarReciente(c);
-			menuHome.refrescarRecientes(catalogoCanciones.getRecientes());
+			usuarioActual.addReciente(c);
+			adaptadorUsuario.actualizar(usuarioActual.getRecientesNum(),usuarioActual, "recientes");
+			menuHome.refrescarRecientes(usuarioActual.getRecientes());
 		}
 	}
 	
@@ -349,5 +371,10 @@ public class ControladorAppMusic implements ICancionesListener{
 		{
 			((MenuPlaylist) panelActualReproduccion).cancionAlFinalizar();
 		}
+	}
+	
+	public boolean isFavorita(umu.tds.negocio.Cancion c)
+	{
+		return usuarioActual.isFavorita(c);
 	}
 }

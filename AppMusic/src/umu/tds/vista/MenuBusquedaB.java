@@ -151,6 +151,7 @@ public class MenuBusquedaB extends JPanel {
 				
 				Component componente = menuBusqueda.getComponent(1);
 				((MenuBusquedaR)componente).cargarCanciones(canciones);
+				((MenuBusquedaR)componente).entrarVentana();
 				
 				
 				

@@ -80,17 +80,36 @@ xs:schemaLocation="http://www.tds.es/canciones canciones.xsd">
 		<interprete>Wos</interprete>
 	</cancion>
 	
-	<cancion titulo="Caliente">
-		<URL><![CDATA[https://dl129.filemate20.shop/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ25tZGt6d2g0M0JPQUh0SVFzM1AybEo4QmJZS29mbnN5a0dOSlJ5aTdaWmRqV2RWMnZyNWN6Vm1hRDhwTnZuekxmb010eWY4ZzBCRERCeTlDT3dCVmluaXF0ZVpiQUJlc1FhRzlycWxKbXh5K2V5YXlGN2tXczRpcjQvaHpVS2pjRHFENVdiNjJGb2MwY2pDL1llYXJnMGNGWA%3D%3D]]></URL>
-		<estilo>Rap</estilo>
-		<interprete>Ricky Edit</interprete>
+	<cancion titulo="Lo de Anoche">
+		<URL><![CDATA[https://ia904500.us.archive.org/27/items/yt-1s.com-bad-bunny-x-rosali-a-la-noche-de-anoche-video-oficial/yt1s.com%20-%20BAD%20BUNNY%20x%20ROSAL%C3%8DA%20%20LA%20NOCHE%20DE%20ANOCHE%20Video%20Oficial.mp3]]></URL>
+		<estilo>Regueton</estilo>
+		<interprete>Bad bunny-La Rosalia</interprete>
 	</cancion>
 	
-	<cancion titulo="Saxphone God">
-		<URL><![CDATA[https://dl244.filemate12.shop/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ3NsOXN4emg1b1NxcENyNEF1dysydkxZSmZJYXdLd0lXc1d0MVR2anZJZU5QQUl3NlIvWXMzVjNxVDQ5bzQ4amphNnNBdFNabzNVQi8wbnRtemx5VisxRUtuV01IQ0FLeERiM0krOFdadXczWFdudGVEL0VmZWd5bjRzM2VnYWp3MWd3SkZNT1dEdDVwUXhXRFphdVB0M3BWWS9ISFB0c3NlaktISjRVZmx5cWc3NVk0aER4d2lLdFpPejhmeDNhaz0%3D]]></URL>
-		<estilo>Jazz</estilo>
-		<interprete>Sex Saxo</interprete>
+	<cancion titulo="Persecution">
+		<URL><![CDATA[https://ia801303.us.archive.org/15/items/a_20240102/persecuciones.mp3]]></URL>
+		<estilo>Suspense</estilo>
+		<interprete>Atrap Atack</interprete>
 	</cancion>
+	
+	<cancion titulo="Caliente">
+		<URL><![CDATA[https://ia601207.us.archive.org/0/items/caliente-rickyedit/caliente%20-%20rickyedit.mp3]]></URL>
+		<estilo>Hot</estilo>
+		<interprete>Rycky Edit</interprete>
+	</cancion>
+	
+	<cancion titulo="Mandanga Style">
+		<URL><![CDATA[https://ia801207.us.archive.org/2/items/amador-rivas-mandanga-style/Amador%20Rivas%20-%20Mandanga%20Style.mp3]]></URL>
+		<estilo>Regueton</estilo>
+		<interprete>Amador Rivas</interprete>
+	</cancion>
+	
+	<cancion titulo="Bad Apple">
+		<URL><![CDATA[https://ia601200.us.archive.org/2/items/bad-apple-pv_202401/東方Bad%20Apple!!%20ＰＶ影絵.mp3]]></URL>
+		<estilo>Electric</estilo>
+		<interprete>Steve Jobs</interprete>
+	</cancion>
+	
 	
 	
 	

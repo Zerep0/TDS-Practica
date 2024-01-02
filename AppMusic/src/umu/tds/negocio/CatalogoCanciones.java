@@ -82,57 +82,13 @@ public class CatalogoCanciones {
 		 for (Cancion can : cancionesBD) 
 		 {
 			  canciones.put(can.getInterprete()  + "_" + can.getTitulo(), can);
-			  if(can.getReciente() != Reciente.NORECIENTE)
-			  {
-				  cancionesRecientes.add(can);
-			  }
 		 }
-		 cancionesRecientes.sort(new Comparator<Cancion>() {
-            @Override
-            public int compare(Cancion c1, Cancion c2) {
-                // Compara las canciones según el índice de reciente
-                return Integer.compare(c1.getReciente().ordinal(), c2.getReciente().ordinal());
-            }
-        });
+		 
 		 
 	}
 	
-	public void actualizarFavorito(Cancion c)
-	{
-		String clave =  c.getInterprete() + "_" + c.getTitulo();
-		canciones.put(clave, c);
-		adaptadorCancion.actualizarFavorito(c);
-	}
 	
-	public void agregarReciente(Cancion nuevaCancion) {
-	    if (!cancionesRecientes.contains(nuevaCancion)) {
-	    	
-	    	cancionesRecientes.addFirst(nuevaCancion);  // Agregar al principio de la lista
-	    	if(cancionesRecientes.size() == Reciente.values().length)
-	    	{
-	    		Cancion antigua = cancionesRecientes.removeLast();
-	            antigua.setReciente(Reciente.NORECIENTE.ordinal());
-	            adaptadorCancion.recienteEliminada(antigua);
-	    	}
-	    }
-	    else
-	    {
-	    	if(nuevaCancion.getReciente() != Reciente.PRIMERA)
-	    	{
-	    		cancionesRecientes.remove(nuevaCancion);
-	    		cancionesRecientes.addFirst(nuevaCancion);
-	    	}
-	    }
-	    for (int i = 0; i < cancionesRecientes.size(); i++) {
-            Cancion cancionActual = cancionesRecientes.get(i);
-            cancionActual.setReciente(i);
-        }
-	    adaptadorCancion.actualizarRecientes(cancionesRecientes);
-	}
 	
-	public LinkedList<Cancion> getRecientes()
-	{
-		return cancionesRecientes;
-	}
+	
 
 }

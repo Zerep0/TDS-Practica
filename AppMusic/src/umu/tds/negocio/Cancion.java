@@ -6,9 +6,9 @@ public class Cancion {
 	private int id;
 	private String titulo, ruta, estilo, interprete;
 	private int numReproducciones;
-	private boolean favorita;
-	private Reciente reciente;
 	
+	
+
 	public Cancion(String titulo,String ruta, String estilo, String interprete) {
 		this.id = 0;
 		this.titulo = titulo;
@@ -16,8 +16,6 @@ public class Cancion {
 		this.estilo = estilo;
 		this.interprete = interprete;
 		numReproducciones = 0;
-		favorita = false;
-		reciente = Reciente.NORECIENTE;
 	}
 
 	public int getId() {
@@ -65,14 +63,6 @@ public class Cancion {
 	/**
 	 * @return the marcado
 	 */
-	public boolean isFavorita() {
-		return favorita;
-	}
-	
-	public void setFavorita(boolean favorita)
-	{
-		this.favorita = favorita;
-	}
 	
 	public void setEstilo(String estilo)
 	{
@@ -91,19 +81,9 @@ public class Cancion {
 		return titulo + " ~ " + interprete;
 	}
 	
-	public Reciente getReciente()
-	{
-		return reciente;
-	}
-	
-	public void setReciente(int posicion)
-	{
-		this.reciente = Reciente.fromValor(posicion);
-	}
-	
 	@Override
 	public int hashCode() {
-		return Objects.hash(estilo, id, interprete, reciente, ruta, titulo);
+		return Objects.hash(estilo, id, interprete, ruta, titulo);
 	}
 
 	@Override
@@ -116,7 +96,7 @@ public class Cancion {
 			return false;
 		Cancion other = (Cancion) obj;
 		return Objects.equals(estilo, other.estilo) && id == other.id && Objects.equals(interprete, other.interprete)
-				&& reciente == other.reciente && Objects.equals(ruta, other.ruta)
-				&& Objects.equals(titulo, other.titulo);
+				&& Objects.equals(ruta, other.ruta) && Objects.equals(titulo, other.titulo);
 	}
+	
 }

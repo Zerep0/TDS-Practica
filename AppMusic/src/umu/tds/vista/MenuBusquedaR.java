@@ -170,7 +170,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		barraReproduccion.setBackground(new Color(18, 156, 189));
 		barraReproduccion.setPreferredSize(new Dimension(400, 26));
 		subPanelTiempo.add(barraReproduccion, BorderLayout.NORTH);
-		barraReproduccion.setMinimum(0);
+		barraReproduccion.setValue(0);
         
 		JLabel msgDuracion = new JLabel("3:16");
 		msgDuracion.setForeground(new Color(255, 255, 255));
@@ -302,17 +302,18 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				umu.tds.negocio.Cancion cancionSeleccionada = listaCanciones.getSelectedValue();
 				if(cancionSeleccionada != null)
 				{
-					if(cancionSeleccionada.isFavorita())
+					boolean esFavorita;
+					if(ControladorAppMusic.getInstancia().isFavorita(cancionSeleccionada))
 					{
 						quitaIconoFavorito();
-						cancionSeleccionada.setFavorita(false);
+						esFavorita = false;
 					}
 					else
 					{
 						cambiaIconoFavorito();
-						cancionSeleccionada.setFavorita(true);
+						esFavorita = true;
 					}
-					ControladorAppMusic.getInstancia().actualizarFavorito(cancionSeleccionada);
+					ControladorAppMusic.getInstancia().actualizarFavorito(esFavorita, cancionSeleccionada);
 				}
 			}
 		});
@@ -322,7 +323,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				umu.tds.negocio.Cancion cancionSeleccionada = listaCanciones.getSelectedValue();
 				if(cancionSeleccionada != null)
 				{
-					if(cancionSeleccionada.isFavorita())
+					if(ControladorAppMusic.getInstancia().isFavorita(cancionSeleccionada))
 					{
 						cambiaIconoFavorito();
 					}
@@ -350,6 +351,22 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	public void quitaIconoFavorito()
 	{
 		btnFavorito.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/favoritos.png")));
+	}
+	public void entrarVentana()
+	{
+		if(miModelo.getSize() > 0)
+		{
+			int indice = listaCanciones.getSelectedIndex();
+			if(ControladorAppMusic.getInstancia().isFavorita(miModelo.getElementAt(indice == -1 ? 0 : indice)))
+			{
+				cambiaIconoFavorito();
+			}
+			else
+			{
+				quitaIconoFavorito();
+			}
+		}
+		
 	}
 
 	@Override
