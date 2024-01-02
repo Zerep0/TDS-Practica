@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 
+import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.*;
 import umu.tds.negocio.Cancion;
 
@@ -35,8 +36,9 @@ import javax.swing.JButton;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import umu.tds.negocio.IReproductorListener;
 
-public class MenuPlaylist extends JPanel {
+public class MenuPlaylist extends JPanel implements IReproductorListener{
 
 	private static final String PLACEHOLDER_PLAYLIST = "Nombre de la Playlist";
 	private static final long serialVersionUID = 1L;
@@ -45,13 +47,19 @@ public class MenuPlaylist extends JPanel {
 	private JTable tablaCancionesPlaylist;
 	private Placeholder placeholder;
 	private RenderizadorLetrasCabecera renderizadorLetras;
-	private boolean pausa;
+	private String pausa;
+	private JLabel btnStop;
+	private JLabel btnRedo;
+	private JLabel btnPlay;
+	private JLabel btnForwa;
+	private JLabel btnRandom;
 	/**
 	 * Create the panel.
 	 */
 	
 	public MenuPlaylist() {
-		this.pausa = true;
+		this.pausa = "play";
+		ControladorAppMusic.getInstancia().setMenuPlaylist(this);
 		initialize();
 	}
 	
@@ -208,23 +216,23 @@ public class MenuPlaylist extends JPanel {
 		PanelReproduccion.setBackground(new Color(18, 159, 186));
 		add(PanelReproduccion, BorderLayout.SOUTH);
 		
-		JLabel btnStop = new JLabel("");
+		btnStop = new JLabel("");
 		btnStop.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/cuadrado.png")));
 		PanelReproduccion.add(btnStop);
 		
-		JLabel btnRedo = new JLabel("");
+		btnRedo = new JLabel("");
 		btnRedo.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/atras.png")));
 		PanelReproduccion.add(btnRedo);
 		
-		JLabel btnPlay = new JLabel("");
+		btnPlay = new JLabel("");
 		btnPlay.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
 		PanelReproduccion.add(btnPlay);
 		
-		JLabel btnForwa = new JLabel("");
+		btnForwa = new JLabel("");
 		btnForwa.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/siguiente.png")));
 		PanelReproduccion.add(btnForwa);
 		
-		JLabel btnRandom = new JLabel("");
+		btnRandom = new JLabel("");
 		btnRandom.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/aleatorio.png")));
 		PanelReproduccion.add(btnRandom);
 		
@@ -277,20 +285,32 @@ public class MenuPlaylist extends JPanel {
 		btnPlay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(pausa)
+				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+				if(pausa == "play")
 				{
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
-					btnPlay.setVisible(true);
-					pausa = false;
+					pausa = "pause";
 				}
 				else
 				{
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-					btnPlay.setVisible(true);
-					pausa = true;
+					pausa = "play";
 				}
+				
 
 			}
 		});
+		
+	}
+
+	@Override
+	public void actualizarEstadoReproductor(String pausa) {
+		this.pausa = pausa;	
+		if(pausa == "play")
+		{
+			btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+		}
+		else
+		{
+			btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+		}
 	}
 }

@@ -16,17 +16,21 @@ import java.util.stream.Collectors;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import umu.tds.negocio.CargadorCanciones;
 import umu.tds.negocio.CatalogoCanciones;
 import umu.tds.negocio.CatalogoUsuarios;
+import umu.tds.negocio.IReproductorListener;
 import umu.tds.negocio.Usuario;
 
 import umu.tds.vista.Alerta;
 import umu.tds.vista.Inicio;
+import umu.tds.vista.MenuBusquedaR;
 import umu.tds.vista.MenuHome;
+import umu.tds.vista.MenuPlaylist;
 import umu.tds.vista.Registro;
 
 public class ControladorAppMusic implements ICancionesListener{
@@ -55,10 +59,11 @@ public class ControladorAppMusic implements ICancionesListener{
 	private CatalogoCanciones catalogoCanciones;
 	
 	private ArrayList<IUsuarioListener> listeners = new ArrayList<IUsuarioListener>();
+	private ArrayList<IReproductorListener> listenerReproductor = new ArrayList<IReproductorListener>();
 	
 	private MenuHome menuHome;
+	private JPanel panelActualReproduccion;
 	
-	private Player reproductor = new Player();
 	
 	private ControladorAppMusic()
 	{
@@ -276,6 +281,17 @@ public class ControladorAppMusic implements ICancionesListener{
 	{
 		this.menuHome = menuHome;
 		this.menuHome.refrescarRecientes(catalogoCanciones.getRecientes());
+		listenerReproductor.add(menuHome);
+	}
+	
+	public void setMenuPlaylist(MenuPlaylist menuPlaylist)
+	{
+		listenerReproductor.add(menuPlaylist);
+	}
+	
+	public void setMenuBusquedaR(MenuBusquedaR menuBusquedaR)
+	{
+		listenerReproductor.add(menuBusquedaR);
 	}
 	
 	public LinkedList<umu.tds.negocio.Cancion> refrescarRecientes()
@@ -285,7 +301,7 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
 	{
-		reproductor.play(play,c);
+		Player.INSTANCE.play(play,c);
 		if(play.equals("play"))
 		{
 			catalogoCanciones.agregarReciente(c);
@@ -295,9 +311,29 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	public umu.tds.negocio.Cancion getCancionReproduciendose()
 	{
-		return reproductor.getCancionReproduciendo();
+		return Player.INSTANCE.getCancionReproduciendo();
 	}
 	
+	public void actualizarEstadoReproductor(String pausa)
+	{
+		for(IReproductorListener r : listenerReproductor)
+			r.actualizarEstadoReproductor(pausa);
+	}
 	
+	// play
+	public void actualizarPanelReproduccion(JPanel reproActual)
+	{
+		panelActualReproduccion = reproActual;
+	}
 	
+	// forward o un rewind
+	public boolean comprobarPaneles(JPanel panelActual)
+	{
+		boolean devolver = false;
+		if(panelActual == panelActualReproduccion)
+			devolver = true;
+		else devolver = false;
+		panelActualReproduccion = panelActual;
+		return devolver;
+	}
 }

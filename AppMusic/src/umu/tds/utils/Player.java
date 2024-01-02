@@ -18,12 +18,13 @@ import umu.tds.negocio.Cancion;
 
 import java.io.IOException;
 
-public class Player {
+public enum Player {
+	INSTANCE;
 	// canciones almacenadas en src/main/resources
 	private Cancion cancionActual = null;
 	private MediaPlayer mediaPlayer;
 	
-	public Player(){
+	private Player(){
 		//existen otras formas de lanzar JavaFX desde Swing
 		try {
 			com.sun.javafx.application.PlatformImpl.startup(()->{});			
@@ -45,6 +46,7 @@ public class Player {
 			break;
 		case "stop": 
 			mediaPlayer.stop();
+			cancionActual = null;
 			break;
 		case "pause": 
 			mediaPlayer.pause();

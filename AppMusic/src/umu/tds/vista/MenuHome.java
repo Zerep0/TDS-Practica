@@ -7,9 +7,6 @@ import java.awt.GridBagConstraints;
 import javax.swing.ImageIcon;
 import java.awt.Insets;
 import java.awt.Rectangle;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -18,7 +15,6 @@ import java.awt.Color;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
-import javax.swing.AbstractListModel;
 import javax.swing.BorderFactory;
 
 import java.awt.Font;
@@ -30,6 +26,7 @@ import javax.swing.plaf.basic.BasicSliderUI;
 import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.AlineamientoLista;
 import umu.tds.negocio.Cancion;
+import umu.tds.negocio.IReproductorListener;
 import umu.tds.observer.IUsuarioListener;
 import umu.tds.observer.UsuarioEvent;
 
@@ -39,26 +36,29 @@ import javax.swing.ListModel;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
-public class MenuHome extends JPanel{
+public class MenuHome extends JPanel implements IReproductorListener{
 
 	private static final long serialVersionUID = 1L;
 	private AlineamientoLista alineamientoListaMenu;
 	private String pausa;
-	private boolean Aleatorio;
 	private JLabel MsgBienvenida;
 	private ListaModelo miModelo;
+	private JLabel btnStop;
+	private JLabel btnRedo;
+	private JLabel btnPlay;
+	private JLabel btnForwa;
+	private JLabel btnRandom;
 	/**
 	 * Create the panel.
 	 */
 	public MenuHome() {
 		this.pausa = "play";
-		this.Aleatorio = false;
 		miModelo = new ListaModelo();
 		ControladorAppMusic.getInstancia().setMenuHome(this);
 		initialize();
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void initialize()
 	{
 		// HELPER
@@ -72,23 +72,23 @@ public class MenuHome extends JPanel{
 		PanelReproduccion.setBackground(new Color(18, 159, 186));
 		add(PanelReproduccion, BorderLayout.SOUTH);
 		
-		JLabel btnStop = new JLabel("");
+		btnStop = new JLabel("");
 		btnStop.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/cuadrado.png")));
 		PanelReproduccion.add(btnStop);
 		
-		JLabel btnRedo = new JLabel("");
+		btnRedo = new JLabel("");
 		btnRedo.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/atras.png")));
 		PanelReproduccion.add(btnRedo);
 		
-		JLabel btnPlay = new JLabel("");
+		btnPlay = new JLabel("");
 		btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
 		PanelReproduccion.add(btnPlay);
 		
-		JLabel btnForwa = new JLabel("");
+		btnForwa = new JLabel("");
 		btnForwa.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/siguiente.png")));
 		PanelReproduccion.add(btnForwa);
 		
-		JLabel btnRandom = new JLabel("");
+		btnRandom = new JLabel("");
 		btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/aleatorio.png")));
 		PanelReproduccion.add(btnRandom);
 		
@@ -177,17 +177,20 @@ public class MenuHome extends JPanel{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
+				if(c == null)
+				{
+					c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				}
 				if(c != null)
 				{
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					if(pausa.equals("play"))
 					{
-						btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
 						pausa = "pause";
 					}
 					else
 					{
-						btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
 						pausa = "play";
 					}
 				}
@@ -219,9 +222,9 @@ public class MenuHome extends JPanel{
 					c = modelo.getElementAt(j);
 					pausa = "play";
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
-					
+
 				}
 			}
 		});
@@ -248,7 +251,7 @@ public class MenuHome extends JPanel{
 					c = modelo.getElementAt(j);
 					pausa = "play";
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-					btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
 					
 				}
@@ -258,14 +261,15 @@ public class MenuHome extends JPanel{
 		
 		btnStop.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
+				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
 				pausa = "stop";
 				if(c!=null)
 				{
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 				}
-				btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 				pausa = "play";
+				
 			}
 		});
 		
@@ -295,6 +299,19 @@ public class MenuHome extends JPanel{
 	    }
 	}
 
+
+	@Override
+	public void actualizarEstadoReproductor(String pausa) {
+		this.pausa = pausa;	
+		if(pausa == "play")
+		{
+			btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/boton-de-pausa.png")));
+		}
+		else
+		{
+			btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
+		}
+	}
 
 	
 
