@@ -20,15 +20,87 @@ xs:schemaLocation="http://www.tds.es/canciones canciones.xsd">
 		<interprete>King Crimson </interprete>
 	</cancion>
 	
-	<cancion titulo="Confessing that I love you">
-		<URL><![CDATA[https://ia600108.us.archive.org/13/items/78_west-end-blues_louis-armstrong-and-his-orchestra-spencer-williams_gbia0031327/06%20-%20Confessin%27%20That%20I%20Love%20You%20-%20Louis%20Armstrong%20And%20His%20Orchcestra.mp3]]></URL>
-		<estilo>Jazz</estilo>
-		<interprete>Louis Armstrong</interprete>
-	</cancion>
-	
 	<cancion titulo="La Cumparsita">
 		<URL><![CDATA[https://ia801609.us.archive.org/14/items/78_la-cumparsita_pietro-g.h.-matos-rodriguez_gbia0001088b/La%20Cumparsita%20-%20Pietro%20-%20G.H.%20Matos%20Rodriguez-restored.mp3]]></URL>
 		<estilo>Tango</estilo>
 		<interprete>Pietro</interprete>
 	</cancion>
+	
+	<cancion titulo="ATL">
+		<URL><![CDATA[https://ia801205.us.archive.org/35/items/moe2023-12-09.duro.flac16/moe2023-12-09t09_ATL.mp3]]></URL>
+		<estilo>Tango</estilo>
+		<interprete>Moe</interprete>
+	</cancion>
+	
+	<cancion titulo="Christmas Time is Here">
+		<URL><![CDATA[https://ia801205.us.archive.org/35/items/moe2023-12-09.duro.flac16/moe2023-12-09t13_Christmas_Time_is_Here.mp3]]></URL>
+		<estilo>Christmas</estilo>
+		<interprete>Moe</interprete>
+	</cancion>
+	
+	<cancion titulo="76">
+		<URL><![CDATA[https://ia800503.us.archive.org/29/items/mkp2023-12-15.cmc622.sbd.matrix.flac16/kmp2023-12-15.cmc622.sbd.matrix-s1t01.mp3]]></URL>
+		<estilo>Jazz</estilo>
+		<interprete>Eric Krasno</interprete>
+	</cancion>
+	
+	<cancion titulo="Matrix">
+		<URL><![CDATA[https://ia800503.us.archive.org/29/items/mkp2023-12-15.cmc622.sbd.matrix.flac16/kmp2023-12-15.cmc622.sbd.matrix-s1t02.mp3]]></URL>
+		<estilo>Jazz</estilo>
+		<interprete>Eric Krasno</interprete>
+	</cancion>
+	
+	<cancion titulo="Ojos llorosos">
+		<URL><![CDATA[https://ia801207.us.archive.org/6/items/y-2mate.com-ojos-llorosos-magus-ep-un-verano-contigo/y2mate.com%20-%20Ojos%20Llorosos%20%20%20Magus%20EP%20Un%20verano%20contigo.mp3]]></URL>
+		<estilo>Regueton</estilo>
+		<interprete>Magus</interprete>
+	</cancion>
+	
+	<cancion titulo="ANDROMEDA">
+		<URL><![CDATA[https://ia601208.us.archive.org/31/items/wos-andromeda/y2mate.com%20-%20WOS%20%20ANDROMEDA%20Video%20Oficial.mp3]]></URL>
+		<estilo>Rap</estilo>
+		<interprete>Wos</interprete>
+	</cancion>
+	
+	<cancion titulo="Perro Negro">
+		<URL><![CDATA[https://ia601205.us.archive.org/33/items/bad-bunny-perro-negro/y2mate.com%20-%20Bad%20Bunny%20Feid%20%20PERRO%20NEGRO%20Letra.mp3]]></URL>
+		<estilo>Regueton</estilo>
+		<interprete>Bad bunny</interprete>
+	</cancion>
+	
+	<cancion titulo="Mira Mama">
+		<URL><![CDATA[https://ia801301.us.archive.org/31/items/wos-mira-mama/y2mate.com%20-%20WOS%20%20MIR%C3%81%20MAM%C3%81%20Video%20Oficial.mp3]]></URL>
+		<estilo>Rap</estilo>
+		<interprete>Wos</interprete>
+	</cancion>
+	
+	<cancion titulo="Canguro">
+		<URL><![CDATA[https://ia601301.us.archive.org/22/items/wos-canguro/y2mate.com%20-%20WOS%20%20CANGURO%20Video%20Oficial.mp3]]></URL>
+		<estilo>Rap</estilo>
+		<interprete>Wos</interprete>
+	</cancion>
+	
+	<cancion titulo="Caliente">
+		<URL><![CDATA[https://dl129.filemate20.shop/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ25tZGt6d2g0M0JPQUh0SVFzM1AybEo4QmJZS29mbnN5a0dOSlJ5aTdaWmRqV2RWMnZyNWN6Vm1hRDhwTnZuekxmb010eWY4ZzBCRERCeTlDT3dCVmluaXF0ZVpiQUJlc1FhRzlycWxKbXh5K2V5YXlGN2tXczRpcjQvaHpVS2pjRHFENVdiNjJGb2MwY2pDL1llYXJnMGNGWA%3D%3D]]></URL>
+		<estilo>Rap</estilo>
+		<interprete>Ricky Edit</interprete>
+	</cancion>
+	
+	<cancion titulo="Saxphone God">
+		<URL><![CDATA[https://dl244.filemate12.shop/?file=M3R4SUNiN3JsOHJ6WWQ2a3NQS1Y5ZGlxVlZIOCtyZ3NsOXN4emg1b1NxcENyNEF1dysydkxZSmZJYXdLd0lXc1d0MVR2anZJZU5QQUl3NlIvWXMzVjNxVDQ5bzQ4amphNnNBdFNabzNVQi8wbnRtemx5VisxRUtuV01IQ0FLeERiM0krOFdadXczWFdudGVEL0VmZWd5bjRzM2VnYWp3MWd3SkZNT1dEdDVwUXhXRFphdVB0M3BWWS9ISFB0c3NlaktISjRVZmx5cWc3NVk0aER4d2lLdFpPejhmeDNhaz0%3D]]></URL>
+		<estilo>Jazz</estilo>
+		<interprete>Sex Saxo</interprete>
+	</cancion>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </canciones>

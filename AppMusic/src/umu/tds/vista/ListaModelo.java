@@ -8,7 +8,7 @@ import javax.swing.ListModel;
 
 import umu.tds.negocio.Cancion;
 
-public class ListaModelo extends AbstractListModel<Cancion> {
+public class ListaModelo<T> extends AbstractListModel<T> {
 	
 	
 		/**
@@ -16,18 +16,30 @@ public class ListaModelo extends AbstractListModel<Cancion> {
 	 */
 	private static final long serialVersionUID = 1L;
 	
-		ArrayList<Cancion> canciones = new ArrayList<Cancion>();
+		ArrayList<T> canciones = new ArrayList<T>();
 		public int getSize() {
 			return canciones.size();
 		}
 		
-		public Cancion getElementAt(int index) {
+		public T getElementAt(int index) {
 			return canciones.get(index);
 		}
 		
-		public void actualizarLista(ArrayList<Cancion> canciones)
+		public void actualizarLista(ArrayList<T> canciones)
 		{
 			this.canciones = canciones;
+			fireContentsChanged(canciones, 0, getSize());
+		}
+		
+		public void add(T c)
+		{
+			canciones.add(c);
+			fireContentsChanged(canciones, 0, getSize());
+		}
+		
+		public void remove(T nombre)
+		{
+			canciones.remove(nombre);
 			fireContentsChanged(canciones, 0, getSize());
 		}
 

@@ -42,19 +42,22 @@ public class MenuHome extends JPanel implements IReproductorListener{
 	private AlineamientoLista alineamientoListaMenu;
 	private String pausa;
 	private JLabel MsgBienvenida;
-	private ListaModelo miModelo;
+	private ListaModelo<Cancion> miModelo;
 	private JLabel btnStop;
 	private JLabel btnRedo;
 	private JLabel btnPlay;
 	private JLabel btnForwa;
 	private JLabel btnRandom;
+	private MenuHome menuHome;
+	private JList<Cancion> listaCanciones;
 	/**
 	 * Create the panel.
 	 */
 	public MenuHome() {
 		this.pausa = "play";
-		miModelo = new ListaModelo();
-		ControladorAppMusic.getInstancia().setMenuHome(this);
+		miModelo = new ListaModelo<Cancion>();
+		menuHome = this;
+		ControladorAppMusic.getInstancia().setMenuHome(menuHome);
 		initialize();
 	}
 	
@@ -119,7 +122,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		JScrollPane scrollPane = new JScrollPane();
 		PanelRecientes.add(scrollPane, BorderLayout.CENTER);
 		
-		JList<Cancion> listaCanciones = new JList();
+		listaCanciones = new JList();
 		listaCanciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listaCanciones.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
 		listaCanciones.setModel(miModelo);
@@ -176,6 +179,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		btnPlay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuHome);
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
 				if(c == null)
 				{
@@ -200,31 +204,36 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		btnRedo.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
 				if(c != null)
 				{
 					pausa = "stop";
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					pausa = "play";
-					ListModel<umu.tds.negocio.Cancion> modelo = listaCanciones.getModel();
-					int j = 0;
-					for (int i = 0; i < modelo.getSize(); i++) {
-				            if (modelo.getElementAt(i).equals(c)) {
-				                j = i;
-				                i = modelo.getSize();
-				           }
-				     }
-					j = (j-1) % modelo.getSize();
-					if(j<0)
-					{
-						j = modelo.getSize()-1;
-					}
-					c = modelo.getElementAt(j);
-					pausa = "play";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-					pausa = "pause";
-
+				}
+				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuHome);
+				if(vengoOtroPanel && listaCanciones.getModel().getSize() > 0)
+				{
+					 listaCanciones.setSelectedIndex(listaCanciones.getModel().getSize()-1);
+				}else
+				{
+					int indiceActual = listaCanciones.getSelectedIndex();
+			        int totalCanciones = listaCanciones.getModel().getSize();
+			        if (totalCanciones > 0) {
+			        	indiceActual--;
+			        	int siguienteIndice;
+			        	if(indiceActual < 0)
+			        	{
+			        		indiceActual = listaCanciones.getModel().getSize()-1;
+			        	}
+			        	siguienteIndice = indiceActual;
+			            listaCanciones.setSelectedIndex(siguienteIndice);
+			            c = (Cancion) miModelo.getElementAt(siguienteIndice);
+			            pausa = "play";
+						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+						pausa = "pause";
+			        }
 				}
 			}
 		});
@@ -233,27 +242,30 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		btnForwa.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
 				if(c != null)
 				{
 					pausa = "stop";
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					pausa = "play";
-					ListModel<umu.tds.negocio.Cancion> modelo = listaCanciones.getModel();
-					int j = 0;
-					for (int i = 0; i < modelo.getSize(); i++) {
-				            if (modelo.getElementAt(i).equals(c)) {
-				                j = i;
-				                i = modelo.getSize();
-				           }
-				     }
-					j = (j+1) % modelo.getSize();
-					c = modelo.getElementAt(j);
-					pausa = "play";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-					pausa = "pause";
-					
+				}
+				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuHome);
+				if(vengoOtroPanel && listaCanciones.getModel().getSize() > 0)
+				{
+					 listaCanciones.setSelectedIndex(0);
+				}else
+				{
+					int indiceActual = listaCanciones.getSelectedIndex();
+			        int totalCanciones = listaCanciones.getModel().getSize();
+			        if (totalCanciones > 0) {
+			            int siguienteIndice = (indiceActual + 1) % totalCanciones;
+			            listaCanciones.setSelectedIndex(siguienteIndice);
+			            c = (Cancion) miModelo.getElementAt(siguienteIndice);
+			            pausa = "play";
+						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+						pausa = "pause";
+			        }
 				}
 			}
 		});
@@ -313,7 +325,20 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		}
 	}
 
-	
+	public void cancionAlFinalizar()
+	{
+		int indiceActual = listaCanciones.getSelectedIndex();
+        int totalCanciones = listaCanciones.getModel().getSize();
+        if (totalCanciones > 0) {
+            int siguienteIndice = (indiceActual + 1) % totalCanciones;
+            listaCanciones.setSelectedIndex(siguienteIndice);
+            Cancion c = miModelo.getElementAt(siguienteIndice);
+            pausa = "play";
+			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+			pausa = "pause";
+        }
+	}
 
 
 	

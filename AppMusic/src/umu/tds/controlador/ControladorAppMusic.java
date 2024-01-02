@@ -331,9 +331,23 @@ public class ControladorAppMusic implements ICancionesListener{
 	{
 		boolean devolver = false;
 		if(panelActual == panelActualReproduccion)
-			devolver = true;
-		else devolver = false;
+			devolver = false;
+		else devolver = true;
 		panelActualReproduccion = panelActual;
 		return devolver;
+	}
+	
+	public void siguienteAlFinalizar()
+	{
+		if(panelActualReproduccion instanceof MenuBusquedaR)
+		{
+			((MenuBusquedaR) panelActualReproduccion).cancionAlFinalizar();
+		}else if(panelActualReproduccion instanceof MenuHome)
+		{
+			((MenuHome) panelActualReproduccion).cancionAlFinalizar();
+		}else
+		{
+			((MenuPlaylist) panelActualReproduccion).cancionAlFinalizar();
+		}
 	}
 }

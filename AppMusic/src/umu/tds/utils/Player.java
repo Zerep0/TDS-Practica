@@ -14,6 +14,7 @@ import javax.swing.ListModel;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.negocio.Cancion;
 
 import java.io.IOException;
@@ -85,6 +86,11 @@ public enum Player {
 			Media hit = new Media(mp3.toFile().toURI().toString());
 			mediaPlayer = new MediaPlayer(hit);
 			
+			mediaPlayer.setOnEndOfMedia(() -> {
+		        ControladorAppMusic.getInstancia().siguienteAlFinalizar();
+		        
+		    });
+			
 		}
 		
 	}
@@ -93,5 +99,7 @@ public enum Player {
 	{
 		return cancionActual;
 	}
+	
+	
 	
 }

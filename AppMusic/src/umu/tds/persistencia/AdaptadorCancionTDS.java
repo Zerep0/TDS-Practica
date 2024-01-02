@@ -124,9 +124,13 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO{
 	public void actualizarReciente(Cancion recientes)
 	{
 		Entidad recuperaCancion = servPersistencia.recuperarEntidad(recientes.getId());
-		recuperaCancion.getPropiedades().stream().filter(p -> p.getNombre().equals("reciente"))
-		.forEach(p -> {p.setValor(String.valueOf(recientes.getReciente().ordinal()));
-		servPersistencia.modificarPropiedad(p);});
+		if(recuperaCancion != null)
+		{
+			recuperaCancion.getPropiedades().stream().filter(p -> p.getNombre().equals("reciente"))
+			.forEach(p -> {p.setValor(String.valueOf(recientes.getReciente().ordinal()));
+			servPersistencia.modificarPropiedad(p);});
+		}
+		
 	}
 	
 }

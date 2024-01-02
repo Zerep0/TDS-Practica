@@ -53,26 +53,30 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	private JLabel btnPlay;
 	private JLabel btnForwa;
 	private JLabel btnRandom;
+	private MenuPlaylist menuPlaylist;
+	private ListaModelo<String> miModelo;
+	private JList<String> listaPlaylist;
 	/**
 	 * Create the panel.
 	 */
 	
 	public MenuPlaylist() {
 		this.pausa = "play";
-		ControladorAppMusic.getInstancia().setMenuPlaylist(this);
+		menuPlaylist = this;
+		ControladorAppMusic.getInstancia().setMenuPlaylist(menuPlaylist);
 		initialize();
 	}
 	
 	
 	
-	@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+	@SuppressWarnings({ "rawtypes", "unchecked"})
 	private void initialize()
 	{
-		
+		miModelo = new ListaModelo<String>();
 		class MiTablaPersonalizada extends AbstractTableModel {
 			
 			private ArrayList<Cancion> cancionesPrueba;
-			private String[] columnas = {"Titulo","Interprete","Estilo",""};
+			private String[] columnas = {"Titulo","Interprete","Estilo","Seleccionar"};
 			private static final long serialVersionUID = 1L;
 			
 			public MiTablaPersonalizada(Cancion ...cancionesPrueba)
@@ -132,10 +136,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				
 				return  col == 3; // Solo la columna de checkboxes es editable.
 			}
-			
-			
-			
-			
+
 		}
 		
 		
@@ -150,20 +151,12 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		PanelPlaylist.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		add(PanelPlaylist, BorderLayout.WEST);
 		
-		JList<String> listaCanciones = new JList();
-		listaCanciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listaCanciones.setFont(new Font("Arial", Font.PLAIN, 14));
-		listaCanciones.setModel(new AbstractListModel() {
-			String[] values = new String[] {"Favoritas", "Musica Random", "Musica Clasica","Metal", "Un dia mas aqui","Pop","Pop","Pop","Pop","Pop","Pop","Pop","Pop","Pop","Pop"};
-			public int getSize() {
-				return values.length;
-			}
-			public Object getElementAt(int index) {
-				return values[index];
-			}
-		});
-		PanelPlaylist.setViewportView(listaCanciones);
-		listaCanciones.setBorder(BorderFactory.createLineBorder(Color.black));
+		listaPlaylist = new JList();
+		listaPlaylist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listaPlaylist.setFont(new Font("Arial", Font.PLAIN, 14));
+		listaPlaylist.setModel(miModelo);
+		PanelPlaylist.setViewportView(listaPlaylist);
+		listaPlaylist.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		
 		
@@ -286,6 +279,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuPlaylist);
 				if(pausa == "play")
 				{
 					pausa = "pause";
@@ -298,6 +292,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 
 			}
 		});
+		
 		
 	}
 
@@ -312,5 +307,10 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		{
 			btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
 		}
+	}
+	
+	public void cancionAlFinalizar()
+	{
+		// TODO:
 	}
 }
