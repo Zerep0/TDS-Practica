@@ -63,7 +63,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	public MenuPlaylist() {
 		this.pausa = "play";
 		menuPlaylist = this;
-		ControladorAppMusic.getInstancia().setMenuPlaylist(menuPlaylist);
+		ControladorAppMusic.getInstancia().setMenuPlaylist(menuPlaylist, null, null);
 		initialize();
 	}
 	

@@ -20,8 +20,10 @@ import java.util.stream.Collectors;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 
 import umu.tds.negocio.CargadorCanciones;
@@ -72,9 +74,13 @@ public class ControladorAppMusic implements ICancionesListener{
 	private Usuario usuarioActual;
 	private IAdaptadorUsuarioDAO adaptadorUsuario;
 	
+	private LinkedList<JSlider> sliders = new LinkedList<JSlider>();
+	private LinkedList<JLabel> labels = new LinkedList<JLabel>();
+	
 	private ControladorAppMusic()
 	{
 		usuarioActual = null;
+
 		try {
 			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 		} catch (DAOException e) {
@@ -302,27 +308,33 @@ public class ControladorAppMusic implements ICancionesListener{
 		adaptadorUsuario.actualizar(usuarioActual.getFavoritasNum(),usuarioActual, "favoritas");
 	}
 	
-	public void setMenuHome(MenuHome menuHome)
+	public void setMenuHome(MenuHome menuHome, JSlider slider, JLabel etiquetaTiempo)
 	{
 		this.menuHome = menuHome;
 		listenerReproductor.add(menuHome);
-	}
+		sliders.add(slider);
+		labels.add(etiquetaTiempo);
+;	}
 	
-	public void setMenuPlaylist(MenuPlaylist menuPlaylist)
+	public void setMenuPlaylist(MenuPlaylist menuPlaylist, JSlider slider, JLabel etiquetaTiempo)
 	{
 		listenerReproductor.add(menuPlaylist);
+		sliders.add(slider);
+		labels.add(etiquetaTiempo);
 	}
 	
-	public void setMenuBusquedaR(MenuBusquedaR menuBusquedaR)
+	public void setMenuBusquedaR(MenuBusquedaR menuBusquedaR, JSlider slider, JLabel etiquetaTiempo)
 	{
 		listenerReproductor.add(menuBusquedaR);
+		sliders.add(slider);
+		labels.add(etiquetaTiempo);
 	}
 	
 	
 	
 	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
 	{
-		Player.INSTANCE.play(play,c);
+		Player.INSTANCE.play(play,c, sliders, labels);
 		if(play.equals("play"))
 		{
 			usuarioActual.addReciente(c);

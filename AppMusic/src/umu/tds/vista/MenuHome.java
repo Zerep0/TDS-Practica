@@ -50,6 +50,8 @@ public class MenuHome extends JPanel implements IReproductorListener{
 	private JLabel btnRandom;
 	private MenuHome menuHome;
 	private JList<Cancion> listaCanciones;
+	private JSlider barraReproduccion = new JSlider();
+	JLabel msgDuracion = new JLabel("0:00");
 	/**
 	 * Create the panel.
 	 */
@@ -57,7 +59,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		this.pausa = "play";
 		miModelo = new ListaModelo<Cancion>();
 		menuHome = this;
-		ControladorAppMusic.getInstancia().setMenuHome(menuHome);
+		ControladorAppMusic.getInstancia().setMenuHome(menuHome, barraReproduccion, msgDuracion);
 		initialize();
 	}
 	
@@ -153,13 +155,13 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		PanelTiempo.add(subPanelTiempo);
 		subPanelTiempo.setLayout(new BorderLayout(0, 0));
 		
-		JSlider barraReproduccion = new JSlider();
+		
 		barraReproduccion.setBackground(new Color(18, 156, 189));
 		barraReproduccion.setPreferredSize(new Dimension(400, 26));
 		barraReproduccion.setValue(0);
 		subPanelTiempo.add(barraReproduccion, BorderLayout.NORTH);
 		
-		JLabel msgDuracion = new JLabel("3:16");
+		
 		msgDuracion.setForeground(new Color(255, 255, 255));
 		msgDuracion.setFont(new Font("Arial", Font.BOLD, 14));
 		GridBagConstraints gbc_msgDuracion = new GridBagConstraints();
