@@ -268,14 +268,35 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		listaPlaylist.setCellRenderer(centro);
 		listaPlaylist.setModel(miModelo);
 		PanelPlaylist.setViewportView(listaPlaylist);
-		miModelo.add("Favoritas");
+		anadirPlaylist("Favoritas");
 		
 		JScrollPane PanelTablaCanciones = new JScrollPane(tablaCancionesPlaylist);
 		PanelCentral.add(PanelTablaCanciones, BorderLayout.CENTER);
 		
 		creaPlaylist.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				
+				if(ControladorAppMusic.getInstancia().registrarPlaylist(creadorPlaylist))
+				{
+					anadirPlaylist(creadorPlaylist.getText());
+				}
+			}
+		});
+		
+		eliminarPlaylist.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int index = listaPlaylist.getSelectedIndex();
+				if(index>=0 && index<miModelo.getSize())
+				{
+					String nombrePlaylistSel = miModelo.getElementAt(index);
+					if(ControladorAppMusic.getInstancia().eliminarPlaylistSelec(nombrePlaylistSel))
+					{
+						quitarPlaylist(nombrePlaylistSel);
+					}
+				}
+				if(ControladorAppMusic.getInstancia().eliminarPlaylist(creadorPlaylist))
+				{
+					quitarPlaylist(creadorPlaylist.getText());
+				}
 				
 			}
 		});
@@ -293,6 +314,16 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		{
 			btnPlay.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
 		}
+	}
+	
+	public void anadirPlaylist(String playlist)
+	{
+		miModelo.add(playlist);
+	}
+	
+	public void quitarPlaylist(String playlist)
+	{
+		miModelo.remove(playlist);
 	}
 	
 	public void cancionAlFinalizar()

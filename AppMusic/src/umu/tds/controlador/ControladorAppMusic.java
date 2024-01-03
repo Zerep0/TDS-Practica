@@ -180,6 +180,8 @@ public class ControladorAppMusic implements ICancionesListener{
 
 	}
 	
+
+	
 	public void cargarCanciones(String rutaArchivo)
 	{
 		umu.tds.negocio.CargadorCanciones.INSTANCE.setArchivoCanciones(rutaArchivo);
@@ -388,5 +390,33 @@ public class ControladorAppMusic implements ICancionesListener{
 	public boolean isFavorita(umu.tds.negocio.Cancion c)
 	{
 		return usuarioActual.isFavorita(c);
+	}
+	
+	public Boolean registrarPlaylist(JTextField playlist)
+	{
+		if(playlist.getFont().isItalic())
+		{
+			return false;
+		}
+		return true;
+		
+	}
+	
+	public Boolean eliminarPlaylist(JTextField playlist)
+	{
+		if(playlist.getFont().isItalic() || playlist.getText().equals("Favoritas"))
+		{
+			return false;
+		}
+		return true;
+	}
+	
+	public Boolean eliminarPlaylistSelec(String playlist)
+	{
+		if(playlist.equals("Favoritas"))
+		{
+			return false;
+		}
+		return true;
 	}
 }
