@@ -67,7 +67,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 	private void initialize()
 	{
 		// HELPER
-		alineamientoListaMenu = new AlineamientoLista();
+		alineamientoListaMenu = new AlineamientoLista("izquierda");
 		
 		
 		setBackground(new Color(18, 159, 186));

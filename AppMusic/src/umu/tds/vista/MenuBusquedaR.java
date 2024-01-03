@@ -70,7 +70,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	private void initialize()
 	{
 		// HELPER
-		alinamientoListaBusqueda = new AlineamientoLista();
+		alinamientoListaBusqueda = new AlineamientoLista("izquierda");
 		miModelo = new ListaModelo<Cancion>();
 		
 		setBackground(new Color(18, 159, 186));

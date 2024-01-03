@@ -7,6 +7,7 @@ import java.awt.Dimension;
 
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
@@ -27,6 +28,7 @@ import javax.swing.BorderFactory;
 import java.awt.Font;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
 import javax.swing.JTable;
 
 import java.awt.Cursor;
@@ -37,6 +39,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import umu.tds.negocio.IReproductorListener;
+import java.awt.Component;
+import com.jgoodies.forms.factories.DefaultComponentFactory;
+import java.awt.ComponentOrientation;
 
 public class MenuPlaylist extends JPanel implements IReproductorListener{
 
@@ -44,18 +49,15 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField creadorPlaylist;
-	private JTable tablaCancionesPlaylist;
 	private Placeholder placeholder;
 	private RenderizadorLetrasCabecera renderizadorLetras;
 	private String pausa;
-	private JLabel btnStop;
-	private JLabel btnRedo;
-	private JLabel btnPlay;
-	private JLabel btnForwa;
-	private JLabel btnRandom;
 	private MenuPlaylist menuPlaylist;
 	private ListaModelo<String> miModelo;
-	private JList<String> listaPlaylist;
+	private JLabel btnPlay;
+	private JTable tablaCancionesPlaylist;
+	private JLabel msgDuracion = new JLabel("00:00");
+	private JSlider barraReproduccion = new JSlider();
 	/**
 	 * Create the panel.
 	 */
@@ -63,7 +65,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	public MenuPlaylist() {
 		this.pausa = "play";
 		menuPlaylist = this;
-		ControladorAppMusic.getInstancia().setMenuPlaylist(menuPlaylist, null, null);
+		ControladorAppMusic.getInstancia().setMenuPlaylist(menuPlaylist, barraReproduccion, msgDuracion);
 		initialize();
 	}
 	
@@ -146,19 +148,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		
 		setLayout(new BorderLayout(0, 0));
 		
-		JScrollPane PanelPlaylist = new JScrollPane();
-		PanelPlaylist.setFont(new Font("Arial", Font.PLAIN, 14));
-		PanelPlaylist.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		add(PanelPlaylist, BorderLayout.WEST);
-		
-		listaPlaylist = new JList();
-		listaPlaylist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listaPlaylist.setFont(new Font("Arial", Font.PLAIN, 14));
-		listaPlaylist.setModel(miModelo);
-		PanelPlaylist.setViewportView(listaPlaylist);
-		listaPlaylist.setBorder(BorderFactory.createLineBorder(Color.black));
-		
-		
+
 		
 		
 		
@@ -184,77 +174,57 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		creadorPlaylist.setColumns(25);
 		creadorPlaylist.setPreferredSize(new Dimension(150,30));
 		
-		JButton btnNewButton_1 = new JButton("");
-		btnNewButton_1.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/pagina.png")));
-		btnNewButton_1.setBorderPainted(false);
-		btnNewButton_1.setBorder(new EmptyBorder(0, 0, 0, 0));
-		btnNewButton_1.setBackground(new Color(18, 159, 186));
-		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
-		gbc_btnNewButton_1.gridx = 2;
-		gbc_btnNewButton_1.gridy = 1;
-		PanelGestionaPlaylist.add(btnNewButton_1, gbc_btnNewButton_1);
+		JButton creaPlaylist = new JButton("");
+		creaPlaylist.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/pagina.png")));
+		creaPlaylist.setBorderPainted(false);
+		creaPlaylist.setBorder(new EmptyBorder(0, 0, 0, 0));
+		creaPlaylist.setBackground(new Color(18, 159, 186));
+		GridBagConstraints gbc_creaPlaylist = new GridBagConstraints();
+		gbc_creaPlaylist.insets = new Insets(0, 0, 5, 5);
+		gbc_creaPlaylist.gridx = 2;
+		gbc_creaPlaylist.gridy = 1;
+		PanelGestionaPlaylist.add(creaPlaylist, gbc_creaPlaylist);
 		
-		JButton btnNewButton_2 = new JButton("");
-		btnNewButton_2.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/no-disponible.png")));
-		btnNewButton_2.setBorderPainted(false);
-		btnNewButton_2.setBackground(new Color(18, 159, 186));
-		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
-		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 0);
-		gbc_btnNewButton_2.gridx = 3;
-		gbc_btnNewButton_2.gridy = 1;
-		PanelGestionaPlaylist.add(btnNewButton_2, gbc_btnNewButton_2);
+		JButton eliminarPlaylist = new JButton("");
+		eliminarPlaylist.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/no-disponible.png")));
+		eliminarPlaylist.setBorderPainted(false);
+		eliminarPlaylist.setBackground(new Color(18, 159, 186));
+		GridBagConstraints gbc_eliminarPlaylist = new GridBagConstraints();
+		gbc_eliminarPlaylist.insets = new Insets(0, 0, 5, 0);
+		gbc_eliminarPlaylist.gridx = 3;
+		gbc_eliminarPlaylist.gridy = 1;
+		PanelGestionaPlaylist.add(eliminarPlaylist, gbc_eliminarPlaylist);
+		
+
 		
 		JPanel PanelReproduccion = new JPanel();
 		PanelReproduccion.setBackground(new Color(18, 159, 186));
 		add(PanelReproduccion, BorderLayout.SOUTH);
+		PanelReproduccion.setLayout(new BorderLayout(0, 0));
 		
-		btnStop = new JLabel("");
+		JPanel panel_botones = new JPanel();
+		panel_botones.setBackground(new Color(18, 156, 189));
+		PanelReproduccion.add(panel_botones, BorderLayout.CENTER);
+		
+		JLabel btnStop = new JLabel("");
 		btnStop.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/cuadrado.png")));
-		PanelReproduccion.add(btnStop);
+		panel_botones.add(btnStop);
 		
-		btnRedo = new JLabel("");
+		JLabel btnRedo = new JLabel("");
 		btnRedo.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/atras.png")));
-		PanelReproduccion.add(btnRedo);
+		panel_botones.add(btnRedo);
 		
 		btnPlay = new JLabel("");
 		btnPlay.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/triangulo-negro-flecha-derecha.png")));
-		PanelReproduccion.add(btnPlay);
+		panel_botones.add(btnPlay);
 		
-		btnForwa = new JLabel("");
+		JLabel btnForwa = new JLabel("");
 		btnForwa.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/siguiente.png")));
-		PanelReproduccion.add(btnForwa);
+		panel_botones.add(btnForwa);
 		
-		btnRandom = new JLabel("");
+		JLabel btnRandom = new JLabel("");
 		btnRandom.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/aleatorio.png")));
-		PanelReproduccion.add(btnRandom);
-		
-		JPanel panel = new JPanel();
-		add(panel, BorderLayout.CENTER);
-		panel.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(18, 156, 189));
-		panel.add(panel_1, BorderLayout.WEST);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(new Color(18, 156, 189));
-		panel.add(panel_2, BorderLayout.NORTH);
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(18, 156, 189));
-		panel.add(panel_3, BorderLayout.SOUTH);
-		
-		JButton btnEliminarCancion = new JButton("");
-		btnEliminarCancion.setBorderPainted(false);
-		btnEliminarCancion.setBackground(new Color(18, 159, 186));
-		btnEliminarCancion.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/cancelar.png")));
-		panel_3.add(btnEliminarCancion);
-		btnEliminarCancion.setVisible(false);
-		
-		JPanel panel_4 = new JPanel();
-		panel_4.setBackground(new Color(18, 156, 189));
-		panel.add(panel_4, BorderLayout.EAST);
+		panel_botones.add(btnRandom);
 		
 		
 		Cancion [] cancionesPrueba = {new Cancion("ANDROMEDA","ruta","rap","Wos"), new Cancion("Aqua Girl","rutaa","pop","Barbie")};
@@ -262,37 +232,53 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		tablaCancionesPlaylist = new JTable(modeloPlaylist);	
 		
 		tablaCancionesPlaylist.setAutoCreateRowSorter(true);
-		JTableHeader header = tablaCancionesPlaylist.getTableHeader(); 
+		JTableHeader header = tablaCancionesPlaylist.getTableHeader();
 		
 		// HELPER
 		renderizadorLetras = new RenderizadorLetrasCabecera(header.getDefaultRenderer(), new Font("Arial", Font.BOLD, 14),Color.BLACK);;
 		header.setDefaultRenderer(renderizadorLetras);
-		JScrollPane scrollPane = new JScrollPane(tablaCancionesPlaylist);
-		panel.add(scrollPane, BorderLayout.CENTER);
 		
 		
 		
 		placeholder.crearPlaceholderText(creadorPlaylist, PLACEHOLDER_PLAYLIST);
 		
+		JPanel PanelCentral = new JPanel();
+		PanelCentral.setBackground(new Color(18, 156, 189));
+		add(PanelCentral, BorderLayout.CENTER);
+		PanelCentral.setLayout(new BorderLayout(0, 0));
 		
-		btnPlay.addMouseListener(new MouseAdapter() {
-			@Override
+		JPanel PanelSlider = new JPanel();
+		PanelSlider.setBackground(new Color(18, 156, 189));
+		PanelCentral.add(PanelSlider, BorderLayout.SOUTH);
+		
+		barraReproduccion.setPreferredSize(new Dimension(400, 26));
+		barraReproduccion.setBackground(new Color(18, 156, 189));
+		PanelSlider.add(barraReproduccion);
+		
+		msgDuracion.setForeground(new Color(255, 255, 255));
+		msgDuracion.setFont(new Font("Arial", Font.BOLD, 14));
+		PanelSlider.add(msgDuracion);
+		
+		JScrollPane PanelPlaylist = new JScrollPane();
+		PanelCentral.add(PanelPlaylist, BorderLayout.WEST);
+		
+		AlineamientoLista centro = new AlineamientoLista("centro");
+		JList listaPlaylist = new JList();
+		listaPlaylist.setPreferredSize(new Dimension(100, 0));
+		listaPlaylist.setCellRenderer(centro);
+		listaPlaylist.setModel(miModelo);
+		PanelPlaylist.setViewportView(listaPlaylist);
+		miModelo.add("Favoritas");
+		
+		JScrollPane PanelTablaCanciones = new JScrollPane(tablaCancionesPlaylist);
+		PanelCentral.add(PanelTablaCanciones, BorderLayout.CENTER);
+		
+		creaPlaylist.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuPlaylist);
-				if(pausa == "play")
-				{
-					pausa = "pause";
-				}
-				else
-				{
-					pausa = "play";
-				}
 				
-
+				
 			}
 		});
-		
 		
 	}
 

@@ -98,8 +98,7 @@ public enum Player {
 	               int i = 0;
 	               for(JSlider s : sliders)
 	               {
-	            	   if(s != null)
-	            		   actualizarSlider(s,labels.get(i));
+	            	   actualizarSlider(s,labels.get(i));
 	            	   i++;
 	               }
 	                
