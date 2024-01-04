@@ -30,6 +30,7 @@ import umu.tds.negocio.CargadorCanciones;
 import umu.tds.negocio.CatalogoCanciones;
 import umu.tds.negocio.CatalogoUsuarios;
 import umu.tds.negocio.IReproductorListener;
+import umu.tds.negocio.Playlist;
 import umu.tds.negocio.Usuario;
 
 import umu.tds.vista.Alerta;
@@ -68,6 +69,7 @@ public class ControladorAppMusic implements ICancionesListener{
 	private ArrayList<IReproductorListener> listenerReproductor = new ArrayList<IReproductorListener>();
 	
 	private MenuHome menuHome;
+	private MenuPlaylist menuPlaylist;
 	private JPanel panelActualReproduccion;
 	
 	private FactoriaDAO dao;
@@ -133,6 +135,7 @@ public class ControladorAppMusic implements ICancionesListener{
 			UsuarioEvent e = new UsuarioEvent(user.getLogin());
 			notificarCambioNombre(e);
 			usuarioActual = user;
+			setFavoritasPlaylist();
 			this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
 			return true;
 		}
@@ -140,6 +143,7 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	public Boolean loginUsuario(JTextField login, JPasswordField password,Inicio ventana)
 	{
+		
 		// precondiciones
 		if(login.getFont().isItalic() || password.getFont().isItalic())
 		{
@@ -157,6 +161,7 @@ public class ControladorAppMusic implements ICancionesListener{
 			UsuarioEvent e = new UsuarioEvent(usuario.getLogin());
 			notificarCambioNombre(e);
 			usuarioActual = usuario;
+			setFavoritasPlaylist();
 			this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
 			return true;
 		}else 
@@ -306,10 +311,11 @@ public class ControladorAppMusic implements ICancionesListener{
 	public void actualizarFavorito(boolean esFavorita, umu.tds.negocio.Cancion c)
 	{
 		if(esFavorita)
-			
 			usuarioActual.addFavorita(c);
 		else usuarioActual.removeFavorita(c);
 		adaptadorUsuario.actualizar(usuarioActual.getFavoritasNum(),usuarioActual, "favoritas");
+		menuPlaylist.actualizarTabla(usuarioActual.getFavoritas());
+		
 	}
 	
 	public void setMenuHome(MenuHome menuHome, JSlider slider, JLabel etiquetaTiempo)
@@ -322,6 +328,7 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	public void setMenuPlaylist(MenuPlaylist menuPlaylist, JSlider slider, JLabel etiquetaTiempo)
 	{
+		this.menuPlaylist = menuPlaylist;
 		listenerReproductor.add(menuPlaylist);
 		sliders.add(slider);
 		labels.add(etiquetaTiempo);
@@ -400,8 +407,15 @@ public class ControladorAppMusic implements ICancionesListener{
 		{
 			return false;
 		}
+		
+		usuarioActual.setPlaylist(playlist.getText(),new Playlist(playlist.getText()));  //Poner tambien lista de canciones seleccionadas en null
 		return true;
 		
+	}
+	
+	public LinkedList<umu.tds.negocio.Cancion> getPlaylistCanciones(String playlist)
+	{
+		return usuarioActual.getCancionesPlaylist(playlist);
 	}
 	
 	public Boolean eliminarPlaylist(JTextField playlist)
@@ -410,6 +424,7 @@ public class ControladorAppMusic implements ICancionesListener{
 		{
 			return false;
 		}
+		usuarioActual.erasePlaylist(playlist.getText());
 		return true;
 	}
 	
@@ -419,16 +434,29 @@ public class ControladorAppMusic implements ICancionesListener{
 		{
 			return false;
 		}
+		usuarioActual.erasePlaylist(playlist);
 		return true;
 	}
+	
+	public void setFavoritasPlaylist()
+	{
+		Playlist favoritasPlaylist = new Playlist("Favoritas");
+		LinkedList<umu.tds.negocio.Cancion> favs = usuarioActual.getFavoritas();
+		for (umu.tds.negocio.Cancion c : favs) {
+			favoritasPlaylist.addCancion(c);
+		}
+		usuarioActual.setPlaylist(favoritasPlaylist.getNombrePlaylist(), favoritasPlaylist);
+	}
+	
+
 	
 	public void setSliderVolumen(JSlider volumen)
 	{
 		this.volumen = volumen;
 	}
+	
 	public void actualizarVolumen()
 	{
-		
 		Player.INSTANCE.actualizarVolumen(volumen.getValue() / 100f);
 	}
 	

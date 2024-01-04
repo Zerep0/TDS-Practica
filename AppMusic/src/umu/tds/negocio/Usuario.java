@@ -2,6 +2,7 @@ package umu.tds.negocio;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +16,7 @@ public class Usuario {
 	private boolean premium;
 	private LinkedList<Cancion> cancionesRecientes;
 	private LinkedList<Cancion> cancionesFavoritas;
+	private HashMap<String, Playlist> cancionesPlaylist;
 	private static final int MAX_RECIENTES = 10;
 
 	public Usuario(String login, String password, String email, LocalDate fechaNacimiento) {
@@ -26,6 +28,8 @@ public class Usuario {
 		this.premium = false;
 		cancionesRecientes = new LinkedList<Cancion>();
 		cancionesFavoritas = new LinkedList<Cancion>();
+		cancionesPlaylist = new HashMap<String,Playlist>();
+		cancionesPlaylist.put("Favoritas", new Playlist("Favoritas"));
 	}
 
 	/**
@@ -116,16 +120,41 @@ public class Usuario {
 	public void addFavorita(Cancion c)
 	{
 		if(!cancionesFavoritas.contains(c))
+		{
 			cancionesFavoritas.add(c);
+			cancionesPlaylist.get("Favoritas").addCancion(c);
+		}
+			
+			
 	}
 	
 	public void removeFavorita(Cancion c)
 	{
 		cancionesFavoritas.remove(c);
+		cancionesPlaylist.get("Favoritas").borrarCancion(c);
 	}
 	
 	public boolean isFavorita(Cancion c)
 	{
 		return cancionesFavoritas.contains(c);
 	}
+	
+	public LinkedList<Cancion> getCancionesPlaylist(String playlist)
+	{
+		return cancionesPlaylist.get(playlist).getCanciones();
+	}
+	
+	public void setPlaylist(String playlist,Playlist list)
+	{
+		cancionesPlaylist.put(playlist,list);
+		System.out.println("Se ha creado la playlist " + playlist);
+	}
+	
+	public void erasePlaylist(String playlist)
+	{
+		cancionesPlaylist.remove(playlist);
+		System.out.println("Se ha borrado la playlist " + playlist);
+
+	}
+	
 }

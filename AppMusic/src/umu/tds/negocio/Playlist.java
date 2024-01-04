@@ -1,33 +1,39 @@
 package umu.tds.negocio;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Playlist {
 
-	
 	private String nombrePlaylist;
-	
+	private LinkedList<Cancion> canciones;
 	public Playlist(String nombrePlaylist) {
 		this.nombrePlaylist = nombrePlaylist;
+		canciones = new LinkedList<Cancion>();
 	}
 	
 	
-	public void addCancion()
+	public void addCancion(Cancion c)
 	{
-		
+		if(!canciones.contains(c))
+		{
+			canciones.add(c);
+		}
 	}
 	
-	public List<Cancion> getCanciones()
+	public LinkedList<Cancion> getCanciones()
 	{
-		return null;
+		return canciones;
 	}
-	public String getNombrePlaylist() {
+	
+	public boolean borrarCancion(Cancion c)
+	{		
+		return canciones.remove(c);
+	}
+	
+	public String getNombrePlaylist() 
+	{
 		return nombrePlaylist;
 	}
-
-	public void setNombrePlaylist(String nombrePlaylist) {
-		this.nombrePlaylist = nombrePlaylist;
-	}
-	
 	
 }

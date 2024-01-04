@@ -9,6 +9,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 
@@ -19,6 +21,8 @@ import umu.tds.negocio.Cancion;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -27,6 +31,7 @@ import javax.swing.BorderFactory;
 
 import java.awt.Font;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
@@ -37,6 +42,7 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 
 import umu.tds.negocio.IReproductorListener;
 import java.awt.Component;
@@ -57,6 +63,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	private JTable tablaCancionesPlaylist;
 	private JLabel msgDuracion = new JLabel("00:00");
 	private JSlider barraReproduccion = new JSlider();
+	private MiTablaPersonalizada modeloPlaylist;
 	/**
 	 * Create the panel.
 	 */
@@ -74,71 +81,6 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	private void initialize()
 	{
 		miModelo = new ListaModelo<String>();
-		class MiTablaPersonalizada extends AbstractTableModel {
-			
-			private ArrayList<Cancion> cancionesPrueba;
-			private String[] columnas = {"Titulo","Interprete","Estilo","Seleccionar"};
-			private static final long serialVersionUID = 1L;
-			
-			public MiTablaPersonalizada(Cancion ...cancionesPrueba)
-			{
-				this.cancionesPrueba = new ArrayList<>();
-				Collections.addAll(this.cancionesPrueba, cancionesPrueba);
-			}
-
-			public int getRowCount() {
-				
-				return cancionesPrueba.size();
-			}
-
-			public int getColumnCount() {
-				
-				return columnas.length;
-			}
-			
-			public String getColumnName(int col) {
-				
-				return columnas[col];
-			}
-
-			public Object getValueAt(int row, int column) {
-	            Cancion cancion = cancionesPrueba.get(row);
-	            switch (column) {
-	                case 0:
-	                    return cancion.getTitulo();
-	                case 1:
-	                    return cancion.getInterprete();
-	                case 2:
-	                    return cancion.getEstilo();
-	                case 3:
-	                    return true;
-	                default:
-	                    return null;
-	            }
-	        }
-			
-			public void setValueAt(Object value, int row, int column) {
-	            Cancion cancion = cancionesPrueba.get(row);
-	            if (column == 3) {
-	            	
-	                //cancion.setFavorita((Boolean) value);
-	            }
-	            fireTableCellUpdated(row, column);
-	        }
-			
-			public Class<?> getColumnClass(int columnIndex) {
-				if (columnIndex == 3) {
-	                return Boolean.class; // CheckBox
-	            }
-	            return super.getColumnClass(columnIndex);
-			}
-				
-			public boolean isCellEditable(int row, int col) {
-				
-				return  col == 3; // Solo la columna de checkboxes es editable.
-			}
-
-		}
 		
 		
 		// USO DE HELPER
@@ -148,9 +90,6 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		setLayout(new BorderLayout(0, 0));
 		
 
-		
-		
-		
 		JPanel PanelGestionaPlaylist = new JPanel();
 		PanelGestionaPlaylist.setForeground(new Color(198, 255, 255));
 		PanelGestionaPlaylist.setBackground(new Color(18, 156, 189));
@@ -226,8 +165,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		panel_botones.add(btnRandom);
 		
 		
-		Cancion [] cancionesPrueba = {new Cancion("ANDROMEDA","ruta","rap","Wos"), new Cancion("Aqua Girl","rutaa","pop","Barbie")};
-		MiTablaPersonalizada modeloPlaylist = new MiTablaPersonalizada(cancionesPrueba);
+	    modeloPlaylist = new MiTablaPersonalizada();
 		tablaCancionesPlaylist = new JTable(modeloPlaylist);	
 		
 		tablaCancionesPlaylist.setAutoCreateRowSorter(true);
@@ -277,10 +215,21 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		
 		creaPlaylist.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if(ControladorAppMusic.getInstancia().registrarPlaylist(creadorPlaylist))
-				{
-					anadirPlaylist(creadorPlaylist.getText());
-				}
+				int respuesta = JOptionPane.showConfirmDialog(null, "¿Quieres crear la playlist?", "Confirmación", JOptionPane.YES_NO_OPTION);
+
+		        if (respuesta == JOptionPane.YES_OPTION) {
+					if(ControladorAppMusic.getInstancia().registrarPlaylist(creadorPlaylist))
+					{
+						if(anadirPlaylist(creadorPlaylist.getText()))
+						{
+					        JOptionPane.showMessageDialog(null, "La lista se ha creado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else
+						{
+					        JOptionPane.showMessageDialog(null, "No se ha podido crear la lista", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+		        }
 			}
 		});
 		
@@ -303,6 +252,24 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 			}
 		});
 		
+		listaPlaylist.addListSelectionListener(new ListSelectionListener() {
+	        @Override
+	        public void valueChanged(ListSelectionEvent e) {
+	            if (!e.getValueIsAdjusting()) {
+	                // Acciones que ocurren cuando se selecciona un elemento
+	            	String selectedValue = (String) listaPlaylist.getSelectedValue();
+	                if (selectedValue != null) {
+	                    System.out.println("Elemento seleccionado: " + selectedValue);
+	                
+	                    //Realizar acciones adicionales aquí
+	                    LinkedList<Cancion> canciones = ControladorAppMusic.getInstancia().getPlaylistCanciones(selectedValue);
+	                    
+	                }
+	            }
+	        }
+	    });
+		
+		
 	}
 
 	@Override
@@ -318,9 +285,10 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		}
 	}
 	
-	public void anadirPlaylist(String playlist)
+	
+	public boolean anadirPlaylist(String playlist)
 	{
-		miModelo.add(playlist);
+		return miModelo.add(playlist);
 	}
 	
 	public void quitarPlaylist(String playlist)
@@ -328,8 +296,15 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		miModelo.remove(playlist);
 	}
 	
+	
+	
 	public void cancionAlFinalizar()
 	{
 		// TODO:
+	}
+	
+	public void actualizarTabla(LinkedList<Cancion> canciones)
+	{
+		modeloPlaylist.actualizarTabla(canciones);
 	}
 }

@@ -31,13 +31,15 @@ public class ListaModelo<T> extends AbstractListModel<T> {
 			fireContentsChanged(canciones, 0, getSize());
 		}
 		
-		public void add(T c)
+		public boolean add(T c)
 		{
 			if(!canciones.contains(c))
 			{
 				canciones.add(c);
 				fireContentsChanged(canciones, 0, getSize());
+				return true;
 			}
+			return false;
 		}
 		
 		public void remove(T nombre)
