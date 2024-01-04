@@ -263,7 +263,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	                
 	                    //Realizar acciones adicionales aquí
 	                    LinkedList<Cancion> canciones = ControladorAppMusic.getInstancia().getPlaylistCanciones(selectedValue);
-	                    
+	                    modeloPlaylist.actualizarTabla(canciones, selectedValue);
 	                }
 	            }
 	        }
@@ -305,6 +305,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	
 	public void actualizarTabla(LinkedList<Cancion> canciones)
 	{
-		modeloPlaylist.actualizarTabla(canciones);
+		if(modeloPlaylist.getNombrePlaylist().equals("Favoritas"))
+			modeloPlaylist.actualizarTabla(canciones, "Favoritas");
 	}
 }
