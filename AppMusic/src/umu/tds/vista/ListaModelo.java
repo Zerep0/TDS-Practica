@@ -33,30 +33,18 @@ public class ListaModelo<T> extends AbstractListModel<T> {
 		
 		public void add(T c)
 		{
-			int i;
-			for(i = 0;i<canciones.size();i++)
+			if(!canciones.contains(c))
 			{
-				if(c.equals(canciones.get(i)))
-				{
-					return;
-				}
+				canciones.add(c);
+				fireContentsChanged(canciones, 0, getSize());
 			}
-			canciones.add(c);
-			fireContentsChanged(canciones, 0, getSize());
 		}
 		
 		public void remove(T nombre)
 		{
-			int i;
-			for(i = 0;i<canciones.size();i++)
-			{
-				if(nombre.equals(canciones.get(i)))
-				{
-					canciones.remove(nombre);
-					fireContentsChanged(canciones, 0, getSize());
-					return;
-				}
-			}
+			
+			if(canciones.remove(nombre))
+				fireContentsChanged(canciones, 0, getSize());
 		}
 
 

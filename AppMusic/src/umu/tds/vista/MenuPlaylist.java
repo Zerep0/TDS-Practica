@@ -40,7 +40,6 @@ import java.util.Collections;
 
 import umu.tds.negocio.IReproductorListener;
 import java.awt.Component;
-import com.jgoodies.forms.factories.DefaultComponentFactory;
 import java.awt.ComponentOrientation;
 
 public class MenuPlaylist extends JPanel implements IReproductorListener{
