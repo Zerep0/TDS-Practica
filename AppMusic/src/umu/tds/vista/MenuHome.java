@@ -25,6 +25,7 @@ import javax.swing.plaf.basic.BasicSliderUI;
 
 import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.AlineamientoLista;
+import umu.tds.helper.CustomSliderUI;
 import umu.tds.negocio.Cancion;
 import umu.tds.negocio.IReproductorListener;
 import umu.tds.observer.IUsuarioListener;
@@ -51,7 +52,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 	private MenuHome menuHome;
 	private JList<Cancion> listaCanciones;
 	private JSlider barraReproduccion = new JSlider();
-	JLabel msgDuracion = new JLabel("0:00");
+	JLabel msgDuracion = new JLabel("00:00");
 	/**
 	 * Create the panel.
 	 */
@@ -159,6 +160,8 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		barraReproduccion.setBackground(new Color(18, 156, 189));
 		barraReproduccion.setPreferredSize(new Dimension(400, 26));
 		barraReproduccion.setValue(0);
+		barraReproduccion.setEnabled(false);
+		barraReproduccion.setUI(new CustomSliderUI(barraReproduccion));
 		subPanelTiempo.add(barraReproduccion, BorderLayout.NORTH);
 		
 		

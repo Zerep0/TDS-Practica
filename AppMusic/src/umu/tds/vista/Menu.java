@@ -15,20 +15,22 @@ import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
-
 import javax.swing.JMenuItem;
 import java.awt.GridBagLayout;
 import java.awt.Window;
 
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import umu.tds.controlador.ControladorAppMusic;
+import umu.tds.helper.CustomSliderUI;
 import umu.tds.negocio.Cancion;
 import pulsador.Luz;
+import javax.swing.JSlider;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.Font;
 
 public class Menu extends JPanel {
 
@@ -83,22 +85,6 @@ public class Menu extends JPanel {
 		add(PanelBotonIcono, BorderLayout.EAST);
 		PanelBotonIcono.setLayout(new BorderLayout(0, 0));
 		
-		JLabel btnIcono = new JLabel("");
-		btnIcono.setBackground(new Color(18, 156, 189));
-		btnIcono.setVerticalAlignment(SwingConstants.TOP);
-		btnIcono.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/usuario.png")));
-		PanelBotonIcono.add(btnIcono, BorderLayout.CENTER);
-		
-		JPopupMenu desplegableIcono = new JPopupMenu();
-		addPopup(btnIcono, desplegableIcono);
-		
-		
-		JMenuItem btnPremium = new JMenuItem("Premium");
-		desplegableIcono.add(btnPremium);
-		
-		JMenuItem btnLogout = new JMenuItem("Logout");
-		desplegableIcono.add(btnLogout);
-		
 		JPanel rellenoIcono1 = new JPanel();
 		rellenoIcono1.setBackground(new Color(18, 156, 189));
 		PanelBotonIcono.add(rellenoIcono1, BorderLayout.WEST);
@@ -114,6 +100,62 @@ public class Menu extends JPanel {
 		Luz btnLuz = new Luz();
 		PanelBotonIcono.add(btnLuz, BorderLayout.SOUTH);
 		btnLuz.setColor(Color.white);
+		
+		JPanel PanelVolumenIcono = new JPanel();
+		PanelVolumenIcono.setBackground(new Color(18, 156, 189));
+		PanelBotonIcono.add(PanelVolumenIcono, BorderLayout.CENTER);
+		PanelVolumenIcono.setLayout(new BorderLayout(0, 0));
+		
+		JLabel botonIcono = new JLabel("");
+		botonIcono.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/usuario.png")));
+		PanelVolumenIcono.add(botonIcono, BorderLayout.NORTH);
+		
+		
+		JPopupMenu popupMenu = new JPopupMenu();
+		addPopup(botonIcono, popupMenu);
+		
+		JMenuItem btnPremium = new JMenuItem("Premium");
+		popupMenu.add(btnPremium);
+		
+		JMenuItem btnLogout = new JMenuItem("Logout");
+		popupMenu.add(btnLogout);
+		
+		
+		
+		
+		
+		
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(18, 156, 189));
+		PanelVolumenIcono.add(panel, BorderLayout.CENTER);
+		GridBagLayout gbl_panel = new GridBagLayout();
+		gbl_panel.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_panel.rowHeights = new int[]{30, 0, 0, 30, 0};
+		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel.setLayout(gbl_panel);
+		
+		JLabel Volumen = new JLabel("50%");
+		Volumen.setFont(new Font("Arial", Font.BOLD, 14));
+		Volumen.setForeground(new Color(255, 255, 255));
+		GridBagConstraints gbc_Volumen = new GridBagConstraints();
+		gbc_Volumen.insets = new Insets(0, 0, 5, 5);
+		gbc_Volumen.gridx = 1;
+		gbc_Volumen.gridy = 1;
+		panel.add(Volumen, gbc_Volumen);
+		
+		JSlider barraVolumen = new JSlider();
+		barraVolumen.setPreferredSize(new Dimension(26, 100));
+		barraVolumen.setBackground(new Color(18, 156, 189));
+		barraVolumen.setOrientation(SwingConstants.VERTICAL);
+		GridBagConstraints gbc_barraVolumen = new GridBagConstraints();
+		gbc_barraVolumen.insets = new Insets(0, 0, 5, 5);
+		gbc_barraVolumen.gridx = 1;
+		gbc_barraVolumen.gridy = 2;
+		barraVolumen.setUI(new CustomSliderUI(barraVolumen));
+		panel.add(barraVolumen, gbc_barraVolumen);
+		ControladorAppMusic.getInstancia().setSliderVolumen(barraVolumen);
 		
 		JPanel PanelNavegacion = new JPanel();
 		PanelNavegacion.setBackground(new Color(18, 159, 186));
@@ -165,23 +207,6 @@ public class Menu extends JPanel {
 			}
 		});
 		
-		btnLogout.addActionListener((e) -> {
-			launcher.dispose();
-			Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
-			ControladorAppMusic.getInstancia().reproducirCancion("stop", c);
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
-						Launcher window = new Launcher();
-						window.getFrame().setVisible(true);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-		});
-		
 		btnLuz.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -205,14 +230,34 @@ public class Menu extends JPanel {
 			}
 		});
 		
+		btnLogout.addActionListener((e) -> {
+			launcher.dispose();
+			Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+			if(c != null)
+				ControladorAppMusic.getInstancia().reproducirCancion("stop", c);
+			EventQueue.invokeLater(new Runnable() {
+				public void run() {
+					try {
+						UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel");
+						Launcher window = new Launcher();
+						window.getFrame().setVisible(true);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		});
+		
+		btnPremium.addActionListener((e) -> {});
+		
+		barraVolumen.addChangeListener((e) -> {
+			ControladorAppMusic.getInstancia().actualizarVolumen();
+			Volumen.setText(barraVolumen.getValue() + "%");
+		} );
+		
 		
 	}
 
-	
-	
-	
-	
-	
 	private static void addPopup(Component component, final JPopupMenu popup) {
 		component.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
@@ -234,6 +279,9 @@ public class Menu extends JPanel {
 	}
 	
 	
+	
+	
+
 	
 	
 	

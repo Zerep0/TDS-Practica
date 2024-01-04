@@ -252,6 +252,9 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		
 		barraReproduccion.setPreferredSize(new Dimension(400, 26));
 		barraReproduccion.setBackground(new Color(18, 156, 189));
+		barraReproduccion.setValue(0);
+		barraReproduccion.setUI(new CustomSliderUI(barraReproduccion));
+		barraReproduccion.setEnabled(false);
 		PanelSlider.add(barraReproduccion);
 		
 		msgDuracion.setForeground(new Color(255, 255, 255));

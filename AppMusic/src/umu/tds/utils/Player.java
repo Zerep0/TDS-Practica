@@ -85,6 +85,7 @@ public enum Player {
 
 			Media hit = new Media(mp3.toFile().toURI().toString());
 			mediaPlayer = new MediaPlayer(hit);
+			mediaPlayer.setVolume(ControladorAppMusic.getInstancia().getVolumen());
 			
 			mediaPlayer.setOnEndOfMedia(() -> {
 		        ControladorAppMusic.getInstancia().siguienteAlFinalizar();
@@ -124,6 +125,15 @@ public enum Player {
         int segundos = currentTime % 60;
         etiqueta.setText(String.format("%02d:%02d", minutos, segundos));
         slider.setMaximum((int)mediaPlayer.getTotalDuration().toSeconds());
+	}
+	
+	public void actualizarVolumen(float nuevoVolumen) {
+		if(cancionActual != null)
+		{
+			mediaPlayer.setVolume(nuevoVolumen);
+			System.out.println(nuevoVolumen);
+		}
+		
 	}
 	
 	

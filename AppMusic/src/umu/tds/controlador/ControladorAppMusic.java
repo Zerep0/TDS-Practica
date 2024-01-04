@@ -77,6 +77,8 @@ public class ControladorAppMusic implements ICancionesListener{
 	private LinkedList<JSlider> sliders = new LinkedList<JSlider>();
 	private LinkedList<JLabel> labels = new LinkedList<JLabel>();
 	
+	private JSlider volumen;
+	
 	private ControladorAppMusic()
 	{
 		usuarioActual = null;
@@ -418,5 +420,20 @@ public class ControladorAppMusic implements ICancionesListener{
 			return false;
 		}
 		return true;
+	}
+	
+	public void setSliderVolumen(JSlider volumen)
+	{
+		this.volumen = volumen;
+	}
+	public void actualizarVolumen()
+	{
+		
+		Player.INSTANCE.actualizarVolumen(volumen.getValue() / 100f);
+	}
+	
+	public float getVolumen()
+	{
+		return volumen.getValue() / 100f;
 	}
 }

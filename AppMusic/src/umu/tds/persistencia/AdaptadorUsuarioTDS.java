@@ -166,11 +166,14 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	public String IntegerListToString(LinkedList<Integer> nums)
 	{
 		String listaCan = "";
-		int i;
-		for (i = 0;i<nums.size()-1;i++) {
-			listaCan += nums.get(i).toString() + ",";
+		if(!nums.isEmpty())
+		{
+			int i;
+			for (i = 0;i<nums.size()-1;i++) {
+				listaCan += nums.get(i).toString() + ",";
+			}
+			listaCan += nums.get(i).toString(); 
 		}
-		listaCan += nums.get(i).toString(); 
 		return listaCan;
 	}
 	

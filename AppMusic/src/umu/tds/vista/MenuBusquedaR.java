@@ -5,9 +5,13 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -16,24 +20,22 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.AlineamientoLista;
-import umu.tds.utils.Player;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.ResourceBundle.Control;
-
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.basic.BasicSliderUI;
 import javax.swing.event.ListSelectionEvent;
 
 import umu.tds.negocio.Cancion;
 import  umu.tds.negocio.IReproductorListener;
+import javax.swing.border.EmptyBorder;
+import umu.tds.helper.*;
 
 public class MenuBusquedaR extends JPanel implements IReproductorListener{
 
@@ -53,7 +55,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	private JLabel btnRandom;
 	private MenuBusquedaR menuBusquedaR;
 	private JSlider barraReproduccion = new JSlider();
-	private JLabel msgDuracion = new JLabel("0:00");
+	private JLabel msgDuracion = new JLabel("00:00");
 	/**
 	 * Create the panel.
 	 */
@@ -162,16 +164,21 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		gbc_PanelTiempo.gridy = 0;
 		LayoutTiempo.add(PanelTiempo,gbc_PanelTiempo);
 		
+		
+		
 		JPanel subPanelTiempo = new JPanel();
 		subPanelTiempo.setBackground(new Color(18, 156, 189));
 		PanelTiempo.add(subPanelTiempo);
 		subPanelTiempo.setLayout(new BorderLayout(0, 0));
-		
 		barraReproduccion.setEnabled(false);
+		barraReproduccion.setBorder(new EmptyBorder(0, 0, 0, 0));
 		barraReproduccion.setBackground(new Color(18, 156, 189));
 		barraReproduccion.setPreferredSize(new Dimension(400, 26));
 		subPanelTiempo.add(barraReproduccion, BorderLayout.NORTH);
 		barraReproduccion.setValue(0);
+		barraReproduccion.setUI(new CustomSliderUI(barraReproduccion));
+		
+		
         
 
 		msgDuracion.setForeground(new Color(255, 255, 255));
