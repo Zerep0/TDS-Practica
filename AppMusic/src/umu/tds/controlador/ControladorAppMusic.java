@@ -447,28 +447,27 @@ public class ControladorAppMusic implements ICancionesListener{
 		usuarioActual.setPlaylist(favoritasPlaylist.getNombrePlaylist(), favoritasPlaylist);
 	}
 	
-	public boolean anadirCancionPlaylist(JTextField playlist,umu.tds.negocio.Cancion c)
+	public void anadirCancionPlaylist(String playlist,umu.tds.negocio.Cancion c)
 	{
-		if(playlist.getFont().isItalic() )
+		if(c != null && !playlist.equals("Favoritas") && usuarioActual.isPlaylist(playlist))
 		{
-			return false;
-		}
-		String list = playlist.getText();
-		if(c != null && list != "Favoritas" && usuarioActual.isPlaylist(list))
-		{
-			LinkedList<umu.tds.negocio.Cancion> canciones = getPlaylistCanciones(list);
-			if(canciones == null)
-			{
-				return false;
-			}
-			if(!canciones.contains(c))
+			LinkedList<umu.tds.negocio.Cancion> canciones = getPlaylistCanciones(playlist);
+			if(canciones != null && !canciones.contains(c))
 			{		
-				usuarioActual.setNuevasCanciones(list, c);
-				return true;
+				usuarioActual.setNuevasCanciones(playlist, c);
 			}
-			return false;
 		}
-		return false;
+	}
+	
+	public void anadirCancionesPlaylist(LinkedList<String> playlists,umu.tds.negocio.Cancion c)
+	{
+		for(String playlist : playlists)
+		{
+			anadirCancionPlaylist(playlist,c);
+		}
+	}
+	{
+		
 	}
 	
 	public void setSliderVolumen(JSlider volumen)
@@ -484,5 +483,10 @@ public class ControladorAppMusic implements ICancionesListener{
 	public float getVolumen()
 	{
 		return volumen.getValue() / 100f;
+	}
+	
+	public ArrayList<String >getNombresPlaylist()
+	{
+		return usuarioActual.getNombresPlaylists();
 	}
 }

@@ -1,6 +1,7 @@
 package umu.tds.negocio;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -176,6 +177,11 @@ public class Usuario {
 		Playlist aux = cancionesPlaylist.get(playlist);
 		aux.addCancion(c);
 		cancionesPlaylist.put(playlist, aux);
+	}
+	
+	public ArrayList<String> getNombresPlaylists()
+	{
+		return new ArrayList<String>(cancionesPlaylist.keySet());
 	}
 	
 }

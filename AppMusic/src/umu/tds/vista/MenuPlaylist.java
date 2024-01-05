@@ -312,26 +312,25 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuPlaylist);
 				if(vengoOtroPanel && canciones.size() > 0)
 				{
-					 
-				}else
-				{
-					int indiceActual = tablaCancionesPlaylist.getSelectedRow();
-			        int totalCanciones = canciones.size();
-			        if (totalCanciones > 0) {
-			        	indiceActual--;
-			        	int siguienteIndice;
-			        	if(indiceActual < 0)
-			        	{
-			        		indiceActual = canciones.size()-1;
-			        	}
-			        	siguienteIndice = indiceActual;
-			            c = tabla.getCancionAt(siguienteIndice);
-			            pausa = "play";
-						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-						pausa = "pause";
-			        }
+					tablaCancionesPlaylist.setRowSelectionInterval(canciones.size()-1, canciones.size()-1);
 				}
+				int indiceActual =vengoOtroPanel ? canciones.size() : tablaCancionesPlaylist.getSelectedRow();
+		        int totalCanciones = canciones.size();
+		        if (totalCanciones > 0) {
+		        	indiceActual--;
+		        	int siguienteIndice;
+		        	if(indiceActual < 0)
+		        	{
+		        		indiceActual = canciones.size()-1;
+		        	}
+		        	siguienteIndice = indiceActual;
+		            c = tabla.getCancionAt(siguienteIndice);
+		            tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
+		            pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+					pausa = "pause";
+		        }
 			}
 		});
 		
@@ -353,20 +352,20 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuPlaylist);
 				if(vengoOtroPanel && canciones.size() > 0)
 				{
-					 
-				}else
-				{
-					int indiceActual = tablaCancionesPlaylist.getSelectedRow();
-			        int totalCanciones = canciones.size();
-			        if (totalCanciones > 0) {
-			            int siguienteIndice = (indiceActual + 1) % totalCanciones;
-			            c = tabla.getCancionAt(siguienteIndice);
-			            pausa = "play";
-						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-						pausa = "pause";
-			        }
+					 tablaCancionesPlaylist.setRowSelectionInterval(0, 0);
 				}
+				int indiceActual = tablaCancionesPlaylist.getSelectedRow();
+		        int totalCanciones = canciones.size();
+		        if (totalCanciones > 0) {
+		            int siguienteIndice = vengoOtroPanel ? 0 :(indiceActual + 1) % totalCanciones;
+		            c = tabla.getCancionAt(siguienteIndice);
+		            tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
+		            pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+					pausa = "pause";
+		        }
+				
 			}
 		});
 		
@@ -420,7 +419,17 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	
 	public void cancionAlFinalizar()
 	{
-		// TODO:
+		/*int indiceActual = listaCanciones.getSelectedIndex();
+        int totalCanciones = listaCanciones.getModel().getSize();
+        if (totalCanciones > 0) {
+            int siguienteIndice = (indiceActual + 1) % totalCanciones;
+            listaCanciones.setSelectedIndex(siguienteIndice);
+            Cancion c = miModelo.getElementAt(siguienteIndice);
+            pausa = "play";
+			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+			pausa = "pause";
+        }*/
 	}
 	
 	public void actualizarTabla(LinkedList<Cancion> canciones)

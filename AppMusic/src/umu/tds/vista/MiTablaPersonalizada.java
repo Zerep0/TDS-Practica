@@ -1,7 +1,5 @@
 package umu.tds.vista;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 
 import javax.swing.table.AbstractTableModel;
@@ -17,7 +15,8 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	
 	public MiTablaPersonalizada()
 	{
-		this.canciones = new LinkedList<>();
+		canciones = new LinkedList<>();
+		nombrePlaylist = "";
 	}
 
 	public int getRowCount() {

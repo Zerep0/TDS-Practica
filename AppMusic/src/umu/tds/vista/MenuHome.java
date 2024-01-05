@@ -221,26 +221,25 @@ public class MenuHome extends JPanel implements IReproductorListener{
 				if(vengoOtroPanel && listaCanciones.getModel().getSize() > 0)
 				{
 					 listaCanciones.setSelectedIndex(listaCanciones.getModel().getSize()-1);
-				}else
-				{
-					int indiceActual = listaCanciones.getSelectedIndex();
-			        int totalCanciones = listaCanciones.getModel().getSize();
-			        if (totalCanciones > 0) {
-			        	indiceActual--;
-			        	int siguienteIndice;
-			        	if(indiceActual < 0)
-			        	{
-			        		indiceActual = listaCanciones.getModel().getSize()-1;
-			        	}
-			        	siguienteIndice = indiceActual;
-			            listaCanciones.setSelectedIndex(siguienteIndice);
-			            c = (Cancion) miModelo.getElementAt(siguienteIndice);
-			            pausa = "play";
-						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-						pausa = "pause";
-			        }
 				}
+				int indiceActual =vengoOtroPanel ? listaCanciones.getSelectedIndex()+1 : listaCanciones.getSelectedIndex();
+		        int totalCanciones = listaCanciones.getModel().getSize();
+		        if (totalCanciones > 0) {
+		        	indiceActual--;
+		        	int siguienteIndice;
+		        	if(indiceActual < 0)
+		        	{
+		        		indiceActual = listaCanciones.getModel().getSize()-1;
+		        	}
+		        	siguienteIndice = indiceActual;
+		            listaCanciones.setSelectedIndex(siguienteIndice);
+		            c = (Cancion) miModelo.getElementAt(siguienteIndice);
+		            pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+					pausa = "pause";
+		        }
+				
 			}
 		});
 		
@@ -259,20 +258,19 @@ public class MenuHome extends JPanel implements IReproductorListener{
 				if(vengoOtroPanel && listaCanciones.getModel().getSize() > 0)
 				{
 					 listaCanciones.setSelectedIndex(0);
-				}else
-				{
-					int indiceActual = listaCanciones.getSelectedIndex();
-			        int totalCanciones = listaCanciones.getModel().getSize();
-			        if (totalCanciones > 0) {
-			            int siguienteIndice = (indiceActual + 1) % totalCanciones;
-			            listaCanciones.setSelectedIndex(siguienteIndice);
-			            c = (Cancion) miModelo.getElementAt(siguienteIndice);
-			            pausa = "play";
-						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-						pausa = "pause";
-			        }
 				}
+				int indiceActual = listaCanciones.getSelectedIndex();
+		        int totalCanciones = listaCanciones.getModel().getSize();
+		        if (totalCanciones > 0) {
+		            int siguienteIndice = vengoOtroPanel ? 0 : (indiceActual + 1) % totalCanciones;
+		            listaCanciones.setSelectedIndex(siguienteIndice);
+		            c = (Cancion) miModelo.getElementAt(siguienteIndice);
+		            pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+					pausa = "pause";
+		        }
+				
 			}
 		});
 		

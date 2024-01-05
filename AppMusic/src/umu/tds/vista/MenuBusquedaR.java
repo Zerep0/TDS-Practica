@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -22,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import umu.tds.controlador.ControladorAppMusic;
 
@@ -38,6 +40,7 @@ import javax.swing.border.EmptyBorder;
 import umu.tds.helper.*;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 import javax.swing.UIManager;
@@ -62,7 +65,6 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	private MenuBusquedaR menuBusquedaR;
 	private JSlider barraReproduccion = new JSlider();
 	private JLabel msgDuracion = new JLabel("00:00");
-	private JTextField PlaylistNombre;
 	private Placeholder placeholder;
 	/**
 	 * Create the panel.
@@ -90,6 +92,10 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		JPanel PanelReproduccion = new JPanel();
 		PanelReproduccion.setBackground(new Color(18, 156, 189));
 		add(PanelReproduccion, BorderLayout.SOUTH);
+		
+		JLabel btnAñadirPlaylists = new JLabel("");
+		btnAñadirPlaylists.setIcon(new ImageIcon(MenuBusquedaR.class.getResource("/ImagenesMenu/pagina.png")));
+		PanelReproduccion.add(btnAñadirPlaylists);
 		
 		btnStop = new JLabel("");
 		btnStop.setIcon(new ImageIcon(MenuBusquedaR.class.getResource("/ImagenesMenu/cuadrado.png")));
@@ -201,35 +207,6 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		add(PanelPlaylist, BorderLayout.WEST);
 		PanelPlaylist.setLayout(new GridLayout(0, 1, 0, 0));
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(18, 156, 189));
-		PanelPlaylist.add(panel_1);
-		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{86, 0};
-		gbl_panel_1.rowHeights = new int[]{20, 0, 0, 0};
-		gbl_panel_1.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panel_1.setLayout(gbl_panel_1);
-		
-		PlaylistNombre = new JTextField();
-		PlaylistNombre.setFont(new Font("Arial", Font.ITALIC, 14));
-		PlaylistNombre.setText(PLACEHOLDER_PLAYLIST);
-		GridBagConstraints gbc_PlaylistNombre = new GridBagConstraints();
-		gbc_PlaylistNombre.insets = new Insets(0, 0, 5, 0);
-		gbc_PlaylistNombre.anchor = GridBagConstraints.NORTHWEST;
-		gbc_PlaylistNombre.gridx = 0;
-		gbc_PlaylistNombre.gridy = 1;
-		panel_1.add(PlaylistNombre, gbc_PlaylistNombre);
-		PlaylistNombre.setColumns(10);
-		
-		JButton AnadirPlaylist = new JButton("Añadir Playlist");
-		GridBagConstraints gbc_AnadirPlaylist = new GridBagConstraints();
-		gbc_AnadirPlaylist.gridx = 0;
-		gbc_AnadirPlaylist.gridy = 2;
-		panel_1.add(AnadirPlaylist, gbc_AnadirPlaylist);
-		
-		placeholder.crearPlaceholderText(PlaylistNombre, PLACEHOLDER_PLAYLIST);
-		
         lblNewLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -276,26 +253,25 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				if(vengoOtroPanel && listaCanciones.getModel().getSize() > 0)
 				{
 					 listaCanciones.setSelectedIndex(listaCanciones.getModel().getSize()-1);
-				}else
-				{
-					int indiceActual = listaCanciones.getSelectedIndex();
-			        int totalCanciones = listaCanciones.getModel().getSize();
-			        if (totalCanciones > 0) {
-			        	indiceActual--;
-			        	int siguienteIndice;
-			        	if(indiceActual < 0)
-			        	{
-			        		indiceActual = listaCanciones.getModel().getSize()-1;
-			        	}
-			        	siguienteIndice = indiceActual;
-			            listaCanciones.setSelectedIndex(siguienteIndice);
-			            c = miModelo.getElementAt(siguienteIndice);
-			            pausa = "play";
-						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-						pausa = "pause";
-			        }
 				}
+				int indiceActual = vengoOtroPanel ? listaCanciones.getSelectedIndex()+1 : listaCanciones.getSelectedIndex();
+		        int totalCanciones = listaCanciones.getModel().getSize();
+		        if (totalCanciones > 0) {
+		        	indiceActual--;
+		        	int siguienteIndice;
+		        	if(indiceActual < 0)
+		        	{
+		        		indiceActual = listaCanciones.getModel().getSize()-1;
+		        	}
+		        	siguienteIndice = indiceActual;
+		            listaCanciones.setSelectedIndex(siguienteIndice);
+		            c = miModelo.getElementAt(siguienteIndice);
+		            pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+					pausa = "pause";
+		        }
+			
 
 			}
 		});
@@ -314,20 +290,19 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				if(vengoOtroPanel && listaCanciones.getModel().getSize() > 0)
 				{
 					 listaCanciones.setSelectedIndex(0);
-				}else
-				{
-					int indiceActual = listaCanciones.getSelectedIndex();
-			        int totalCanciones = listaCanciones.getModel().getSize();
-			        if (totalCanciones > 0) {
-			            int siguienteIndice = (indiceActual + 1) % totalCanciones;
-			            listaCanciones.setSelectedIndex(siguienteIndice);
-			            c = miModelo.getElementAt(siguienteIndice);
-			            pausa = "play";
-						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
-						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-						pausa = "pause";
-			        }
 				}
+				int indiceActual = listaCanciones.getSelectedIndex();
+		        int totalCanciones = listaCanciones.getModel().getSize();
+		        if (totalCanciones > 0) {
+		            int siguienteIndice = vengoOtroPanel ? 0 : (indiceActual + 1) % totalCanciones;
+		            listaCanciones.setSelectedIndex(siguienteIndice);
+		            c = miModelo.getElementAt(siguienteIndice);
+		            pausa = "play";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+					pausa = "pause";
+		        }
+				
 			}
 		});
 		
@@ -385,17 +360,14 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 			}
 		});
 		
-		
-		AnadirPlaylist.addActionListener((e) -> {
-			
-			if(ControladorAppMusic.getInstancia().anadirCancionPlaylist(PlaylistNombre,listaCanciones.getSelectedValue()))
-			{
-				System.out.println("Se ha registrado la cancion");
-			}
-			else
-			{
-				System.out.println("NO se ha registrado la cancion");
-
+		btnAñadirPlaylists.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Cancion c = listaCanciones.getSelectedValue();
+				if(c != null)
+				{
+					abrirVentanaModal(c, ControladorAppMusic.getInstancia().getNombresPlaylist());
+				}
 			}
 		});
 	}
@@ -460,5 +432,20 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 			pausa = "pause";
         }
 	}
+	
+	 private void abrirVentanaModal(Cancion c, ArrayList<String> canciones) {
+	        // Crear un JDialog modal con MenuBusquedaR como propietario
+	        JDialog dialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Panel Seleccion", true);
+	        
+	        // Configurar el contentPane del JDialog con una instancia de PanelSeleccionPlaylist
+	        PanelSeleccionPlaylist panelSeleccion = new PanelSeleccionPlaylist(c,canciones, dialog);
+	        dialog.setContentPane(panelSeleccion);
+
+	        // Configurar otras propiedades del JDialog según sea necesario
+	        dialog.setSize(400, 300);
+	        dialog.setLocationRelativeTo(this);
+	        dialog.setResizable(false);
+	        dialog.setVisible(true);
+	    }
 }
 
