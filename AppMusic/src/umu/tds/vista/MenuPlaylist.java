@@ -164,6 +164,11 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		btnRandom.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/aleatorio.png")));
 		panel_botones.add(btnRandom);
 		
+		JLabel btnEliminarCanciones = new JLabel("");
+		btnEliminarCanciones.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/pagina.png")));
+		panel_botones.add(btnEliminarCanciones);
+		btnEliminarCanciones.setVisible(false);
+		
 		
 	    modeloPlaylist = new MiTablaPersonalizada();
 		tablaCancionesPlaylist = new JTable(modeloPlaylist);	
@@ -389,6 +394,27 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				
 			}
 		});
+		
+		tablaCancionesPlaylist.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+            	int selectedRow = tablaCancionesPlaylist.getSelectedRow();
+                int selectedColumn = tablaCancionesPlaylist.getSelectedColumn();
+                if(selectedColumn == 3)
+                {
+                	boolean marcado = (boolean) tablaCancionesPlaylist.getValueAt(selectedRow, selectedColumn);
+                	System.out.println(marcado);
+                	if(marcado)
+			        	modeloPlaylist.añadirMarcada(selectedRow);
+                	else modeloPlaylist.quitarMarcada(selectedRow);
+			        if(modeloPlaylist.isCancionesMarcadas())
+			        		btnEliminarCanciones.setVisible(true);
+			        else btnEliminarCanciones.setVisible(false);
+                }
+            }
+        });
+		
+		 
 	}
 
 	@Override
@@ -437,4 +463,6 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		if(modeloPlaylist.getNombrePlaylist().equals("Favoritas"))
 			modeloPlaylist.actualizarTabla(canciones, "Favoritas");
 	}
+	
+	
 }

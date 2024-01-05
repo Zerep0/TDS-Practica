@@ -1,7 +1,12 @@
 package umu.tds.vista;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 
+import javax.swing.JCheckBox;
 import javax.swing.table.AbstractTableModel;
 
 import umu.tds.negocio.Cancion;
@@ -10,13 +15,16 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	
 	private LinkedList<Cancion> canciones;
 	private String[] columnas = {"Titulo","Interprete","Estilo","Seleccionar"};
+	private ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
 	private static final long serialVersionUID = 1L;
 	private String nombrePlaylist;
+	private HashSet<Integer> filasMarcadas;
 	
 	public MiTablaPersonalizada()
 	{
 		canciones = new LinkedList<>();
 		nombrePlaylist = "";
+		filasMarcadas = new HashSet<Integer>();
 	}
 
 	public int getRowCount() {
@@ -48,7 +56,7 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	        case 2:
 	            return cancion.getEstilo();
 	        case 3:
-	            return false;
+	            return checkBoxes.get(row).isSelected();
 	        default:
 	            return null;
 	    }
@@ -66,22 +74,24 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	}
 	
 	public void setValueAt(Object value, int row, int column) {
-	    if (canciones != null && !canciones.isEmpty()) {
-	        Cancion cancion = canciones.get(row);
-	        if (column == 3) {
-	            // Verifica si la canción no es nula antes de acceder a sus propiedades.
-	            if (cancion != null) {
-	                //cancion.setFavorita((Boolean) value);
-	                fireTableCellUpdated(row, column);
-	            }
-	        }
-	    }
+		if (column == 3) {
+            // Actualizar el valor del checkbox
+			checkBoxes.get(row).setSelected(!checkBoxes.get(row).isSelected());
+            fireTableCellUpdated(row, column);
+        }
 	}
 	
+	
+	
 	public void actualizarTabla(LinkedList<Cancion> nuevasCanciones, String nombrePlaylist) {
-		this.nombrePlaylist = nombrePlaylist;
-	    this.canciones = nuevasCanciones;
-	    fireTableDataChanged();
+		if(this.nombrePlaylist != nombrePlaylist)
+		{
+			this.nombrePlaylist = nombrePlaylist;
+		    this.canciones = nuevasCanciones;
+		    inicializarCheckBoxes();
+		    fireTableDataChanged();
+		}
+		
 	}
 	
 	public void eliminarFilas()
@@ -99,12 +109,36 @@ class MiTablaPersonalizada extends AbstractTableModel {
 		if (columnIndex == 3) {
             return Boolean.class; // CheckBox
         }
-        return super.getColumnClass(columnIndex);
+        return String.class;
 	}
 		
 	public boolean isCellEditable(int row, int col) {
 		
 		return  col == 3; // Solo la columna de checkboxes es editable.
+	}
+	
+	public void inicializarCheckBoxes()
+	{
+	     checkBoxes.clear();
+		 for(int i = 0;i<canciones.size();i++)
+		 {
+			 checkBoxes.add(new JCheckBox());
+		 }	
+	}
+	
+	public boolean isCancionesMarcadas()
+	{
+		return filasMarcadas.size() > 0;
+	}
+
+	public void añadirMarcada(int selectedRow) {
+		filasMarcadas.add(selectedRow);
+		
+	}
+
+	public void quitarMarcada(int selectedRow) {
+		filasMarcadas.remove(selectedRow);
+		
 	}
 	
 }
