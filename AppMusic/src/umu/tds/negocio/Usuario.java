@@ -141,7 +141,11 @@ public class Usuario {
 	
 	public LinkedList<Cancion> getCancionesPlaylist(String playlist)
 	{
-		return cancionesPlaylist.get(playlist).getCanciones();
+		if(cancionesPlaylist.containsKey(playlist))
+		{
+			return cancionesPlaylist.get(playlist).getCanciones();
+		}
+		else return null;
 	}
 	
 	public void setPlaylist(String playlist,Playlist list)
@@ -152,9 +156,26 @@ public class Usuario {
 	
 	public void erasePlaylist(String playlist)
 	{
-		cancionesPlaylist.remove(playlist);
+		cancionesPlaylist.remove(playlist, cancionesPlaylist.get(playlist));
 		System.out.println("Se ha borrado la playlist " + playlist);
 
+	}
+	
+	public boolean isPlaylist(String playlist)
+	{
+		
+		if(playlist.contains(playlist))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	public void setNuevasCanciones(String playlist, Cancion c)
+	{
+		Playlist aux = cancionesPlaylist.get(playlist);
+		aux.addCancion(c);
+		cancionesPlaylist.put(playlist, aux);
 	}
 	
 }

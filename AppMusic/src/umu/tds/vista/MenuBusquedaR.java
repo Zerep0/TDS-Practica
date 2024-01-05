@@ -24,7 +24,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 import umu.tds.controlador.ControladorAppMusic;
-import umu.tds.helper.AlineamientoLista;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -36,10 +36,16 @@ import umu.tds.negocio.Cancion;
 import  umu.tds.negocio.IReproductorListener;
 import javax.swing.border.EmptyBorder;
 import umu.tds.helper.*;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.BoxLayout;
+import java.awt.GridLayout;
+import javax.swing.UIManager;
 
 public class MenuBusquedaR extends JPanel implements IReproductorListener{
 
 	private AlineamientoLista alinamientoListaBusqueda;
+	private static final String PLACEHOLDER_PLAYLIST = "Playlist";
 	private static final long serialVersionUID = 1L;
 	private CardLayout menuBusqueda;
 	private String ruta;
@@ -56,6 +62,8 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	private MenuBusquedaR menuBusquedaR;
 	private JSlider barraReproduccion = new JSlider();
 	private JLabel msgDuracion = new JLabel("00:00");
+	private JTextField PlaylistNombre;
+	private Placeholder placeholder;
 	/**
 	 * Create the panel.
 	 */
@@ -72,6 +80,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	private void initialize()
 	{
 		// HELPER
+		placeholder = new Placeholder();
 		alinamientoListaBusqueda = new AlineamientoLista("izquierda");
 		miModelo = new ListaModelo<Cancion>();
 		
@@ -188,7 +197,40 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		gbc_msgDuracion.gridy = 0;
 		LayoutTiempo.add(msgDuracion, gbc_msgDuracion);
 		
-		lblNewLabel.addMouseListener(new MouseAdapter() {
+		JPanel PanelPlaylist = new JPanel();
+		add(PanelPlaylist, BorderLayout.WEST);
+		PanelPlaylist.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(new Color(18, 156, 189));
+		PanelPlaylist.add(panel_1);
+		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		gbl_panel_1.columnWidths = new int[]{86, 0};
+		gbl_panel_1.rowHeights = new int[]{20, 0, 0, 0};
+		gbl_panel_1.columnWeights = new double[]{0.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		panel_1.setLayout(gbl_panel_1);
+		
+		PlaylistNombre = new JTextField();
+		PlaylistNombre.setFont(new Font("Arial", Font.ITALIC, 14));
+		PlaylistNombre.setText(PLACEHOLDER_PLAYLIST);
+		GridBagConstraints gbc_PlaylistNombre = new GridBagConstraints();
+		gbc_PlaylistNombre.insets = new Insets(0, 0, 5, 0);
+		gbc_PlaylistNombre.anchor = GridBagConstraints.NORTHWEST;
+		gbc_PlaylistNombre.gridx = 0;
+		gbc_PlaylistNombre.gridy = 1;
+		panel_1.add(PlaylistNombre, gbc_PlaylistNombre);
+		PlaylistNombre.setColumns(10);
+		
+		JButton AnadirPlaylist = new JButton("Añadir Playlist");
+		GridBagConstraints gbc_AnadirPlaylist = new GridBagConstraints();
+		gbc_AnadirPlaylist.gridx = 0;
+		gbc_AnadirPlaylist.gridy = 2;
+		panel_1.add(AnadirPlaylist, gbc_AnadirPlaylist);
+		
+		placeholder.crearPlaceholderText(PlaylistNombre, PLACEHOLDER_PLAYLIST);
+		
+        lblNewLabel.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				menuBusqueda.show(MenuBusquedaR.this.getParent(), ruta);
@@ -342,6 +384,20 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				}
 			}
 		});
+		
+		
+		AnadirPlaylist.addActionListener((e) -> {
+			
+			if(ControladorAppMusic.getInstancia().anadirCancionPlaylist(PlaylistNombre,listaCanciones.getSelectedValue()))
+			{
+				System.out.println("Se ha registrado la cancion");
+			}
+			else
+			{
+				System.out.println("NO se ha registrado la cancion");
+
+			}
+		});
 	}
 	
 
@@ -404,6 +460,5 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 			pausa = "pause";
         }
 	}
-	
 }
 

@@ -269,7 +269,127 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	        }
 	    });
 		
+		btnPlay.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuPlaylist);
+				MiTablaPersonalizada tabla = (MiTablaPersonalizada) tablaCancionesPlaylist.getModel();
+				umu.tds.negocio.Cancion c = tabla.getCancionAt(tablaCancionesPlaylist.getSelectedRow());
+				if(c == null)
+				{
+					c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				}
+				if(c != null)
+				{
+					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					if(pausa.equals("play"))
+					{
+						pausa = "pause";
+					}
+					else
+					{
+						pausa = "play";
+					}
+				}
+			}
+		});
 		
+		btnRedo.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				
+				if(c != null)
+				{
+					pausa = "stop";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					pausa = "play";
+				}
+				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuPlaylist);
+				MiTablaPersonalizada tabla = (MiTablaPersonalizada) tablaCancionesPlaylist.getModel();
+				LinkedList<Cancion> canciones = tabla.getCanciones();
+				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuPlaylist);
+				if(vengoOtroPanel && canciones.size() > 0)
+				{
+					 
+				}else
+				{
+					int indiceActual = tablaCancionesPlaylist.getSelectedRow();
+			        int totalCanciones = canciones.size();
+			        if (totalCanciones > 0) {
+			        	indiceActual--;
+			        	int siguienteIndice;
+			        	if(indiceActual < 0)
+			        	{
+			        		indiceActual = canciones.size()-1;
+			        	}
+			        	siguienteIndice = indiceActual;
+			            c = tabla.getCancionAt(siguienteIndice);
+			            pausa = "play";
+						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+						pausa = "pause";
+			        }
+				}
+			}
+		});
+		
+		
+		btnForwa.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				if(c != null)
+				{
+					pausa = "stop";
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					pausa = "play";
+				}
+				
+				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuPlaylist);
+				MiTablaPersonalizada tabla = (MiTablaPersonalizada) tablaCancionesPlaylist.getModel();
+				LinkedList<Cancion> canciones = tabla.getCanciones();
+				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuPlaylist);
+				if(vengoOtroPanel && canciones.size() > 0)
+				{
+					 
+				}else
+				{
+					int indiceActual = tablaCancionesPlaylist.getSelectedRow();
+			        int totalCanciones = canciones.size();
+			        if (totalCanciones > 0) {
+			            int siguienteIndice = (indiceActual + 1) % totalCanciones;
+			            c = tabla.getCancionAt(siguienteIndice);
+			            pausa = "play";
+						ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+						ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+						pausa = "pause";
+			        }
+				}
+			}
+		});
+		
+		
+		btnStop.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				pausa = "stop";
+				if(c!=null)
+				{
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+				}
+				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+				pausa = "play";
+				
+			}
+		});
+		
+		btnRandom.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
 	}
 
 	@Override

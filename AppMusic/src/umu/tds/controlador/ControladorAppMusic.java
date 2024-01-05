@@ -447,7 +447,29 @@ public class ControladorAppMusic implements ICancionesListener{
 		usuarioActual.setPlaylist(favoritasPlaylist.getNombrePlaylist(), favoritasPlaylist);
 	}
 	
-
+	public boolean anadirCancionPlaylist(JTextField playlist,umu.tds.negocio.Cancion c)
+	{
+		if(playlist.getFont().isItalic() )
+		{
+			return false;
+		}
+		String list = playlist.getText();
+		if(c != null && list != "Favoritas" && usuarioActual.isPlaylist(list))
+		{
+			LinkedList<umu.tds.negocio.Cancion> canciones = getPlaylistCanciones(list);
+			if(canciones == null)
+			{
+				return false;
+			}
+			if(!canciones.contains(c))
+			{		
+				usuarioActual.setNuevasCanciones(list, c);
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
 	
 	public void setSliderVolumen(JSlider volumen)
 	{

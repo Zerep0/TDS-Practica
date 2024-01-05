@@ -55,6 +55,17 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	    }
 	}
 	
+	public Cancion getCancionAt(int row)
+	{
+		Cancion cancion = canciones.get(row);
+		return cancion;
+	}
+	
+	public LinkedList<Cancion> getCanciones()
+	{
+		return canciones;
+	}
+	
 	public void setValueAt(Object value, int row, int column) {
 	    if (canciones != null && !canciones.isEmpty()) {
 	        Cancion cancion = canciones.get(row);
