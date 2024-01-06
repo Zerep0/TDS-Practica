@@ -343,6 +343,10 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
 	{
+		if(getCancionReproduciendose() != null)
+		{
+			Player.INSTANCE.play("stop",c, sliders, labels);
+		}
 		Player.INSTANCE.play(play,c, sliders, labels);
 		if(play.equals("play"))
 		{

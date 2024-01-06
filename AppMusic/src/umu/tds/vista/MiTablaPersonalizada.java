@@ -15,16 +15,15 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	
 	private LinkedList<Cancion> canciones;
 	private String[] columnas = {"Titulo","Interprete","Estilo","Seleccionar"};
-	private ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
 	private static final long serialVersionUID = 1L;
 	private String nombrePlaylist;
-	private HashSet<Integer> filasMarcadas;
+	private HashSet<Cancion> filasMarcadas;
 	
 	public MiTablaPersonalizada()
 	{
 		canciones = new LinkedList<>();
 		nombrePlaylist = "";
-		filasMarcadas = new HashSet<Integer>();
+		filasMarcadas = new HashSet<Cancion>();
 	}
 
 	public int getRowCount() {
@@ -56,7 +55,7 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	        case 2:
 	            return cancion.getEstilo();
 	        case 3:
-	            return checkBoxes.get(row).isSelected();
+	            return cancion.isMarcada();
 	        default:
 	            return null;
 	    }
@@ -76,7 +75,11 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	public void setValueAt(Object value, int row, int column) {
 		if (column == 3) {
             // Actualizar el valor del checkbox
-			checkBoxes.get(row).setSelected(!checkBoxes.get(row).isSelected());
+			boolean marcada = (boolean) value;
+			if(marcada)
+				añadirMarcada(row);
+			else quitarMarcada(row);
+			canciones.get(row).setMarcada(marcada);
             fireTableCellUpdated(row, column);
         }
 	}
@@ -86,7 +89,7 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	public void actualizarTabla(LinkedList<Cancion> nuevasCanciones, String nombrePlaylist) {
 			this.nombrePlaylist = nombrePlaylist;
 		    this.canciones = nuevasCanciones;
-		    inicializarCheckBoxes();
+		    nuevasCanciones.forEach(c -> c.setMarcada(false));
 		    fireTableDataChanged();
 	}
 	
@@ -105,21 +108,12 @@ class MiTablaPersonalizada extends AbstractTableModel {
 		if (columnIndex == 3) {
             return Boolean.class; // CheckBox
         }
-        return String.class;
+        return super.getColumnClass(columnIndex);
 	}
 		
 	public boolean isCellEditable(int row, int col) {
 		
 		return  col == 3; // Solo la columna de checkboxes es editable.
-	}
-	
-	public void inicializarCheckBoxes()
-	{
-	     checkBoxes.clear();
-		 for(int i = 0;i<canciones.size();i++)
-		 {
-			 checkBoxes.add(new JCheckBox());
-		 }	
 	}
 	
 	public boolean isCancionesMarcadas()
@@ -128,33 +122,27 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	}
 
 	public void añadirMarcada(int selectedRow) {
-		filasMarcadas.add(selectedRow);
+		Cancion c = canciones.get(selectedRow);
+		filasMarcadas.add(c);
 		
 	}
 
 	public void quitarMarcada(int selectedRow) {
-		filasMarcadas.remove(selectedRow);
+		Cancion c = canciones.get(selectedRow);
+		filasMarcadas.remove(c);
 	}
 	
-	public HashSet<Integer> listaMarcadas()
+	public HashSet<Cancion> listaMarcadas()
 	{
 		return filasMarcadas;
 	}
 	
-	public void borrarCancion(int row)
+	
+	public void borrarCanciones()
 	{
-		canciones.remove(row);
-		checkBoxes.remove(row);
+		this.canciones.removeIf(c -> filasMarcadas.contains(c));
+		filasMarcadas.clear();
 		fireTableDataChanged();
 	}
-	
-	public void showCheckBox()
-	{
-		int i = 0;
-		for (JCheckBox check : checkBoxes) {
-			System.out.println("La checkbox " + i + " esta " + check.isSelected());
-			i++;
-		}
-		
-	}
+
 }

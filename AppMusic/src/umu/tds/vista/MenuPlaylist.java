@@ -69,6 +69,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	private JSlider barraReproduccion = new JSlider();
 	private MiTablaPersonalizada modeloPlaylist;
 	private String playlistActual;
+	private boolean modoAleatorio;
 	/**
 	 * Create the panel.
 	 */
@@ -77,6 +78,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		this.pausa = "play";
 		menuPlaylist = this;
 		playlistActual = "";
+		modoAleatorio = true;
 		ControladorAppMusic.getInstancia().setMenuPlaylist(menuPlaylist, barraReproduccion, msgDuracion);
 		initialize();
 	}
@@ -84,7 +86,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	
 	
 	@SuppressWarnings({ "rawtypes", "unchecked"})
-	private void initialize()
+	private void initialize() 
 	{
 		miModelo = new ListaModelo<String>();
 		
@@ -253,11 +255,15 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 					if(ControladorAppMusic.getInstancia().eliminarPlaylistSelec(nombrePlaylistSel))
 					{
 						quitarPlaylist(nombrePlaylistSel);
+						playlistActual = "";
+						actualizarTabla();
 					}
 				}
 				if(ControladorAppMusic.getInstancia().eliminarPlaylist(creadorPlaylist))
 				{
 					quitarPlaylist(creadorPlaylist.getText());
+					playlistActual = "";
+					actualizarTabla();
 				}
 				
 			}
@@ -274,11 +280,12 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	                    playlistActual = selectedValue;
 	                    //Realizar acciones adicionales aquí
 	                    LinkedList<Cancion> canciones = ControladorAppMusic.getInstancia().getPlaylistCanciones(selectedValue);
+	                    modeloPlaylist.actualizarTabla(canciones, selectedValue);
 	                    btnEliminarCanciones.setVisible(false);
 	                    for (int i = 0; i<canciones.size();i++) {
 	                    	modeloPlaylist.quitarMarcada(i);
 						}
-	                    modeloPlaylist.actualizarTabla(canciones, selectedValue);
+	                    
 	                }
 	            }
 	        }
@@ -356,8 +363,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 					pausa = "stop";
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					pausa = "play";
-				}
-				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuPlaylist);
+				} 
 				MiTablaPersonalizada tabla = (MiTablaPersonalizada) tablaCancionesPlaylist.getModel();
 				LinkedList<Cancion> canciones = tabla.getCanciones();
 				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuPlaylist);
@@ -365,22 +371,27 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				{
 					tablaCancionesPlaylist.setRowSelectionInterval(canciones.size()-1, canciones.size()-1);
 				}
-				int indiceActual =vengoOtroPanel ? canciones.size() : tablaCancionesPlaylist.getSelectedRow();
+				int siguienteIndice = vengoOtroPanel ? canciones.size() - 1
+						: tablaCancionesPlaylist.getSelectedRow() - 1;
 		        int totalCanciones = canciones.size();
 		        if (totalCanciones > 0) {
-		        	indiceActual--;
-		        	int siguienteIndice;
-		        	if(indiceActual < 0)
+		        	if(modoAleatorio)
 		        	{
-		        		indiceActual = canciones.size()-1;
+		        		siguienteIndice = vengoOtroPanel ? siguienteIndice : 
+		        			Aleatorio.generarAletorio(0, totalCanciones, siguienteIndice+1);
+		        	}else
+		        	{
+		        		if(siguienteIndice < 0)
+			        	{
+							siguienteIndice = canciones.size() - 1;
+			        	}
 		        	}
-		        	siguienteIndice = indiceActual;
 		            c = tabla.getCancionAt(siguienteIndice);
 		            tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
 		            pausa = "play";
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-					pausa = "pause";
+					pausa = "pause";  
 		        }
 			}
 		});
@@ -396,8 +407,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					pausa = "play";
 				}
-				
-				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuPlaylist);
+				 
 				MiTablaPersonalizada tabla = (MiTablaPersonalizada) tablaCancionesPlaylist.getModel();
 				LinkedList<Cancion> canciones = tabla.getCanciones();
 				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuPlaylist);
@@ -407,8 +417,12 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				}
 				int indiceActual = tablaCancionesPlaylist.getSelectedRow();
 		        int totalCanciones = canciones.size();
+		        int siguienteIndice;
 		        if (totalCanciones > 0) {
-		            int siguienteIndice = vengoOtroPanel ? 0 :(indiceActual + 1) % totalCanciones;
+		        	if(modoAleatorio)
+		        		siguienteIndice = vengoOtroPanel ? 0 : Aleatorio.generarAletorio(0, totalCanciones, indiceActual);
+		        	else siguienteIndice = vengoOtroPanel ? 0 :(indiceActual + 1) % totalCanciones;
+		        	
 		            c = tabla.getCancionAt(siguienteIndice);
 		            tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
 		            pausa = "play";
@@ -444,20 +458,13 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		tablaCancionesPlaylist.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            	int selectedRow = tablaCancionesPlaylist.getSelectedRow();
                 int selectedColumn = tablaCancionesPlaylist.getSelectedColumn();
                 if(selectedColumn == 3)
                 {
-                	boolean marcado = (boolean) tablaCancionesPlaylist.getValueAt(selectedRow, selectedColumn);
-                	System.out.println(marcado);
-                	if(marcado)
-			        	modeloPlaylist.añadirMarcada(selectedRow);
-                	else modeloPlaylist.quitarMarcada(selectedRow);
 			        if(modeloPlaylist.isCancionesMarcadas())
 			        		btnEliminarCanciones.setVisible(true);
 			        else btnEliminarCanciones.setVisible(false);
                 }
-                modeloPlaylist.showCheckBox();
             }
         });
 		
@@ -466,21 +473,14 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 			{
 				
 				String selectedValue = (String) listaPlaylist.getSelectedValue();
-				HashSet<Integer> marcadas = modeloPlaylist.listaMarcadas();
-				if(selectedValue != "Favoritas" && !marcadas.isEmpty())
+				if(!selectedValue.equals("Favoritas"))
 				{
-					List<Integer> listaOrdenada = new ArrayList<>(marcadas);
-			        Collections.sort(listaOrdenada, Collections.reverseOrder());
-					for (Integer integer : listaOrdenada) {
-						modeloPlaylist.quitarMarcada(integer);
-						modeloPlaylist.borrarCancion(integer);
-					}
-					modeloPlaylist.showCheckBox();
+					modeloPlaylist.borrarCanciones();
 					btnEliminarCanciones.setVisible(false);
 				}
 			}
 		});
-	}
+	} 
 
 	@Override
 	public void actualizarEstadoReproductor(String pausa) {
@@ -514,10 +514,12 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		System.out.println(indiceActual);
 		int totalCanciones = tablaCancionesPlaylist.getModel().getRowCount();
         if (totalCanciones > 0) {
-            int siguienteIndice = (indiceActual + 1) % totalCanciones;
-            System.out.println(siguienteIndice);
+        	int siguienteIndice;
+        	if(modoAleatorio)
+        		siguienteIndice = Aleatorio.generarAletorio(0, totalCanciones, indiceActual);
+        	else siguienteIndice = (indiceActual + 1) % totalCanciones;	
+            Cancion c = ((MiTablaPersonalizada) tablaCancionesPlaylist.getModel()).getCancionAt(siguienteIndice); 
             tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
-            Cancion c = ((MiTablaPersonalizada)tablaCancionesPlaylist.getModel()).getCancionAt(siguienteIndice);
             pausa = "play";
 			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
@@ -531,9 +533,13 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		{
 			LinkedList<Cancion> canciones = ControladorAppMusic.getInstancia().getPlaylistCanciones(playlistActual);
 	        modeloPlaylist.actualizarTabla(canciones, playlistActual);
+		}else
+		{
+			modeloPlaylist.actualizarTabla(new LinkedList<Cancion>(), playlistActual);
 		}
 		 
 	}
 	
+
 	
 }

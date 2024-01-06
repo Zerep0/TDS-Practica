@@ -40,7 +40,8 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO{
 				eCancion = new Entidad();
 				eCancion.setNombre("cancion");
 				eCancion.setPropiedades(new ArrayList<Propiedad>(
-						Arrays.asList(new Propiedad("titulo", cancion.getTitulo()), new Propiedad("ruta",cancion.getRuta()),new Propiedad("estilo",cancion.getEstilo()),
+						Arrays.asList(new Propiedad("titulo", cancion.getTitulo()),new Propiedad("marcada",Boolean.toString(cancion.isMarcada())), 
+								new Propiedad("ruta",cancion.getRuta()),new Propiedad("estilo",cancion.getEstilo()),
 								new Propiedad("interprete",cancion.getInterprete()),
 								new Propiedad("numReproducciones",String.valueOf(cancion.getNumReproducciones())))));
 				// registrar entidad cliente
@@ -59,7 +60,7 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO{
 	public Cancion recuperarCancion(int codigo) {
 		// si no, la recupera de la base de datos
 		Entidad eCancion;
-		String titulo, ruta, estilo, interprete,numReproducciones;
+		String titulo, ruta, estilo, interprete,numReproducciones, marcada;
 		
 		// recuperar entidad
 		eCancion = servPersistencia.recuperarEntidad(codigo);
@@ -70,10 +71,11 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO{
 			estilo = servPersistencia.recuperarPropiedadEntidad(eCancion, "estilo");
 			interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, "interprete");
 			numReproducciones = servPersistencia.recuperarPropiedadEntidad(eCancion, "numReproducciones");
-			
+			marcada = servPersistencia.recuperarPropiedadEntidad(eCancion, "marcada");
 
 			// recuperar playlist
 			Cancion cancion = new Cancion(titulo,ruta, estilo, interprete);
+			cancion.setMarcada(Boolean.parseBoolean(marcada));
 			cancion.setId(codigo);
 			cancion.setNumReproducciones(Integer.parseInt(numReproducciones));
 			return cancion;

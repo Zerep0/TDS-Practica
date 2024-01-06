@@ -33,6 +33,7 @@ public class PanelSeleccionPlaylist extends JPanel {
 	public PanelSeleccionPlaylist(Cancion cancion, ArrayList<String> playlists, JDialog padre) {
 		this.cancion = cancion;
 		this.playlists = playlists;
+		playlists.remove("Favoritas"); // no se le proporciona por que para eso ya esta la estrella
 		this.padre = padre;
 		alineamiento = new AlineamientoLista("centro");
 		inicialize();
@@ -72,6 +73,12 @@ public class PanelSeleccionPlaylist extends JPanel {
         btnAñadirPlaylists.setBorderPainted(false);
         btnAñadirPlaylists.setBackground(new Color(18, 156, 189));
         add(btnAñadirPlaylists, BorderLayout.SOUTH);
+        
+		if(playlists.isEmpty())
+		{
+			btnAñadirPlaylists.setEnabled(false);
+			btnAñadirPlaylists.setText("No hay playlists creadas");
+		}
         
         btnAñadirPlaylists.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {

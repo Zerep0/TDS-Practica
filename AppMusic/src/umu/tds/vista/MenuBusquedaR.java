@@ -30,6 +30,8 @@ import umu.tds.controlador.ControladorAppMusic;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.basic.BasicSliderUI;
 import javax.swing.event.ListSelectionEvent;
@@ -48,7 +50,6 @@ import javax.swing.UIManager;
 public class MenuBusquedaR extends JPanel implements IReproductorListener{
 
 	private AlineamientoLista alinamientoListaBusqueda;
-	private static final String PLACEHOLDER_PLAYLIST = "Playlist";
 	private static final long serialVersionUID = 1L;
 	private CardLayout menuBusqueda;
 	private String ruta;
@@ -65,7 +66,8 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	private MenuBusquedaR menuBusquedaR;
 	private JSlider barraReproduccion = new JSlider();
 	private JLabel msgDuracion = new JLabel("00:00");
-	private Placeholder placeholder;
+	private boolean modoAletorio;
+	
 	/**
 	 * Create the panel.
 	 */
@@ -74,6 +76,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		this.ruta = ruta;
 		this.pausa = "play";
 		menuBusquedaR = this;
+		modoAletorio = true;
 		ControladorAppMusic.getInstancia().setMenuBusquedaR(menuBusquedaR, barraReproduccion,msgDuracion);
 		initialize();
 	}
@@ -82,7 +85,6 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	private void initialize()
 	{
 		// HELPER
-		placeholder = new Placeholder();
 		alinamientoListaBusqueda = new AlineamientoLista("izquierda");
 		miModelo = new ListaModelo<Cancion>();
 		
@@ -226,7 +228,6 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
     				}
     				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
     				pausa = "play";
-                    int index = listaCanciones.locationToIndex(e.getPoint());
                         ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuBusquedaR);
         				c = listaCanciones.getSelectedValue();
         				if(c == null)
@@ -291,22 +292,30 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				{
 					 listaCanciones.setSelectedIndex(listaCanciones.getModel().getSize()-1);
 				}
-				int indiceActual = vengoOtroPanel ? listaCanciones.getSelectedIndex()+1 : listaCanciones.getSelectedIndex();
+				int siguienteIndice = vengoOtroPanel ? listaCanciones.getModel().getSize() - 1
+						: listaCanciones.getSelectedIndex() - 1;	
 		        int totalCanciones = listaCanciones.getModel().getSize();
 		        if (totalCanciones > 0) {
-		        	indiceActual--;
-		        	int siguienteIndice;
-		        	if(indiceActual < 0)
-		        	{
-		        		indiceActual = listaCanciones.getModel().getSize()-1;
-		        	}
-		        	siguienteIndice = indiceActual;
-		            listaCanciones.setSelectedIndex(siguienteIndice);
+					if(modoAletorio)
+					{
+						siguienteIndice = vengoOtroPanel ? siguienteIndice : 
+							Aleatorio.generarAletorio(0, totalCanciones, siguienteIndice+1);
+					}
+					else
+					{
+						if(siguienteIndice < 0)
+			        	{
+							siguienteIndice = listaCanciones.getModel().getSize()-1;
+			        	}
+					}
+					listaCanciones.setSelectedIndex(siguienteIndice);
 		            c = miModelo.getElementAt(siguienteIndice);
 		            pausa = "play";
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
+		        	
+		        	
 		        }
 			
 
@@ -330,14 +339,19 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				}
 				int indiceActual = listaCanciones.getSelectedIndex();
 		        int totalCanciones = listaCanciones.getModel().getSize();
+		        int siguienteIndice;
 		        if (totalCanciones > 0) {
-		            int siguienteIndice = vengoOtroPanel ? 0 : (indiceActual + 1) % totalCanciones;
-		            listaCanciones.setSelectedIndex(siguienteIndice);
+		        	if(modoAletorio)
+		        		siguienteIndice = vengoOtroPanel ? 0 : Aleatorio.generarAletorio(0, totalCanciones, indiceActual);
+		        	else siguienteIndice = vengoOtroPanel ? 0 : (indiceActual + 1) % totalCanciones;
+
+		        	listaCanciones.setSelectedIndex(siguienteIndice);
 		            c = miModelo.getElementAt(siguienteIndice);
 		            pausa = "play";
 					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
+		            
 		        }
 				
 			}
@@ -408,6 +422,12 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				}
 			}
 		});
+		
+		btnRandom.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
 	}
 	
 
@@ -461,9 +481,13 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		int indiceActual = listaCanciones.getSelectedIndex();
         int totalCanciones = listaCanciones.getModel().getSize();
         if (totalCanciones > 0) {
-            int siguienteIndice = (indiceActual + 1) % totalCanciones;
+        	int siguienteIndice;
+        	if(modoAletorio)
+        		siguienteIndice = Aleatorio.generarAletorio(0, totalCanciones, indiceActual);
+        	else siguienteIndice = (indiceActual + 1) % totalCanciones;
+        	
             listaCanciones.setSelectedIndex(siguienteIndice);
-            Cancion c = miModelo.getElementAt(siguienteIndice);
+            Cancion c = (Cancion) miModelo.getElementAt(siguienteIndice);
             pausa = "play";
 			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);

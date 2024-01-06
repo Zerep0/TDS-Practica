@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Cancion {
 	private int id;
 	private String titulo, ruta, estilo, interprete;
+	private boolean marcada;
 	private int numReproducciones;
 	
 	
@@ -16,12 +17,23 @@ public class Cancion {
 		this.estilo = estilo;
 		this.interprete = interprete;
 		numReproducciones = 0;
+		marcada = false;
 	}
 
 	public int getId() {
 		return id;
 	}
-
+	
+	public void setMarcada(boolean value)
+	{
+		marcada = value;
+	}
+	
+	public boolean isMarcada()
+	{
+		return marcada;
+	}
+	
 	public void setId(int id) {
 		this.id = id;
 	}
