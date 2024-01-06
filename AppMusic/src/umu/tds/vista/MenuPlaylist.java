@@ -42,7 +42,11 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import umu.tds.negocio.IReproductorListener;
 import java.awt.Component;
@@ -265,14 +269,54 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	            	String selectedValue = (String) listaPlaylist.getSelectedValue();
 	                if (selectedValue != null) {
 	                    System.out.println("Elemento seleccionado: " + selectedValue);
-	                
+	                    
 	                    //Realizar acciones adicionales aquí
 	                    LinkedList<Cancion> canciones = ControladorAppMusic.getInstancia().getPlaylistCanciones(selectedValue);
+	                    btnEliminarCanciones.setVisible(false);
+	                    for (int i = 0; i<canciones.size();i++) {
+	                    	modeloPlaylist.quitarMarcada(i);
+						}
 	                    modeloPlaylist.actualizarTabla(canciones, selectedValue);
 	                }
 	            }
 	        }
 	    });
+		
+		tablaCancionesPlaylist.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent e)
+        	{
+        		if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+    				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+    				if(c!=null)
+    				{
+    					pausa = "stop";
+    					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+    				}
+    				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+    				pausa = "play"; 	
+                        ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuPlaylist);
+                        MiTablaPersonalizada tabla = (MiTablaPersonalizada) tablaCancionesPlaylist.getModel();
+        				c = tabla.getCancionAt(tablaCancionesPlaylist.getSelectedRow());
+        				if(c == null)
+        				{
+        					c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+        				}
+        				if(c != null)
+        				{
+        					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+        					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+        					if(pausa.equals("play"))
+        					{
+        						pausa = "pause";
+        					}
+        					else
+        					{
+        						pausa = "play";
+        					}
+        				}
+                }
+        	}
+        });
 		
 		btnPlay.addMouseListener(new MouseAdapter() {
 			@Override
@@ -411,10 +455,29 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 			        		btnEliminarCanciones.setVisible(true);
 			        else btnEliminarCanciones.setVisible(false);
                 }
+                modeloPlaylist.showCheckBox();
             }
         });
 		
-		 
+		btnEliminarCanciones.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e)
+			{
+				
+				String selectedValue = (String) listaPlaylist.getSelectedValue();
+				HashSet<Integer> marcadas = modeloPlaylist.listaMarcadas();
+				if(selectedValue != "Favoritas" && !marcadas.isEmpty())
+				{
+					List<Integer> listaOrdenada = new ArrayList<>(marcadas);
+			        Collections.sort(listaOrdenada, Collections.reverseOrder());
+					for (Integer integer : listaOrdenada) {
+						modeloPlaylist.quitarMarcada(integer);
+						modeloPlaylist.borrarCancion(integer);
+					}
+					modeloPlaylist.showCheckBox();
+					btnEliminarCanciones.setVisible(false);
+				}
+			}
+		});
 	}
 
 	@Override
