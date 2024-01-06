@@ -314,7 +314,6 @@ public class ControladorAppMusic implements ICancionesListener{
 			usuarioActual.addFavorita(c);
 		else usuarioActual.removeFavorita(c);
 		adaptadorUsuario.actualizar(usuarioActual.getFavoritasNum(),usuarioActual, "favoritas");
-		menuPlaylist.actualizarTabla(usuarioActual.getFavoritas());
 	}
 	
 	public void setMenuHome(MenuHome menuHome, JSlider slider, JLabel etiquetaTiempo)
@@ -488,5 +487,10 @@ public class ControladorAppMusic implements ICancionesListener{
 	public ArrayList<String >getNombresPlaylist()
 	{
 		return usuarioActual.getNombresPlaylists();
+	}
+	
+	public void refrescarPlaylists()
+	{
+		menuPlaylist.actualizarTabla();
 	}
 }

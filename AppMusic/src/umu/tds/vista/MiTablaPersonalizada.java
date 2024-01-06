@@ -84,14 +84,10 @@ class MiTablaPersonalizada extends AbstractTableModel {
 	
 	
 	public void actualizarTabla(LinkedList<Cancion> nuevasCanciones, String nombrePlaylist) {
-		if(this.nombrePlaylist != nombrePlaylist)
-		{
 			this.nombrePlaylist = nombrePlaylist;
 		    this.canciones = nuevasCanciones;
 		    inicializarCheckBoxes();
 		    fireTableDataChanged();
-		}
-		
 	}
 	
 	public void eliminarFilas()

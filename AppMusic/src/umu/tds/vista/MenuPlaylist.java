@@ -64,6 +64,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	private JLabel msgDuracion = new JLabel("00:00");
 	private JSlider barraReproduccion = new JSlider();
 	private MiTablaPersonalizada modeloPlaylist;
+	private String playlistActual;
 	/**
 	 * Create the panel.
 	 */
@@ -71,6 +72,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	public MenuPlaylist() {
 		this.pausa = "play";
 		menuPlaylist = this;
+		playlistActual = "";
 		ControladorAppMusic.getInstancia().setMenuPlaylist(menuPlaylist, barraReproduccion, msgDuracion);
 		initialize();
 	}
@@ -265,7 +267,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	            	String selectedValue = (String) listaPlaylist.getSelectedValue();
 	                if (selectedValue != null) {
 	                    System.out.println("Elemento seleccionado: " + selectedValue);
-	                
+	                    playlistActual = selectedValue;
 	                    //Realizar acciones adicionales aquí
 	                    LinkedList<Cancion> canciones = ControladorAppMusic.getInstancia().getPlaylistCanciones(selectedValue);
 	                    modeloPlaylist.actualizarTabla(canciones, selectedValue);
@@ -458,10 +460,14 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
         }*/
 	}
 	
-	public void actualizarTabla(LinkedList<Cancion> canciones)
+	public void actualizarTabla()
 	{
-		if(modeloPlaylist.getNombrePlaylist().equals("Favoritas"))
-			modeloPlaylist.actualizarTabla(canciones, "Favoritas");
+		if(!playlistActual.equals(""))
+		{
+			LinkedList<Cancion> canciones = ControladorAppMusic.getInstancia().getPlaylistCanciones(playlistActual);
+	        modeloPlaylist.actualizarTabla(canciones, playlistActual);
+		}
+		 
 	}
 	
 	

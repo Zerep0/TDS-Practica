@@ -339,6 +339,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 						esFavorita = true;
 					}
 					ControladorAppMusic.getInstancia().actualizarFavorito(esFavorita, cancionSeleccionada);
+					
 				}
 			}
 		});

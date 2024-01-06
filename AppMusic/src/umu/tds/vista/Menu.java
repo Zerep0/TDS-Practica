@@ -197,6 +197,7 @@ public class Menu extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
 				cardlayout.show(PanelNavegacion, "Playlist");
+				ControladorAppMusic.getInstancia().refrescarPlaylists();
 			}
 		});
 		
