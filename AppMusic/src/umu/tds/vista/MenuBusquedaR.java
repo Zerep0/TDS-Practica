@@ -214,6 +214,43 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 			}
 		});
 		
+        listaCanciones.addMouseListener(new MouseAdapter() {
+        	public void mouseClicked(MouseEvent e)
+        	{
+        		if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
+    				umu.tds.negocio.Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+    				if(c!=null)
+    				{
+    					pausa = "stop";
+    					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+    				}
+    				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+    				pausa = "play";
+                    int index = listaCanciones.locationToIndex(e.getPoint());
+                        ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuBusquedaR);
+        				c = listaCanciones.getSelectedValue();
+        				if(c == null)
+        				{
+        					c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+        				}
+        				if(c != null)
+        				{
+        					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+        					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
+        					if(pausa.equals("play"))
+        					{
+        						pausa = "pause";
+        					}
+        					else
+        					{
+        						pausa = "play";
+        					}
+        				}
+                    
+                }
+        	}
+        });
+        
 		btnPlay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

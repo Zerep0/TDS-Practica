@@ -134,7 +134,27 @@ class MiTablaPersonalizada extends AbstractTableModel {
 
 	public void quitarMarcada(int selectedRow) {
 		filasMarcadas.remove(selectedRow);
-		
 	}
 	
+	public HashSet<Integer> listaMarcadas()
+	{
+		return filasMarcadas;
+	}
+	
+	public void borrarCancion(int row)
+	{
+		canciones.remove(row);
+		checkBoxes.remove(row);
+		fireTableDataChanged();
+	}
+	
+	public void showCheckBox()
+	{
+		int i = 0;
+		for (JCheckBox check : checkBoxes) {
+			System.out.println("La checkbox " + i + " esta " + check.isSelected());
+			i++;
+		}
+		
+	}
 }
