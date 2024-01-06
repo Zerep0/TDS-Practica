@@ -122,7 +122,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			if(!s.equals(""))
 			{
 				c = AdaptadorCancionTDS.getUnicaInstancia().recuperarCancion(Integer.parseInt(s));
-				usuario.addReciente(c);
+				if(c != null)
+					usuario.addReciente(c);
 			}
 			
 		}
@@ -133,7 +134,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			if(!s.equals(""))
 			{
 				c = AdaptadorCancionTDS.getUnicaInstancia().recuperarCancion(Integer.parseInt(s));
-				usuario.addFavorita(c);
+				if(c != null)
+					usuario.addFavorita(c);
 			}
 			
 		}

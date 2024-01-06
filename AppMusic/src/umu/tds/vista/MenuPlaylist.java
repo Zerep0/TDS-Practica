@@ -447,17 +447,19 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 	
 	public void cancionAlFinalizar()
 	{
-		/*int indiceActual = listaCanciones.getSelectedIndex();
-        int totalCanciones = listaCanciones.getModel().getSize();
+		int indiceActual = tablaCancionesPlaylist.getSelectedRow();
+		System.out.println(indiceActual);
+		int totalCanciones = tablaCancionesPlaylist.getModel().getRowCount();
         if (totalCanciones > 0) {
             int siguienteIndice = (indiceActual + 1) % totalCanciones;
-            listaCanciones.setSelectedIndex(siguienteIndice);
-            Cancion c = miModelo.getElementAt(siguienteIndice);
+            System.out.println(siguienteIndice);
+            tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
+            Cancion c = ((MiTablaPersonalizada)tablaCancionesPlaylist.getModel()).getCancionAt(siguienteIndice);
             pausa = "play";
 			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 			pausa = "pause";
-        }*/
+        }
 	}
 	
 	public void actualizarTabla()

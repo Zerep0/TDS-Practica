@@ -59,26 +59,29 @@ public class AdaptadorCancionTDS implements IAdaptadorCancionDAO{
 	public Cancion recuperarCancion(int codigo) {
 		// si no, la recupera de la base de datos
 		Entidad eCancion;
-		String titulo, ruta, estilo, interprete,favorito,numReproducciones;
+		String titulo, ruta, estilo, interprete,numReproducciones;
 		
 		// recuperar entidad
 		eCancion = servPersistencia.recuperarEntidad(codigo);
-		
+		if(eCancion != null)
+		{
+			titulo = servPersistencia.recuperarPropiedadEntidad(eCancion, "titulo");
+			ruta = servPersistencia.recuperarPropiedadEntidad(eCancion, "ruta");
+			estilo = servPersistencia.recuperarPropiedadEntidad(eCancion, "estilo");
+			interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, "interprete");
+			numReproducciones = servPersistencia.recuperarPropiedadEntidad(eCancion, "numReproducciones");
+			
+
+			// recuperar playlist
+			Cancion cancion = new Cancion(titulo,ruta, estilo, interprete);
+			cancion.setId(codigo);
+			cancion.setNumReproducciones(Integer.parseInt(numReproducciones));
+			return cancion;
+		}
 
 		// recuperar propiedades que no son objetos
-		titulo = servPersistencia.recuperarPropiedadEntidad(eCancion, "titulo");
-		ruta = servPersistencia.recuperarPropiedadEntidad(eCancion, "ruta");
-		estilo = servPersistencia.recuperarPropiedadEntidad(eCancion, "estilo");
-		interprete = servPersistencia.recuperarPropiedadEntidad(eCancion, "interprete");
-		favorito = servPersistencia.recuperarPropiedadEntidad(eCancion, "favorito");
-		numReproducciones = servPersistencia.recuperarPropiedadEntidad(eCancion, "numReproducciones");
+		return null;
 		
-
-		// recuperar playlist
-		Cancion cancion = new Cancion(titulo,ruta, estilo, interprete);
-		cancion.setId(codigo);
-		cancion.setNumReproducciones(Integer.parseInt(numReproducciones));
-		return cancion;
 	}
 
 	@Override

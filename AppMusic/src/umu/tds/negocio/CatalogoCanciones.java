@@ -55,7 +55,7 @@ public class CatalogoCanciones {
 		// TODO: registra una cancion en el catalogo y en la base de datos
 		int id = adaptadorCancion.registrarCancion(cancion);
 		cancion.setId(id);
-		canciones.put(cancion.getInterprete()  + "_" + cancion.getTitulo(), cancion);
+		canciones.put(cancion.getInterprete() + "_" + cancion.getTitulo(), cancion);
 	}
 	
 	public List<Cancion> getCanciones()
