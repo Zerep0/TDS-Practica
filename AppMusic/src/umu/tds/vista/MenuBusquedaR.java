@@ -474,6 +474,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		
 	}
 
+	
 	@Override
 	public void actualizarEstadoReproductor(String pausa) {
 		this.pausa = pausa;	
