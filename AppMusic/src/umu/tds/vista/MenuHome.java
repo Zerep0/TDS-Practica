@@ -340,7 +340,16 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		
 		btnRandom.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				
+				if(modoAleatorio == true)
+				{
+					modoAleatorio = false;
+					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/pareja-de-flechas-circulares.png")));
+				}
+				else
+				{
+					modoAleatorio = true;
+					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/aleatorio.png")));
+				}
 			}
 		});
 	}

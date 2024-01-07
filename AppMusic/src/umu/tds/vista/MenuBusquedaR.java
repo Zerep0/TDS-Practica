@@ -66,7 +66,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 	private MenuBusquedaR menuBusquedaR;
 	private JSlider barraReproduccion = new JSlider();
 	private JLabel msgDuracion = new JLabel("00:00");
-	private boolean modoAletorio;
+	private boolean modoAleatorio;
 	
 	/**
 	 * Create the panel.
@@ -76,7 +76,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		this.ruta = ruta;
 		this.pausa = "play";
 		menuBusquedaR = this;
-		modoAletorio = true;
+		modoAleatorio = true;
 		ControladorAppMusic.getInstancia().setMenuBusquedaR(menuBusquedaR, barraReproduccion,msgDuracion);
 		initialize();
 	}
@@ -296,7 +296,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 						: listaCanciones.getSelectedIndex() - 1;	
 		        int totalCanciones = listaCanciones.getModel().getSize();
 		        if (totalCanciones > 0) {
-					if(modoAletorio)
+					if(modoAleatorio)
 					{
 						siguienteIndice = vengoOtroPanel ? siguienteIndice : 
 							Aleatorio.generarAletorio(0, totalCanciones, siguienteIndice+1);
@@ -341,7 +341,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		        int totalCanciones = listaCanciones.getModel().getSize();
 		        int siguienteIndice;
 		        if (totalCanciones > 0) {
-		        	if(modoAletorio)
+		        	if(modoAleatorio)
 		        		siguienteIndice = vengoOtroPanel ? 0 : Aleatorio.generarAletorio(0, totalCanciones, indiceActual);
 		        	else siguienteIndice = vengoOtroPanel ? 0 : (indiceActual + 1) % totalCanciones;
 
@@ -403,10 +403,12 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 					if(ControladorAppMusic.getInstancia().isFavorita(cancionSeleccionada))
 					{
 						cambiaIconoFavorito();
+						
 					}
 					else
 					{
 						quitaIconoFavorito();
+						
 					}
 				}
 			}
@@ -425,7 +427,16 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		
 		btnRandom.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				
+				if(modoAleatorio == true)
+				{
+					modoAleatorio = false;
+					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/pareja-de-flechas-circulares.png")));
+				}
+				else
+				{
+					modoAleatorio = true;
+					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/aleatorio.png")));
+				}
 			}
 		});
 	}
@@ -482,7 +493,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
         int totalCanciones = listaCanciones.getModel().getSize();
         if (totalCanciones > 0) {
         	int siguienteIndice;
-        	if(modoAletorio)
+        	if(modoAleatorio)
         		siguienteIndice = Aleatorio.generarAletorio(0, totalCanciones, indiceActual);
         	else siguienteIndice = (indiceActual + 1) % totalCanciones;
         	
