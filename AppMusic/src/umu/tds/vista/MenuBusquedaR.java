@@ -224,7 +224,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
     				if(c!=null)
     				{
     					pausa = "stop";
-    					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+    					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
     				}
     				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
     				pausa = "play";
@@ -236,7 +236,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
         				}
         				if(c != null)
         				{
-        					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+        					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
         					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
         					if(pausa.equals("play"))
         					{
@@ -255,7 +255,6 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		btnPlay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuBusquedaR);
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
 				if(c == null)
 				{
@@ -263,7 +262,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				}
 				if(c != null)
 				{
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					if(pausa.equals("play"))
 					{
@@ -274,6 +273,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 						pausa = "play";
 					}
 				}
+				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuBusquedaR);
 			}
 		});
 		
@@ -284,7 +284,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				if(c != null)
 				{
 					pausa = "stop";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
 					pausa = "play";
 				}
 				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuBusquedaR);
@@ -311,7 +311,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 					listaCanciones.setSelectedIndex(siguienteIndice);
 		            c = miModelo.getElementAt(siguienteIndice);
 		            pausa = "play";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
 		        	
@@ -329,7 +329,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				if(c != null)
 				{
 					pausa = "stop";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
 					pausa = "play";
 				}
 				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuBusquedaR);
@@ -348,7 +348,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		        	listaCanciones.setSelectedIndex(siguienteIndice);
 		            c = miModelo.getElementAt(siguienteIndice);
 		            pausa = "play";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
 		            
@@ -364,7 +364,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				if(c!=null)
 				{
 					pausa = "stop";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
 				}
 				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 				pausa = "play";
@@ -500,7 +500,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
             listaCanciones.setSelectedIndex(siguienteIndice);
             Cancion c = (Cancion) miModelo.getElementAt(siguienteIndice);
             pausa = "play";
-			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuBusquedaR);
 			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 			pausa = "pause";
         }

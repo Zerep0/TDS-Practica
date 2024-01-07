@@ -193,7 +193,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
     				if(c!=null)
     				{
     					pausa = "stop";
-    					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+    					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
     				}
     				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
     				pausa = "play";
@@ -205,7 +205,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
         				}
         				if(c != null)
         				{
-        					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+        					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
         					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
         					if(pausa.equals("play"))
         					{
@@ -224,7 +224,6 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		btnPlay.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuHome);
 				umu.tds.negocio.Cancion c = listaCanciones.getSelectedValue();
 				if(c == null)
 				{
@@ -233,7 +232,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 				if(c != null)
 				{
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
 					if(pausa.equals("play"))
 					{
 						pausa = "pause";
@@ -243,6 +242,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 						pausa = "play";
 					}
 				}
+				ControladorAppMusic.getInstancia().actualizarPanelReproduccion(menuHome);
 			}
 		});
 		
@@ -253,7 +253,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 				if(c != null)
 				{
 					pausa = "stop";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
 					pausa = "play";
 				}
 				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuHome);
@@ -280,7 +280,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		            listaCanciones.setSelectedIndex(siguienteIndice);
 		            c = (Cancion) miModelo.getElementAt(siguienteIndice);
 		            pausa = "play";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
 		        }
@@ -296,7 +296,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 				if(c != null)
 				{
 					pausa = "stop";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
 					pausa = "play";
 				}
 				boolean vengoOtroPanel = ControladorAppMusic.getInstancia().comprobarPaneles(menuHome);
@@ -315,7 +315,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		            listaCanciones.setSelectedIndex(siguienteIndice);
 		            c = (Cancion) miModelo.getElementAt(siguienteIndice);
 		            pausa = "play";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
 		        }
@@ -330,7 +330,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 				pausa = "stop";
 				if(c!=null)
 				{
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
 				}
 				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 				pausa = "play";
@@ -400,7 +400,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
             listaCanciones.setSelectedIndex(siguienteIndice);
             Cancion c = (Cancion) miModelo.getElementAt(siguienteIndice);
             pausa = "play";
-			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
+			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuHome);
 			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 			pausa = "pause";
         }

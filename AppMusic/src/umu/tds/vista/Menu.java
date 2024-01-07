@@ -235,7 +235,7 @@ public class Menu extends JPanel {
 			launcher.dispose();
 			Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
 			if(c != null)
-				ControladorAppMusic.getInstancia().reproducirCancion("stop", c);
+				ControladorAppMusic.getInstancia().reproducirCancion("stop", c, null);
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {

@@ -37,7 +37,7 @@ import umu.tds.vista.Alerta;
 import umu.tds.vista.Inicio;
 import umu.tds.vista.MenuBusquedaR;
 import umu.tds.vista.MenuHome;
-import umu.tds.vista.MenuPlaylist;
+import umu.tds.vista.MenuPlaylist;import umu.tds.vista.PanelSeleccionPlaylist;
 import umu.tds.vista.Registro;
 
 public class ControladorAppMusic implements ICancionesListener{
@@ -341,11 +341,11 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	
 	
-	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
+	public void reproducirCancion(String play, umu.tds.negocio.Cancion c, JPanel panel)
 	{
-		if(getCancionReproduciendose() != null)
+		if(panel != panelActualReproduccion && getCancionReproduciendose() != null)
 		{
-			Player.INSTANCE.play("stop",c, sliders, labels);
+			Player.INSTANCE.play("stop",getCancionReproduciendose(), sliders, labels);
 		}
 		Player.INSTANCE.play(play,c, sliders, labels);
 		if(play.equals("play"))
