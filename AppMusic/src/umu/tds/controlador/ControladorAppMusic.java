@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -30,18 +33,21 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 
+import umu.tds.descuentos.Descuento;
+import umu.tds.descuentos.FactoriaDescuento;
 import umu.tds.negocio.CargadorCanciones;
 import umu.tds.negocio.CatalogoCanciones;
 import umu.tds.negocio.CatalogoUsuarios;
 import umu.tds.negocio.IReproductorListener;
 import umu.tds.negocio.Playlist;
 import umu.tds.negocio.Usuario;
-
+import umu.tds.vista.Menu;
 import umu.tds.vista.MenuBusquedaR;
 import umu.tds.vista.MenuHome;
 import umu.tds.vista.MenuPlaylist;
@@ -52,6 +58,7 @@ public class ControladorAppMusic implements ICancionesListener{
 
 	private static final String CADENA_VACIA = "";
 	private static final String ESTILO = "-";
+	private static final int PRECIO_BASE = 15;
 	
 	
 	private static ControladorAppMusic unicaInstancia;
@@ -67,6 +74,7 @@ public class ControladorAppMusic implements ICancionesListener{
 	private MenuPlaylist menuPlaylist;
 	private MenuPremium menuPremium;
 	private MenuBusquedaR MenuBusquedaR;
+	private Menu menu;
 	private JPanel panelActualReproduccion;
 	
 	private FactoriaDAO dao;
@@ -79,6 +87,7 @@ public class ControladorAppMusic implements ICancionesListener{
 											+ "\nEstilo: " + c.getEstilo() + "\n----------------------------------------------------------------------------------------------------\n";
 	
 	private JSlider volumen;
+	private Timer temporizador = null;
 	
 	
 	private ControladorAppMusic()
@@ -126,6 +135,8 @@ public class ControladorAppMusic implements ICancionesListener{
 			setFavoritasPlaylist();
 			this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
 			menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
+			if(usuarioActual.isPremium())
+				menu.actualizarPremium("Premium");
 			return true;
 		}
 		return false;
@@ -151,6 +162,8 @@ public class ControladorAppMusic implements ICancionesListener{
 			setFavoritasPlaylist();
 			menuHome.refrescarRecientes(usuarioActual.getRecientes());
 			menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
+			if(usuarioActual.isPremium())
+				menu.actualizarPremium("Premium");
 			return true;
 		}else return false;
 
@@ -182,6 +195,8 @@ public class ControladorAppMusic implements ICancionesListener{
 					setFavoritasPlaylist();
 					this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
 					menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
+					if(usuarioActual.isPremium())
+						menu.actualizarPremium("Premium");
 				}
 				return (ghuser.getLogin().equals(usuario.getText()) && github.isCredentialValid());
 			}
@@ -310,6 +325,10 @@ public class ControladorAppMusic implements ICancionesListener{
 		labels.add(etiquetaTiempo);
 ;	}
 	
+	public void setMenu(Menu menu)
+	{
+		this.menu = menu;
+	}
 	
 	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
 	{
@@ -511,5 +530,65 @@ public class ControladorAppMusic implements ICancionesListener{
 		PDF.INSTANCE.cerrarDocumento(pdf);
 	}
 	
+	public void actualizarSaldoUsuario()
+	{
+		adaptadorUsuario.actualizarSaldo(usuarioActual, usuarioActual.getSaldo());
+	}
+	
+	public boolean pagarPremium()
+	{
+		double saldoActual;
+		Optional<Descuento> miDescuento = FactoriaDescuento.INSTANCE.getDescuento(usuarioActual);
+		if(miDescuento.isEmpty())
+			saldoActual = usuarioActual.getSaldo() - PRECIO_BASE;
+		else saldoActual = usuarioActual.getSaldo() - PRECIO_BASE * miDescuento.get().getDescuento();
+		
+		
+		if(saldoActual >= 0)
+		{
+			if(!usuarioActual.isPremium())
+				simularTiempo();
+			usuarioActual.setSaldo(saldoActual);
+        	System.out.println(saldoActual);
+			usuarioActual.setPremium(true);
+			adaptadorUsuario.actualizarSaldo(usuarioActual, saldoActual);
+			adaptadorUsuario.actualizarPremium(usuarioActual, true);
+			return true;
+		}else
+		{
+			usuarioActual.setPremium(false);
+        	System.out.println("ya no " + saldoActual);
+			adaptadorUsuario.actualizarPremium(usuarioActual, false);
+			return false;
+		}
+	}
+	
+	public boolean isPremium()
+	{
+		return usuarioActual.isPremium();
+	}
+	
+	public void simularTiempo()
+	{
 
+    	  temporizador = new Timer();
+    	  TimerTask task = new TimerTask() {
+              @Override
+              public void run() {
+              	if(pagarPremium())
+  				{
+  					menu.actualizarPremium("Premium");
+  				}else
+  				{
+  					menu.actualizarPremium("Obtener Premium");
+  					JOptionPane.showMessageDialog(null, "Subscricion Caducada", "Aviso de pago", JOptionPane.INFORMATION_MESSAGE);
+  					temporizador.cancel();
+  					return;
+  				}
+              }
+          };
+          temporizador.schedule(task, 10000, 10000);
+      }
+       
+	
 }

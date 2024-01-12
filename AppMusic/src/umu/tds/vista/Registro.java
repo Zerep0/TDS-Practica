@@ -116,7 +116,7 @@ public class Registro extends JPanel {
 		btnVisibilidad.setBorderPainted(false);
 		btnVisibilidad.setEnabled(false);
 		btnVisibilidad.setBackground(new Color(18, 159, 186));
-		btnVisibilidad.setIcon(new ImageIcon(Inicio.class.getResource("/ImagenesEntrada/ojo.png")));
+		btnVisibilidad.setIcon(new ImageIcon(Registro.class.getResource("/ImagenesEntrada/ojo.png")));
 		GridBagConstraints gbc_btnVisibilidad = new GridBagConstraints();
 		gbc_btnVisibilidad.insets = new Insets(0, 0, 5, 0);
 		gbc_btnVisibilidad.gridx = 4;

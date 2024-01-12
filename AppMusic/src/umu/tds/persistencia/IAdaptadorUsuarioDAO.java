@@ -13,5 +13,6 @@ public interface IAdaptadorUsuarioDAO {
 	public List<Usuario> recuperarTodosUsuarios();
 	public void actualizar(LinkedList<Integer> nums, Usuario u, String propiedad);
 	public String IntegerListToString(LinkedList<Integer> nums);
-	public void modificarUsuario(String recientes, Usuario u, String propiedad);
+	public void actualizarSaldo(Usuario u,double saldo);
+	public void actualizarPremium(Usuario u,boolean premium);
 }

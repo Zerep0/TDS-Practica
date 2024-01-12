@@ -36,7 +36,7 @@ import javax.swing.JSlider;
 import java.awt.Dimension;
 import javax.swing.SwingConstants;
 
-public class MenuHome extends JPanel implements IReproductorListener{
+public class MenuHome extends JPanel implements IReproductorListener,IUsuarioListener{
 
 	private static final long serialVersionUID = 1L;
 	private AlineamientoLista alineamientoListaMenu;
@@ -104,7 +104,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		add(PanelBienvenida, BorderLayout.NORTH);
 		PanelBienvenida.setLayout(new BorderLayout(0, 0));
 		
-		MsgBienvenida = new JLabel("Reproduce las canciones más escuchadas");
+		MsgBienvenida = new JLabel("Sigue escuchando: ");
 		MsgBienvenida.setForeground(new Color(255, 255, 255));
 		MsgBienvenida.setHorizontalAlignment(SwingConstants.CENTER);
 		MsgBienvenida.setFont(new Font("Arial", Font.BOLD, 24));
@@ -343,6 +343,8 @@ public class MenuHome extends JPanel implements IReproductorListener{
 				}
 			}
 		});
+		
+		ControladorAppMusic.getInstancia().addUsuarioListener(this);
 	}
 	
 	public void refrescarRecientes(LinkedList<Cancion> cancionesRecientes)
@@ -395,6 +397,12 @@ public class MenuHome extends JPanel implements IReproductorListener{
 			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 			pausa = "pause";
         }
+	}
+
+	@Override
+	public void actualizar(UsuarioEvent e) {
+		MsgBienvenida.setText(MsgBienvenida.getText() + e.getNombreUsuario());
+		
 	}
 
 

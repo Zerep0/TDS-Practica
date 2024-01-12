@@ -16,6 +16,8 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import java.awt.GridBagLayout;
 import java.awt.Window;
 
@@ -37,12 +39,15 @@ public class Menu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	JFrame frame = new JFrame("File Chooser");
 	private Window launcher;
+	private JMenuItem ConseguirPremium;
+	private JPanel PanelNavegacion;
 	/**
 	 * Create the panel.
 	 */
 	private JPanel home,playlist,busqueda,premium; //Panel que te lleva al home
 	public Menu(Window launcher) {
 		this.launcher = launcher;
+		ControladorAppMusic.getInstancia().setMenu(this);
 		initialize();
 	}
 	
@@ -114,8 +119,8 @@ public class Menu extends JPanel {
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(botonIcono, popupMenu);
 		
-		JMenuItem Premium = new JMenuItem("Premium");
-		popupMenu.add(Premium);
+		ConseguirPremium = new JMenuItem("Obtener Premium");
+		popupMenu.add(ConseguirPremium);
 		
 		JMenuItem Logout = new JMenuItem("Logout");
 		popupMenu.add(Logout);
@@ -157,7 +162,7 @@ public class Menu extends JPanel {
 		panel.add(barraVolumen, gbc_barraVolumen);
 		ControladorAppMusic.getInstancia().setSliderVolumen(barraVolumen);
 		
-		JPanel PanelNavegacion = new JPanel();
+		PanelNavegacion = new JPanel();
 		PanelNavegacion.setBackground(new Color(18, 159, 186));
 		add(PanelNavegacion, BorderLayout.CENTER);
 		PanelNavegacion.setLayout(new CardLayout(0, 0));
@@ -213,8 +218,15 @@ public class Menu extends JPanel {
 		
 		btnPremium.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
-				cardlayout.show(PanelNavegacion, "Premium");
+				if(ControladorAppMusic.getInstancia().isPremium())
+				{
+					CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
+					cardlayout.show(PanelNavegacion, "Premium");
+				}else
+				{
+					JOptionPane.showMessageDialog(null, "Pasate a premium para disfrutar de nuestras novedades", "Premium", JOptionPane.INFORMATION_MESSAGE);
+				}
+				
 			}
 		});
 		
@@ -259,7 +271,25 @@ public class Menu extends JPanel {
 			});
 		});
 		
-		Premium.addActionListener((e) -> {});
+		ConseguirPremium.addActionListener((e) -> {
+			if(ConseguirPremium.getText().equals("Premium"))
+			{
+				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
+				cardlayout.show(PanelNavegacion, "Premium");
+			}
+			else
+			{
+				if(ControladorAppMusic.getInstancia().pagarPremium())
+				{
+					ConseguirPremium.setText("Premium");
+				}else
+				{
+					ConseguirPremium.setText("Obtener Premium");
+					JOptionPane.showMessageDialog(null, "Saldo insuficiente", "Aviso de pago", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+			
+		});
 		
 		barraVolumen.addChangeListener((e) -> {
 			ControladorAppMusic.getInstancia().actualizarVolumen();
@@ -289,6 +319,15 @@ public class Menu extends JPanel {
 		
 	}
 	
+	public void actualizarPremium(String mensaje)
+	{
+		ConseguirPremium.setText(mensaje);
+		if(mensaje.equals("Obtener Premium"))
+		{
+			CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
+			cardlayout.show(PanelNavegacion, "Home");
+		}
+	}
 	
 	
 	

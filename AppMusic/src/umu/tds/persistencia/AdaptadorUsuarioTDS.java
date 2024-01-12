@@ -51,7 +51,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 			eCliente = new Entidad();
 			eCliente.setNombre("usuario");
 			eCliente.setPropiedades(new ArrayList<Propiedad>(
-					Arrays.asList(new Propiedad("login", usuario.getLogin()),new Propiedad("favoritas",""), new Propiedad("password",usuario.getPassword()),new Propiedad("email",usuario.getEmail()),
+					Arrays.asList(new Propiedad("login", usuario.getLogin()),new Propiedad("favoritas",""), new Propiedad("password",usuario.getPassword()),
+							new Propiedad("email",usuario.getEmail()), new Propiedad("saldo",String.valueOf(usuario.getSaldo())),
 							new Propiedad("fechaNacimiento",usuario.getFechaNacimiento().toString()),new Propiedad("premium",String.valueOf(usuario.isPremium())),
 							new Propiedad("recientes",""))));
 
@@ -73,7 +74,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 
 		// si no, la recupera de la base de datos
 		Entidad eUsuario;
-		String nombre, email, fechaNacimiento, password, premium, recientes, favoritas;
+		String nombre, email, fechaNacimiento, password, premium, recientes, favoritas, saldo;
 		
 
 		// recuperar entidad
@@ -85,6 +86,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		fechaNacimiento = servPersistencia.recuperarPropiedadEntidad(eUsuario, "fechaNacimiento");
 		password = servPersistencia.recuperarPropiedadEntidad(eUsuario, "password");
 		premium = servPersistencia.recuperarPropiedadEntidad(eUsuario, "premium");
+		saldo = servPersistencia.recuperarPropiedadEntidad(eUsuario, "saldo");
 		Usuario usuario = new Usuario(nombre,password,email, LocalDate.parse(fechaNacimiento));
 		
 		// recuperar playlist
@@ -121,6 +123,8 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		
 		usuario.setId(codigo);
 		usuario.setPremium(Boolean.parseBoolean(premium));
+		usuario.setSaldo(Double.parseDouble(saldo));
+
 
 		return usuario;
 	}
@@ -157,7 +161,7 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		return listaCan;
 	}
 	
-	public void modificarUsuario(String informacion, Usuario u, String propiedad)
+	private void modificarUsuario(String informacion, Usuario u, String propiedad)
 	{
 		Entidad recuperaCancion = servPersistencia.recuperarEntidad(u.getId());
 		recuperaCancion.getPropiedades().stream().filter(p -> p.getNombre().equals(propiedad))
@@ -165,6 +169,15 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		servPersistencia.modificarPropiedad(p);});
 	}
 	
+	public void actualizarSaldo(Usuario u,double saldo)
+	{
+		modificarUsuario(String.valueOf(saldo),u,"saldo");
+	}
+	
+	public void actualizarPremium(Usuario u,boolean premium)
+	{
+		modificarUsuario(String.valueOf(premium),u,"premium");
+	}
 
 	
 	

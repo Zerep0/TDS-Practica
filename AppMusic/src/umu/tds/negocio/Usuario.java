@@ -14,6 +14,7 @@ public class Usuario {
 	private LinkedList<Cancion> cancionesFavoritas;
 	private HashMap<String, Playlist> cancionesPlaylist;
 	private static final int MAX_RECIENTES = 10;
+	public double saldo;
 
 	public Usuario(String login, String password, String email, LocalDate fechaNacimiento) {
 		this.email = email;
@@ -26,6 +27,7 @@ public class Usuario {
 		cancionesFavoritas = new LinkedList<Cancion>();
 		cancionesPlaylist = new HashMap<String,Playlist>();
 		cancionesPlaylist.put("Favoritas", new Playlist("Favoritas"));
+		saldo = 50.0;
 	}
 
 	/**
@@ -185,4 +187,13 @@ public class Usuario {
 		return new ArrayList<String>(cancionesPlaylist.keySet());
 	}
 	
+	public double getSaldo()
+	{
+		return saldo;
+	}
+	
+	public void setSaldo(double saldo)
+	{
+		this.saldo = saldo;
+	}
 }

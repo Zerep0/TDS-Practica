@@ -77,4 +77,6 @@ public class CatalogoUsuarios {
 			     usuarios.put(user.getLogin(), user);
 	}
 	
+	
+	
 }
