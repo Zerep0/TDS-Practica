@@ -3,6 +3,7 @@ package umu.tds.negocio;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,9 +47,10 @@ public class CatalogoUsuarios {
 	
 	/*devuelve todos los clientes*/
 	public List<Usuario> getUsuarios(){
-		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		LinkedList<Usuario> lista = new LinkedList<Usuario>();
 		for (Usuario u : usuarios.values()) 
 			lista.add(u);
+		System.out.println(lista);
 		return lista;
 	}
 	
@@ -75,6 +77,11 @@ public class CatalogoUsuarios {
 		 List<Usuario> usuariosBD = adaptadorUsuario.recuperarTodosUsuarios();
 		 for (Usuario user : usuariosBD) 
 			     usuarios.put(user.getLogin(), user);
+	}
+
+	public void borrarUsuarios() {
+		usuarios.clear();
+		adaptadorUsuario.borrarUsuarios();
 	}
 	
 	

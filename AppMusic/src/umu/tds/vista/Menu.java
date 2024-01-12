@@ -137,16 +137,14 @@ public class Menu extends JPanel {
 		ConseguirPremium = new JMenuItem("Obtener Premium");
 		popupMenu.add(ConseguirPremium);
 		
-		JMenuItem Logout = new JMenuItem("Logout");
-		popupMenu.add(Logout);
+		JMenuItem Saldo = new JMenuItem("Consultar Saldo");
+		popupMenu.add(Saldo);
 		
 		JMenuItem IngresarDinero = new JMenuItem("Ingresar 100€");
 		popupMenu.add(IngresarDinero);
 		
-		JMenuItem Saldo = new JMenuItem("Consultar Saldo");
-		popupMenu.add(Saldo);
-		
-		
+		JMenuItem Logout = new JMenuItem("Logout");
+		popupMenu.add(Logout);
 		
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(18, 156, 189));
@@ -302,6 +300,7 @@ public class Menu extends JPanel {
 				}else
 				{
 					ConseguirPremium.setText(OBTENER_PREM);
+					JOptionPane.showMessageDialog(null, SALDO_INSUFICIENTE, AVISO_PAGO, JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 			

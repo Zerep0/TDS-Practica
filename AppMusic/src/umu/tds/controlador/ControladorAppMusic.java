@@ -134,7 +134,10 @@ public class ControladorAppMusic implements ICancionesListener{
 			this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
 			menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
 			if(usuarioActual.isPremium())
+			{
 				menu.actualizarPremium("Premium");
+				simularTiempo();
+			}
 			return true;
 		}
 		return false;
@@ -161,7 +164,12 @@ public class ControladorAppMusic implements ICancionesListener{
 			menuHome.refrescarRecientes(usuarioActual.getRecientes());
 			menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
 			if(usuarioActual.isPremium())
+			{
 				menu.actualizarPremium("Premium");
+				simularTiempo();
+			}
+				
+			
 			return true;
 		}else return false;
 
@@ -194,7 +202,10 @@ public class ControladorAppMusic implements ICancionesListener{
 					this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
 					menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
 					if(usuarioActual.isPremium())
+					{
 						menu.actualizarPremium("Premium");
+						simularTiempo();
+					}
 				}
 				return (ghuser.getLogin().equals(usuario.getText()) && github.isCredentialValid());
 			}

@@ -24,7 +24,7 @@ public class Splash extends JPanel {
 	private JFrame frame;
 	private String ruta;
 	private int alto_original, ancho_original;
-	private static int TIEMPO_INICIO = 5000;
+	
 	
 	public Splash(JFrame frame, String ruta, int alto_original,int ancho_original) {
 		this.alto_original = alto_original;
@@ -42,7 +42,7 @@ public class Splash extends JPanel {
 		splash = new JLabel(gifSplash);
 		setLayout(new BorderLayout());
 		add(splash, BorderLayout.CENTER);
-		Timer timer = new Timer(TIEMPO_INICIO, new ActionListener() {
+		Timer timer = new Timer(5000, new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
 	               frame.setSize(alto_original,ancho_original);

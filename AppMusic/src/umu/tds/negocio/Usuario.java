@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class Usuario {
 	private int id;
@@ -182,6 +183,24 @@ public class Usuario {
 		cancionesPlaylist.put(playlist, aux);
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, fechaNacimiento, id, login, password);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		return Objects.equals(email, other.email) && Objects.equals(fechaNacimiento, other.fechaNacimiento)
+			 && Objects.equals(login, other.login) && Objects.equals(password, other.password);
+	}
+
 	public ArrayList<String> getNombresPlaylists()
 	{
 		return new ArrayList<String>(cancionesPlaylist.keySet());

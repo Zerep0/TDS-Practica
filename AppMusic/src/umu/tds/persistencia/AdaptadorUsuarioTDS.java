@@ -178,7 +178,13 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 	{
 		modificarUsuario(String.valueOf(premium),u,"premium");
 	}
-
+	
+	public void borrarUsuarios()
+	{
+		ArrayList<Entidad> eUsuarios = servPersistencia.recuperarEntidades("usuario");
+		eUsuarios.forEach(e -> servPersistencia.borrarEntidad(e));
+		
+	}
 	
 	
 	
