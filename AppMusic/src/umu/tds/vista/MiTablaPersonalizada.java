@@ -1,12 +1,8 @@
 package umu.tds.vista;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
-import javax.swing.JCheckBox;
 import javax.swing.table.AbstractTableModel;
 
 import umu.tds.negocio.Cancion;

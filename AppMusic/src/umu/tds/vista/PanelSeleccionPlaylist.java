@@ -8,12 +8,8 @@ import umu.tds.negocio.Cancion;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.Font;

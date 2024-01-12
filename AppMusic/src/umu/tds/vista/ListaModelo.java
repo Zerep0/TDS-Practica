@@ -1,12 +1,7 @@
 package umu.tds.vista;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.AbstractListModel;
-import javax.swing.ListModel;
-
-import umu.tds.negocio.Cancion;
 
 public class ListaModelo<T> extends AbstractListModel<T> {
 	

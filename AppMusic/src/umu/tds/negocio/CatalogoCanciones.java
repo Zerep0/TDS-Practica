@@ -1,6 +1,5 @@
 package umu.tds.negocio;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.List;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
 import umu.tds.persistencia.IAdaptadorCancionDAO;
-import umu.tds.persistencia.IAdaptadorUsuarioDAO;
 
 public class CatalogoCanciones {
 	private static CatalogoCanciones unicaInstancia;
@@ -17,7 +15,6 @@ public class CatalogoCanciones {
 	private IAdaptadorCancionDAO adaptadorCancion;
 	// la clave es interprete + "_" + titulo
 	private HashMap<String,Cancion> canciones;
-	private LinkedList<Cancion> cancionesRecientes;
 	
 	private CatalogoCanciones()
 	{
@@ -25,7 +22,6 @@ public class CatalogoCanciones {
 			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 			adaptadorCancion = dao.getCancionDAO();
 			canciones = new HashMap<String,Cancion>();
-			cancionesRecientes = new LinkedList<>();
 			this.cargarCatalogo();
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block

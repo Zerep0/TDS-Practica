@@ -6,12 +6,9 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.JTableHeader;
 
 import umu.tds.controlador.ControladorAppMusic;
@@ -21,13 +18,8 @@ import umu.tds.negocio.Cancion;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.AbstractListModel;
-import javax.swing.BorderFactory;
 
 import java.awt.Font;
 import javax.swing.JList;
@@ -36,21 +28,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JTable;
 
-import java.awt.Cursor;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-
 import umu.tds.negocio.IReproductorListener;
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 
 public class MenuPlaylist extends JPanel implements IReproductorListener{
 
@@ -299,7 +281,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
     				if(c!=null)
     				{
     					pausa = "stop";
-    					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+    					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
     				}
     				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
     				pausa = "play"; 	
@@ -312,7 +294,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
         				}
         				if(c != null)
         				{
-        					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+        					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
         					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
         					if(pausa.equals("play"))
         					{
@@ -339,7 +321,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				if(c != null)
 				{
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					if(pausa.equals("play"))
 					{
 						pausa = "pause";
@@ -361,7 +343,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				if(c != null)
 				{
 					pausa = "stop";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					pausa = "play";
 				} 
 				MiTablaPersonalizada tabla = (MiTablaPersonalizada) tablaCancionesPlaylist.getModel();
@@ -389,7 +371,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		            c = tabla.getCancionAt(siguienteIndice);
 		            tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
 		            pausa = "play";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";  
 		        }
@@ -404,7 +386,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				if(c != null)
 				{
 					pausa = "stop";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					pausa = "play";
 				}
 				 
@@ -426,7 +408,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		            c = tabla.getCancionAt(siguienteIndice);
 		            tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
 		            pausa = "play";
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 					ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 					pausa = "pause";
 		        }
@@ -441,7 +423,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				pausa = "stop";
 				if(c!=null)
 				{
-					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+					ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 				}
 				ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 				pausa = "play";
@@ -531,7 +513,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
             Cancion c = ((MiTablaPersonalizada) tablaCancionesPlaylist.getModel()).getCancionAt(siguienteIndice); 
             tablaCancionesPlaylist.setRowSelectionInterval(siguienteIndice, siguienteIndice);
             pausa = "play";
-			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c,menuPlaylist);
+			ControladorAppMusic.getInstancia().reproducirCancion(pausa,c);
 			ControladorAppMusic.getInstancia().actualizarEstadoReproductor(pausa);
 			pausa = "pause";
         }

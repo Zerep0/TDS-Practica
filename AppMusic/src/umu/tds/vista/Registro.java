@@ -23,6 +23,11 @@ public class Registro extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final String MENSAJE_USUARIO_REGISTRADO = "Se ha registrado con exito";
+	private static final String MENSAJE_USUARIO_FALLIDO = "Usuario ya en uso";
+	private static final String ASUNTO_REGISTRO = "Registrado";
+	private static final String ASUNTO_ERROR_CAMPO = "Campo Faltante";
+	private static final String ASUNTO_REGISTRO_ERROR = "No Registrado";
 	/**
 	 * Create the panel.
 	 */
@@ -233,12 +238,24 @@ public class Registro extends JPanel {
 		
 		btnSign.addActionListener((e) -> {
 			LocalDate fechaNacimiento = convertirFecha();
-			Boolean iniciar = ControladorAppMusic.getInstancia().registrarUsuario(RUsuario,RPassword,REmail,fechaNacimiento, this);
-			if(iniciar)
-			{		
-				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
-				cardlayout.show(frame.getContentPane(), "Menu");
+			String msgError = errorCreacion(RUsuario, RPassword, REmail, fechaNacimiento);
+			if(msgError != "")
+			{
+				Alerta.INSTANCIA.mostrarAlerta(msgError, ASUNTO_ERROR_CAMPO, this);
+			}else
+			{
+				Boolean iniciar = ControladorAppMusic.getInstancia().registrarUsuario(RUsuario,RPassword,REmail,fechaNacimiento, this);
+				if(iniciar)
+				{
+					Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_REGISTRADO, ASUNTO_REGISTRO, this);
+					CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
+					cardlayout.show(frame.getContentPane(), "Menu");
+				}else
+				{
+					Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_FALLIDO, ASUNTO_REGISTRO_ERROR, this);
+				}
 			}
+			
 		});
 		
 		hiperVinculo.crearHiperVinculo(etqGoLogin,INICIO,LINK_INICIO,frame);
@@ -257,5 +274,45 @@ public class Registro extends JPanel {
         LocalDate localDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
         return localDate;
     }
+	
+	private String errorCreacion(JTextField login, JPasswordField password, JTextField email, LocalDate fechaNacimiento)
+	{
+		String mensaje_error = "";
+		if(isErrorTexto(login,"User"))
+		{
+			mensaje_error += "Login ";
+		}
+		if(isErrorContraseña(password, "Password"))
+		{
+			mensaje_error += "Password ";
+		}
+		if(isErrorTexto(email,"Email"))
+		{
+			mensaje_error += "Email ";
+		}
+		if(fechaNacimiento == null)
+		{
+			mensaje_error += "FechaNacimiento";
+		}
+		return mensaje_error;
+	}
+	
+	private boolean isErrorTexto(JTextField text,String campo)
+	{
+		if(text.getText().equals(campo) && text.getFont().isItalic())
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean isErrorContraseña(JPasswordField password,String campo)
+	{
+		if(new String(password.getPassword()).equals(campo) && password.getFont().isItalic())
+		{
+			return true;
+		}
+		return false;
+	}
 
 }

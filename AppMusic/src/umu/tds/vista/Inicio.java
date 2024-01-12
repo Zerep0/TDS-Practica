@@ -10,9 +10,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.io.IOException;
-import java.net.URISyntaxException;
-
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,18 +19,21 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import umu.tds.controlador.ControladorAppMusic;
 import umu.tds.helper.Fuente;
 import umu.tds.helper.HiperVinculo;
 import umu.tds.helper.Placeholder;
-import cargadorCanciones.Canciones;
-import cargadorCanciones.MapperCancionesXMLtoJava;
 
 public class Inicio extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-
+	private static final String MENSAJE_USUARIO_LOGIN = "Se ha iniciado sesion correctamente";
+	private static final String MENSAJE_LOGIN_FALLO = "Usuario o contraseña inválidos";
+	private static final String MENSAJE_GITHUB_FALLO = "Usuario o token incorrecto";
+	private static final String ASUNTO_ERROR_LOGIN = "Login error";
+	private static final String ASUNTO_LOGIN = "Login exitoso";
 	/**
 	 * Create the panel.
 	 */
@@ -52,6 +54,7 @@ public class Inicio extends JPanel {
 	private Fuente font;
 	private HiperVinculo hiperVinculo;
 	private JTextField Usuario;
+	JFrame frameGitHub = new JFrame("File Chooser");
 	public Inicio(JFrame frame) throws FontFormatException, IOException {
 		this.frame = frame;
 		inicialize();
@@ -188,18 +191,48 @@ public class Inicio extends JPanel {
 
 		
 		btnLogin.addActionListener((e) -> {
-			Boolean iniciar = ControladorAppMusic.getInstancia().loginUsuario(Usuario, Password, this);
+			Boolean iniciar = ControladorAppMusic.getInstancia().loginUsuario(Usuario, Password);
 			if(iniciar)
 			{
+				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , this);
 				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
 				cardlayout.show(frame.getContentPane(), "Menu");
 				
+			}else
+			{
+				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_LOGIN_FALLO,ASUNTO_ERROR_LOGIN , this);
 			}
 		});
 		
 		btnGit.addActionListener((e) -> {
+			JFileChooser fileChooser = new JFileChooser();
+	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        FileNameExtensionFilter filter = new FileNameExtensionFilter("Github Properties (properties)", "properties");
+	        fileChooser.setFileFilter(filter);
+	        fileChooser.setAcceptAllFileFilterUsed(false);
+	        
+	        int result = fileChooser.showOpenDialog(frameGitHub);
+	        
+	        if (result == JFileChooser.APPROVE_OPTION) {
+	            // Obtener el archivo seleccionado
+	            java.io.File selectedFile = fileChooser.getSelectedFile();
+	            boolean operacion = ControladorAppMusic.getInstancia()
+	            		.registrarIniciarGit(Usuario, selectedFile.getAbsolutePath());
+	            if(operacion)
+	            {
+	            	Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , this);
+	            	CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
+					cardlayout.show(frame.getContentPane(), "Menu");
+	            }else
+	            {
+	            	Alerta.INSTANCIA.mostrarAlerta(MENSAJE_GITHUB_FALLO,ASUNTO_ERROR_LOGIN , this);
+	            }
+	            	
+	        } else {
+	            System.out.println("Selección de archivo cancelada por el usuario"); 
+	        }
 			
-			ControladorAppMusic.getInstancia().registrarGit(Usuario.getText(), new String(Password.getPassword()));
+			
 			
 			
 		});

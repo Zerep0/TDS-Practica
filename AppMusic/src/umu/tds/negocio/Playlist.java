@@ -1,7 +1,6 @@
 package umu.tds.negocio;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class Playlist {
 
