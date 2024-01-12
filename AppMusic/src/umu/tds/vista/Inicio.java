@@ -34,6 +34,7 @@ public class Inicio extends JPanel {
 	private static final String MENSAJE_GITHUB_FALLO = "Usuario o token incorrecto";
 	private static final String ASUNTO_ERROR_LOGIN = "Login error";
 	private static final String ASUNTO_LOGIN = "Login exitoso";
+	private static String MENU = "Menu";
 	/**
 	 * Create the panel.
 	 */
@@ -196,7 +197,7 @@ public class Inicio extends JPanel {
 			{
 				Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , this);
 				CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
-				cardlayout.show(frame.getContentPane(), "Menu");
+				cardlayout.show(frame.getContentPane(), MENU);
 				
 			}else
 			{
@@ -222,7 +223,7 @@ public class Inicio extends JPanel {
 	            {
 	            	Alerta.INSTANCIA.mostrarAlerta(MENSAJE_USUARIO_LOGIN,ASUNTO_LOGIN , this);
 	            	CardLayout cardlayout = (CardLayout) frame.getContentPane().getLayout();
-					cardlayout.show(frame.getContentPane(), "Menu");
+					cardlayout.show(frame.getContentPane(), MENU);
 	            }else
 	            {
 	            	Alerta.INSTANCIA.mostrarAlerta(MENSAJE_GITHUB_FALLO,ASUNTO_ERROR_LOGIN , this);

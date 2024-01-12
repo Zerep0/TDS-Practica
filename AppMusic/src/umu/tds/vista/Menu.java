@@ -41,6 +41,21 @@ public class Menu extends JPanel {
 	private Window launcher;
 	private JMenuItem ConseguirPremium;
 	private JPanel PanelNavegacion;
+	private static String HOME = "Home";
+	private static String OBTENER_PREM = "Obtener Premium";
+	private static String SALDO_INSUFICIENTE = "Saldo insuficiente";
+	private static String PREMIUM = "Premium";
+	private static String PLAYLIST = "Playlist";
+	private static String BUSQUEDA = "Busqueda";
+	private static String STOP = "stop";
+	private static String PASATE_A_PREMIUM = "Pasate a premium para disfrutar de nuestras novedades";
+	private static String AVISO_PAGO = "Aviso de pago";
+	private static String SELECCION_CANCELADA = "Selección de archivo cancelada por el usuario";
+	private static String OBTENER_DINERO = "Se han añadido 100€ a la cuenta ahora tienes ";
+	private static String STR_DINERO_ANADIDO = "Dinero Añadido";
+	private static String STR_SALDO_TOTAL = "Saldo total";
+	private static String STR_POSEES_SALDO = "La cuenta tiene: ";
+	private static double DINERO = 100;
 	/**
 	 * Create the panel.
 	 */
@@ -125,9 +140,11 @@ public class Menu extends JPanel {
 		JMenuItem Logout = new JMenuItem("Logout");
 		popupMenu.add(Logout);
 		
+		JMenuItem IngresarDinero = new JMenuItem("Ingresar 100€");
+		popupMenu.add(IngresarDinero);
 		
-		
-		
+		JMenuItem Saldo = new JMenuItem("Consultar Saldo");
+		popupMenu.add(Saldo);
 		
 		
 		
@@ -179,32 +196,32 @@ public class Menu extends JPanel {
 		
 		// AÑADIR MENU DE HOME
 		home = new MenuHome();
-		PanelNavegacion.add(home, "Home");
+		PanelNavegacion.add(home, HOME);
 		
 		// AÑADIR MENU DE PLAYLIST
 		playlist = new MenuPlaylist();
-		PanelNavegacion.add(playlist,"Playlist");
+		PanelNavegacion.add(playlist,PLAYLIST);
 		
 		//AÑADIR MENU DE BUSQUEDA
 		busqueda = new MenuBusqueda();
-		PanelNavegacion.add(busqueda,"Busqueda");
+		PanelNavegacion.add(busqueda,BUSQUEDA);
 		
 		premium = new MenuPremium();
-		PanelNavegacion.add(premium, "Premium");
+		PanelNavegacion.add(premium, PREMIUM);
 		
 		// EVENTOS 
 		
 		btnHome.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
-				cardlayout.show(PanelNavegacion, "Home");
+				cardlayout.show(PanelNavegacion, HOME);
 			}
 		});
 		
 		btnPlaylist.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
-				cardlayout.show(PanelNavegacion, "Playlist");
+				cardlayout.show(PanelNavegacion, PLAYLIST);
 				ControladorAppMusic.getInstancia().refrescarPlaylists();
 			}
 		});
@@ -212,7 +229,7 @@ public class Menu extends JPanel {
 		btnLupa.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
-				cardlayout.show(PanelNavegacion, "Busqueda");
+				cardlayout.show(PanelNavegacion, BUSQUEDA);
 			}
 		});
 		
@@ -221,10 +238,10 @@ public class Menu extends JPanel {
 				if(ControladorAppMusic.getInstancia().isPremium())
 				{
 					CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
-					cardlayout.show(PanelNavegacion, "Premium");
+					cardlayout.show(PanelNavegacion, PREMIUM);
 				}else
 				{
-					JOptionPane.showMessageDialog(null, "Pasate a premium para disfrutar de nuestras novedades", "Premium", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, PASATE_A_PREMIUM, PREMIUM, JOptionPane.INFORMATION_MESSAGE);
 				}
 				
 			}
@@ -248,7 +265,7 @@ public class Menu extends JPanel {
 		            //System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
 		            ControladorAppMusic.getInstancia().cargarCanciones(selectedFile.getAbsolutePath());
 		        } else {
-		            System.out.println("Selección de archivo cancelada por el usuario"); 
+		            System.out.println(SELECCION_CANCELADA); 
 		        }
 			}
 		});
@@ -257,7 +274,7 @@ public class Menu extends JPanel {
 			launcher.dispose();
 			Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
 			if(c != null)
-				ControladorAppMusic.getInstancia().reproducirCancion("stop", c);
+				ControladorAppMusic.getInstancia().reproducirCancion(STOP, c);
 			EventQueue.invokeLater(new Runnable() {
 				public void run() {
 					try {
@@ -272,23 +289,32 @@ public class Menu extends JPanel {
 		});
 		
 		ConseguirPremium.addActionListener((e) -> {
-			if(ConseguirPremium.getText().equals("Premium"))
+			if(ConseguirPremium.getText().equals(PREMIUM))
 			{
 				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
-				cardlayout.show(PanelNavegacion, "Premium");
+				cardlayout.show(PanelNavegacion, PREMIUM);
 			}
 			else
 			{
 				if(ControladorAppMusic.getInstancia().pagarPremium())
 				{
-					ConseguirPremium.setText("Premium");
+					ConseguirPremium.setText(PREMIUM);
 				}else
 				{
-					ConseguirPremium.setText("Obtener Premium");
-					JOptionPane.showMessageDialog(null, "Saldo insuficiente", "Aviso de pago", JOptionPane.INFORMATION_MESSAGE);
+					ConseguirPremium.setText(OBTENER_PREM);
 				}
 			}
 			
+		});
+		
+		IngresarDinero.addActionListener((e) -> {
+			ControladorAppMusic.getInstancia().anadirDinero(DINERO);
+			JOptionPane.showMessageDialog(null, OBTENER_DINERO + ControladorAppMusic.getInstancia().obtenerDinero(), STR_DINERO_ANADIDO, JOptionPane.INFORMATION_MESSAGE);
+		});
+		
+		Saldo.addActionListener((e) -> {
+			JOptionPane.showMessageDialog(null, STR_POSEES_SALDO + ControladorAppMusic.getInstancia().obtenerDinero(), STR_SALDO_TOTAL, JOptionPane.INFORMATION_MESSAGE);
+
 		});
 		
 		barraVolumen.addChangeListener((e) -> {
@@ -322,10 +348,10 @@ public class Menu extends JPanel {
 	public void actualizarPremium(String mensaje)
 	{
 		ConseguirPremium.setText(mensaje);
-		if(mensaje.equals("Obtener Premium"))
+		if(mensaje.equals(OBTENER_PREM))
 		{
 			CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
-			cardlayout.show(PanelNavegacion, "Home");
+			cardlayout.show(PanelNavegacion, HOME);
 		}
 	}
 	

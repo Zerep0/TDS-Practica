@@ -25,7 +25,8 @@ public class PanelSeleccionPlaylist extends JPanel {
 	private ArrayList<String> playlists;
 	private AlineamientoLista alineamiento;
 	private JDialog padre;
-
+	private static String PLAYLIST_NO_CREADAS = "No hay playlists creadas";
+	
 	public PanelSeleccionPlaylist(Cancion cancion, ArrayList<String> playlists, JDialog padre) {
 		this.cancion = cancion;
 		this.playlists = playlists;
@@ -77,7 +78,7 @@ public class PanelSeleccionPlaylist extends JPanel {
 		if(playlists.isEmpty())
 		{
 			btnAñadirPlaylists.setEnabled(false);
-			btnAñadirPlaylists.setText("No hay playlists creadas");
+			btnAñadirPlaylists.setText(PLAYLIST_NO_CREADAS);
 		}
         
         btnAñadirPlaylists.addActionListener(new ActionListener() {

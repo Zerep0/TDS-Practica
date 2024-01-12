@@ -503,7 +503,7 @@ public class ControladorAppMusic implements ICancionesListener{
 	public void crearPDF(File carpeta)
 	{
 		System.out.println(carpeta.getAbsolutePath());
-		Document pdf = PDF.INSTANCE.crearDocumento(carpeta.getAbsolutePath() + "\\prueba.pdf");
+		Document pdf = PDF.INSTANCE.crearDocumento(carpeta.getAbsolutePath() + "\\listadoPlaylist.pdf");
 		PDF.INSTANCE.abrirDocumento(pdf, "AppMusic");
 		Chapter pagina = PDF.INSTANCE.crearSeccion();
 		PDF.INSTANCE.añadirParrafo(pagina, 
@@ -585,4 +585,14 @@ public class ControladorAppMusic implements ICancionesListener{
       }
        
 	
+		public void anadirDinero(double dinero)
+		{
+			dinero = usuarioActual.getSaldo() + dinero;
+			usuarioActual.setSaldo(dinero);
+		}
+		
+		public double obtenerDinero()
+		{
+			return usuarioActual.getSaldo();
+		}
 }

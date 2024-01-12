@@ -13,6 +13,9 @@ import java.awt.CardLayout;
 
 public class Launcher {
 	private static final String INICIO = "Inicio";
+	private static String REGISTRO = "Registro";
+	private static String MENU = "Menu";
+	private static String SPLASH = "Splash";
 	private static final int ANCHO_DEFECTO = 500;
 	private static final int ALTO_DEFECTO = 800;
 	private JFrame frame;
@@ -58,19 +61,19 @@ public class Launcher {
 		
 		// INICIAR EL SPLASH
 		splash = new Splash(frame,INICIO, ALTO_DEFECTO, ANCHO_DEFECTO);
-		frame.getContentPane().add(splash, "Splash");
+		frame.getContentPane().add(splash, SPLASH);
 		
 		// INICIO
 		inicio = new Inicio(frame);
-		frame.getContentPane().add(inicio,"Inicio");
+		frame.getContentPane().add(inicio,INICIO);
 		
 		// REGISTRO
 		registro = new Registro(frame);
-		frame.getContentPane().add(registro,"Registro");
+		frame.getContentPane().add(registro,REGISTRO);
 		
 		//MENU
 		menu = new Menu(this.frame);
-		frame.getContentPane().add(menu,"Menu");
+		frame.getContentPane().add(menu,MENU);
 		
 		
 	}
