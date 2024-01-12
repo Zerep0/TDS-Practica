@@ -151,25 +151,30 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		panel_botones.add(btnForwa);
 		
 		JLabel btnRandom = new JLabel("");
-		btnRandom.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/aleatorio.png")));
+		btnRandom.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/repetir.png")));
 		panel_botones.add(btnRandom);
 		
 		JLabel btnEliminarCanciones = new JLabel("");
-		btnEliminarCanciones.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/pagina.png")));
+		btnEliminarCanciones.setIcon(new ImageIcon(MenuPlaylist.class.getResource("/ImagenesMenu/eliminar.png")));
 		panel_botones.add(btnEliminarCanciones);
 		btnEliminarCanciones.setVisible(false);
 		
 		
 	    modeloPlaylist = new MiTablaPersonalizada();
-		tablaCancionesPlaylist = new JTable(modeloPlaylist);	
+		tablaCancionesPlaylist = new JTable(modeloPlaylist);
+		tablaCancionesPlaylist.setSelectionBackground(new Color(0,128,255));
+		tablaCancionesPlaylist.setSelectionForeground(Color.WHITE);
+		tablaCancionesPlaylist.setBackground(new Color(193, 255, 245));
+		tablaCancionesPlaylist.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
 		
 		tablaCancionesPlaylist.setAutoCreateRowSorter(true);
 		JTableHeader header = tablaCancionesPlaylist.getTableHeader();
+		header.setBackground(new Color(193, 255, 245));
 		
 		// HELPER
-		renderizadorLetras = new RenderizadorLetrasCabecera(header.getDefaultRenderer(), new Font("Arial", Font.BOLD, 14),Color.BLACK);;
+		renderizadorLetras = new RenderizadorLetrasCabecera(header.getDefaultRenderer(),Color.BLACK);;
 		header.setDefaultRenderer(renderizadorLetras);
-		
+		 
 		
 		
 		placeholder.crearPlaceholderText(creadorPlaylist, PLACEHOLDER_PLAYLIST);
@@ -184,7 +189,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		PanelCentral.add(PanelSlider, BorderLayout.SOUTH);
 		
 		barraReproduccion.setPreferredSize(new Dimension(400, 26));
-		barraReproduccion.setBackground(new Color(18, 156, 189));
+		barraReproduccion.setBackground(new Color(18, 159, 186));
 		barraReproduccion.setValue(0);
 		barraReproduccion.setUI(new CustomSliderUI(barraReproduccion));
 		barraReproduccion.setEnabled(false);
@@ -199,32 +204,47 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 		
 		AlineamientoLista centro = new AlineamientoLista("centro");
 		JList listaPlaylist = new JList();
+		listaPlaylist.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
+		listaPlaylist.setBackground(new Color(193, 255, 245));
 		listaPlaylist.setPreferredSize(new Dimension(100, 0));
 		listaPlaylist.setCellRenderer(centro);
+		listaPlaylist.setSelectionBackground(new Color(0,128,255));
+		listaPlaylist.setSelectionForeground(Color.WHITE);
 		listaPlaylist.setModel(miModelo);
 		PanelPlaylist.setViewportView(listaPlaylist);
 		anadirPlaylist("Favoritas");
 		
 		JScrollPane PanelTablaCanciones = new JScrollPane(tablaCancionesPlaylist);
+		PanelTablaCanciones.setBackground(new Color(193, 255, 245));
+		PanelTablaCanciones.getViewport().setBackground(new Color(128, 255, 236));
 		PanelCentral.add(PanelTablaCanciones, BorderLayout.CENTER);
 		
 		creaPlaylist.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				int respuesta = JOptionPane.showConfirmDialog(null, "¿Quieres crear la playlist?", "Confirmación", JOptionPane.YES_NO_OPTION);
+				if(!creadorPlaylist.getFont().isItalic())
+				{
+					int respuesta = JOptionPane.showConfirmDialog(null, "¿Quieres crear la playlist?", "Confirmación", JOptionPane.YES_NO_OPTION);
 
-		        if (respuesta == JOptionPane.YES_OPTION) {
-					if(ControladorAppMusic.getInstancia().registrarPlaylist(creadorPlaylist))
-					{
-						if(anadirPlaylist(creadorPlaylist.getText()))
+			        if (respuesta == JOptionPane.YES_OPTION) {
+						if(ControladorAppMusic.getInstancia().registrarPlaylist(creadorPlaylist))
 						{
-					        JOptionPane.showMessageDialog(null, "La lista se ha creado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							if(anadirPlaylist(creadorPlaylist.getText()))
+							{
+						        JOptionPane.showMessageDialog(null, "La lista se ha creado exitosamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							}
+							else
+							{
+						        JOptionPane.showMessageDialog(null, "No se ha podido crear la lista", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+							}
+							creadorPlaylist.setText(PLACEHOLDER_PLAYLIST);
+					        creadorPlaylist.setFont(new Font("Arial", Font.ITALIC, 14));
+					        creadorPlaylist.setText(PLACEHOLDER_PLAYLIST);
 						}
-						else
-						{
-					        JOptionPane.showMessageDialog(null, "No se ha podido crear la lista", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-						}
-					}
-		        }
+			        }
+				}else
+				{
+					JOptionPane.showMessageDialog(null, "Introduce un nombre válido de playlist", "Sin información", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		});
 		
@@ -436,7 +456,7 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 				if(modoAleatorio == true)
 				{
 					modoAleatorio = false;
-					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/pareja-de-flechas-circulares.png")));
+					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/repetir.png")));
 				}
 				else
 				{
@@ -464,11 +484,23 @@ public class MenuPlaylist extends JPanel implements IReproductorListener{
 			{
 				
 				String selectedValue = (String) listaPlaylist.getSelectedValue();
-				if(!selectedValue.equals("Favoritas"))
+				if(selectedValue.equals("Favoritas"))
 				{
-					modeloPlaylist.borrarCanciones();
-					btnEliminarCanciones.setVisible(false);
+					modeloPlaylist.listaMarcadas()
+					.forEach(c -> ControladorAppMusic.getInstancia().actualizarFavorito(false, c));
+					ControladorAppMusic.getInstancia().cambiarImagenFavorito();
 				}
+				
+				Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
+				if(c != null && modeloPlaylist.listaMarcadas().contains(c))
+				{
+					ControladorAppMusic.getInstancia().reproducirCancion("stop", c);
+				}
+				modeloPlaylist.borrarCanciones();
+				btnEliminarCanciones.setVisible(false);
+				
+				if(modeloPlaylist.getCanciones().size() > 0)
+					tablaCancionesPlaylist.setRowSelectionInterval(0, 0);
 			}
 		});
 		

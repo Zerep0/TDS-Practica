@@ -84,7 +84,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		add(PanelReproduccion, BorderLayout.SOUTH);
 		
 		JLabel btnAñadirPlaylists = new JLabel("");
-		btnAñadirPlaylists.setIcon(new ImageIcon(MenuBusquedaR.class.getResource("/ImagenesMenu/pagina.png")));
+		btnAñadirPlaylists.setIcon(new ImageIcon(MenuBusquedaR.class.getResource("/ImagenesMenu/añadirPlaylist.png")));
 		PanelReproduccion.add(btnAñadirPlaylists);
 		
 		btnStop = new JLabel("");
@@ -104,7 +104,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		PanelReproduccion.add(btnForwa);
 		
 		btnRandom = new JLabel("");
-		btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/aleatorio.png")));
+		btnRandom.setIcon(new ImageIcon(MenuBusquedaR.class.getResource("/ImagenesMenu/repetir.png")));
 		PanelReproduccion.add(btnRandom);
 		
 		btnFavorito = new JLabel("");
@@ -144,15 +144,18 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		
 		
 		listaCanciones = new JList<Cancion>();
+		listaCanciones.setBackground(new Color(193, 255, 245));
 		listaCanciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listaCanciones.setFont(new Font("Arial", Font.PLAIN, 16));
+		listaCanciones.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
+		listaCanciones.setSelectionBackground(new Color(0,128,255));
+		listaCanciones.setSelectionForeground(Color.WHITE);
 		listaCanciones.setModel(miModelo);
 		scrollPane.setViewportView(listaCanciones);
 		listaCanciones.setBorder(BorderFactory.createLineBorder(Color.black));
 		listaCanciones.setCellRenderer(alinamientoListaBusqueda);
 		
 		JPanel LayoutTiempo = new JPanel();
-		LayoutTiempo.setBackground(new Color(18, 156, 189));
+		LayoutTiempo.setBackground(new Color(18, 159, 186));
 		PanelRecientes.add(LayoutTiempo, BorderLayout.SOUTH);
 		GridBagLayout gbl_LayoutTiempo = new GridBagLayout();
 		gbl_LayoutTiempo.columnWidths = new int[]{55, 228, 5, 0};
@@ -418,7 +421,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 				if(modoAleatorio == true)
 				{
 					modoAleatorio = false;
-					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/pareja-de-flechas-circulares.png")));
+					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/repetir.png")));
 				}
 				else
 				{
@@ -450,7 +453,7 @@ public class MenuBusquedaR extends JPanel implements IReproductorListener{
 		if(miModelo.getSize() > 0)
 		{
 			int indice = listaCanciones.getSelectedIndex();
-			if(ControladorAppMusic.getInstancia().isFavorita(miModelo.getElementAt(indice == -1 ? 0 : indice)))
+			if(ControladorAppMusic.getInstancia().isFavorita(miModelo.getElementAt(indice == -1 || indice > miModelo.getSize()-1 ? 0 : indice)))
 			{
 				cambiaIconoFavorito();
 			}

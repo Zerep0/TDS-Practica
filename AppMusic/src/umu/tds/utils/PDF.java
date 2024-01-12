@@ -16,6 +16,7 @@ public enum PDF {
 	INSTANCE;
 	public final Font chapterFont = FontFactory.getFont("src/Fuentes/BAUHS93.ttf", 54);
     public final Font paragraphFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14, Font.NORMAL);
+    public final Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 12, Font.NORMAL);
     private int NumeroChapters = 0;
          
     public Chapter crearSeccion()

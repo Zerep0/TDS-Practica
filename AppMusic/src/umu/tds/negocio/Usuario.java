@@ -82,21 +82,27 @@ public class Usuario {
 		return nums;
 	}
 	
-	public void addReciente(Cancion c)
+	public void addReciente(Cancion c, boolean esCargaInicial)
 	{
-		if(cancionesRecientes.contains(c))
+		if(esCargaInicial)
+			cancionesRecientes.add(c);
+		else
 		{
-			cancionesRecientes.remove(c);
-			cancionesRecientes.addFirst(c);
-		}else
-		{
-			if(cancionesRecientes.size() == MAX_RECIENTES)
+			if(cancionesRecientes.contains(c))
 			{
-				cancionesRecientes.removeLast();
+				cancionesRecientes.remove(c);
 				cancionesRecientes.addFirst(c);
+			}else
+			{
+				if(cancionesRecientes.size() == MAX_RECIENTES)
+				{
+					cancionesRecientes.removeLast();
+					cancionesRecientes.addFirst(c);
+				}
+				else cancionesRecientes.addFirst(c);
 			}
-			else cancionesRecientes.addFirst(c);
 		}
+		
 	}
 	
 	public LinkedList<Cancion> getFavoritas()

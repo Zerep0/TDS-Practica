@@ -6,20 +6,28 @@ import umu.tds.observer.*;
 import umu.tds.persistencia.DAOException;
 import umu.tds.persistencia.FactoriaDAO;
 import umu.tds.persistencia.IAdaptadorUsuarioDAO;
+import umu.tds.utils.PDF;
 import umu.tds.utils.Player;
 import cargadorCanciones.Cancion;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
+
+import com.itextpdf.text.Chapter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,12 +45,13 @@ import umu.tds.negocio.Usuario;
 import umu.tds.vista.MenuBusquedaR;
 import umu.tds.vista.MenuHome;
 import umu.tds.vista.MenuPlaylist;
+import umu.tds.vista.MenuPremium;
 import umu.tds.vista.Registro;
 
 public class ControladorAppMusic implements ICancionesListener{
 
 	private static final String CADENA_VACIA = "";
-	private static final String ESTILO = "Estilo";
+	private static final String ESTILO = "-";
 	
 	
 	private static ControladorAppMusic unicaInstancia;
@@ -56,6 +65,8 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	private MenuHome menuHome;
 	private MenuPlaylist menuPlaylist;
+	private MenuPremium menuPremium;
+	private MenuBusquedaR MenuBusquedaR;
 	private JPanel panelActualReproduccion;
 	
 	private FactoriaDAO dao;
@@ -64,8 +75,11 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	private LinkedList<JSlider> sliders = new LinkedList<JSlider>();
 	private LinkedList<JLabel> labels = new LinkedList<JLabel>();
+	private Function<umu.tds.negocio.Cancion,String> parseador = c -> "Canción: " + c.getTitulo() + "\nIntérprete: " + c.getInterprete()
+											+ "\nEstilo: " + c.getEstilo() + "\n----------------------------------------------------------------------------------------------------\n";
 	
 	private JSlider volumen;
+	
 	
 	private ControladorAppMusic()
 	{
@@ -111,6 +125,7 @@ public class ControladorAppMusic implements ICancionesListener{
 			usuarioActual = user;
 			setFavoritasPlaylist();
 			this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
+			menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
 			return true;
 		}
 		return false;
@@ -134,7 +149,8 @@ public class ControladorAppMusic implements ICancionesListener{
 			notificarCambioNombre(e);
 			usuarioActual = usuario;
 			setFavoritasPlaylist();
-			this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
+			menuHome.refrescarRecientes(usuarioActual.getRecientes());
+			menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
 			return true;
 		}else return false;
 
@@ -165,6 +181,7 @@ public class ControladorAppMusic implements ICancionesListener{
 					notificarCambioNombre(e);
 					setFavoritasPlaylist();
 					this.menuHome.refrescarRecientes(usuarioActual.getRecientes());
+					menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
 				}
 				return (ghuser.getLogin().equals(usuario.getText()) && github.isCredentialValid());
 			}
@@ -256,13 +273,18 @@ public class ControladorAppMusic implements ICancionesListener{
 		adaptadorUsuario.actualizar(usuarioActual.getFavoritasNum(),usuarioActual, "favoritas");
 	}
 	
+	public void cambiarImagenFavorito()
+	{
+		MenuBusquedaR.entrarVentana();
+	}
+	
 	public void setMenuHome(MenuHome menuHome, JSlider slider, JLabel etiquetaTiempo)
 	{
 		this.menuHome = menuHome;
 		listenerReproductor.add(menuHome);
 		sliders.add(slider);
 		labels.add(etiquetaTiempo);
-;	}
+	}
 	
 	public void setMenuPlaylist(MenuPlaylist menuPlaylist, JSlider slider, JLabel etiquetaTiempo)
 	{
@@ -274,15 +296,27 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	public void setMenuBusquedaR(MenuBusquedaR menuBusquedaR, JSlider slider, JLabel etiquetaTiempo)
 	{
+		this.MenuBusquedaR = menuBusquedaR;
 		listenerReproductor.add(menuBusquedaR);
 		sliders.add(slider);
 		labels.add(etiquetaTiempo);
 	}
 	
+	public void setMenuPremium(MenuPremium menuPremium, JSlider slider, JLabel etiquetaTiempo)
+	{
+		this.menuPremium = menuPremium;
+		listenerReproductor.add(menuPremium);
+		sliders.add(slider);
+		labels.add(etiquetaTiempo);
+;	}
 	
 	
 	public void reproducirCancion(String play, umu.tds.negocio.Cancion c)
 	{
+		if(play.equals("play") && (getCancionReproduciendose() == null || !getCancionReproduciendose().equals(c)))
+		{
+			actualizarNumReproducciones(c);
+		}
 		if(play.equals("play") && getCancionReproduciendose() != null && !getCancionReproduciendose().equals(c))
 		{
 			Player.INSTANCE.play("stop",getCancionReproduciendose(), sliders, labels);
@@ -290,7 +324,7 @@ public class ControladorAppMusic implements ICancionesListener{
 		Player.INSTANCE.play(play,c, sliders, labels);
 		if(play.equals("play"))
 		{
-			usuarioActual.addReciente(c);
+			usuarioActual.addReciente(c,false);
 			adaptadorUsuario.actualizar(usuarioActual.getRecientesNum(),usuarioActual, "recientes");
 			menuHome.refrescarRecientes(usuarioActual.getRecientes());
 		}
@@ -332,9 +366,12 @@ public class ControladorAppMusic implements ICancionesListener{
 		}else if(panelActualReproduccion instanceof MenuHome)
 		{
 			((MenuHome) panelActualReproduccion).cancionAlFinalizar();
-		}else
+		}else if(panelActualReproduccion instanceof MenuPlaylist)
 		{
 			((MenuPlaylist) panelActualReproduccion).cancionAlFinalizar();
+		}else
+		{
+			((MenuPremium) panelActualReproduccion).cancionAlFinalizar();
 		}
 	}
 	
@@ -409,9 +446,7 @@ public class ControladorAppMusic implements ICancionesListener{
 			anadirCancionPlaylist(playlist,c);
 		}
 	}
-	{
-		
-	}
+	
 	
 	public void setSliderVolumen(JSlider volumen)
 	{
@@ -437,4 +472,44 @@ public class ControladorAppMusic implements ICancionesListener{
 	{
 		menuPlaylist.actualizarTabla();
 	}
+	
+
+	public void actualizarNumReproducciones(umu.tds.negocio.Cancion cancion)
+	{
+		catalogoCanciones.incrementarReproducciones(cancion);
+		menuPremium.refrescarMasEscuchadas(catalogoCanciones.getMasEscuchadas());
+	}
+	
+	public LinkedList<String> getEstilosMusicales()
+	{
+		return catalogoCanciones.getEstilosMusicales();
+	}
+	
+	public void crearPDF(File carpeta)
+	{
+		System.out.println(carpeta.getAbsolutePath());
+		Document pdf = PDF.INSTANCE.crearDocumento(carpeta.getAbsolutePath() + "\\prueba.pdf");
+		PDF.INSTANCE.abrirDocumento(pdf, "AppMusic");
+		Chapter pagina = PDF.INSTANCE.crearSeccion();
+		PDF.INSTANCE.añadirParrafo(pagina, 
+				PDF.INSTANCE.crearLinea("AppMusic", PDF.INSTANCE.chapterFont), Element.ALIGN_CENTER);
+		PDF.INSTANCE.añadirParrafo(pagina, 
+				PDF.INSTANCE.crearLinea("\n\nCANCIONES MÁS ESCUCHADAS DEL MOMENTO", PDF.INSTANCE.paragraphFont), Element.ALIGN_CENTER);
+		PDF.INSTANCE.añadirParrafo(pagina, 
+				PDF.INSTANCE.crearLinea("\n\n", PDF.INSTANCE.paragraphFont), Element.ALIGN_CENTER);
+		for(String playlist : usuarioActual.getNombresPlaylists())
+		{
+			PDF.INSTANCE.añadirParrafo(pagina,
+					PDF.INSTANCE.crearLinea("\n\nPlaylist " + playlist + "\n\n", PDF.INSTANCE.paragraphFont), Element.ALIGN_LEFT);
+			for(umu.tds.negocio.Cancion c : usuarioActual.getCancionesPlaylist(playlist))
+			{
+				PDF.INSTANCE.añadirParrafo(pagina,
+						PDF.INSTANCE.crearLinea(parseador.apply(c), PDF.INSTANCE.normalFont), Element.ALIGN_LEFT);
+			}
+		}
+		PDF.INSTANCE.añadirSeccion(pdf, pagina);
+		PDF.INSTANCE.cerrarDocumento(pdf);
+	}
+	
+
 }

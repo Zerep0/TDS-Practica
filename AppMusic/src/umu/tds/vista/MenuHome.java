@@ -96,7 +96,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		PanelReproduccion.add(btnForwa);
 		
 		btnRandom = new JLabel("");
-		btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/aleatorio.png")));
+		btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/repetir.png")));
 		PanelReproduccion.add(btnRandom);
 		
 		JPanel PanelBienvenida = new JPanel();
@@ -104,7 +104,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		add(PanelBienvenida, BorderLayout.NORTH);
 		PanelBienvenida.setLayout(new BorderLayout(0, 0));
 		
-		MsgBienvenida = new JLabel("Sigue escuchando, ");
+		MsgBienvenida = new JLabel("Reproduce las canciones más escuchadas");
 		MsgBienvenida.setForeground(new Color(255, 255, 255));
 		MsgBienvenida.setHorizontalAlignment(SwingConstants.CENTER);
 		MsgBienvenida.setFont(new Font("Arial", Font.BOLD, 24));
@@ -127,15 +127,18 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		PanelRecientes.add(scrollPane, BorderLayout.CENTER);
 		
 		listaCanciones = new JList();
+		listaCanciones.setBackground(new Color(193, 255, 245));
 		listaCanciones.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listaCanciones.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
+		listaCanciones.setSelectionBackground(new Color(0,128,255));
+		listaCanciones.setSelectionForeground(Color.WHITE);
 		listaCanciones.setModel(miModelo);
 		scrollPane.setViewportView(listaCanciones);
 		listaCanciones.setBorder(BorderFactory.createLineBorder(Color.black));
 		listaCanciones.setCellRenderer(alineamientoListaMenu);
 		
 		JPanel LayoutTiempo = new JPanel();
-		LayoutTiempo.setBackground(new Color(18, 156, 189));
+		LayoutTiempo.setBackground(new Color(18, 159, 186));
 		PanelRecientes.add(LayoutTiempo, BorderLayout.SOUTH);
 		GridBagLayout gbl_LayoutTiempo = new GridBagLayout();
 		gbl_LayoutTiempo.columnWidths = new int[]{55, 228, 5, 0};
@@ -172,16 +175,6 @@ public class MenuHome extends JPanel implements IReproductorListener{
 		gbc_msgDuracion.gridx = 3;
 		gbc_msgDuracion.gridy = 0;
 		LayoutTiempo.add(msgDuracion, gbc_msgDuracion);
-		
-		
-		ControladorAppMusic.getInstancia().addUsuarioListener(new IUsuarioListener() {
-			
-			@Override
-			public void actualizar(UsuarioEvent e) {
-				MsgBienvenida.setText(MsgBienvenida.getText() + e.getNombreUsuario());
-				
-			}
-		});
 		
         listaCanciones.addMouseListener(new MouseAdapter() {
         	public void mouseClicked(MouseEvent e)
@@ -341,7 +334,7 @@ public class MenuHome extends JPanel implements IReproductorListener{
 				if(modoAleatorio == true)
 				{
 					modoAleatorio = false;
-					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/pareja-de-flechas-circulares.png")));
+					btnRandom.setIcon(new ImageIcon(MenuHome.class.getResource("/ImagenesMenu/repetir.png")));
 				}
 				else
 				{

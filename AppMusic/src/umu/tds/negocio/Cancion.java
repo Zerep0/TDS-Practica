@@ -71,6 +71,10 @@ public class Cancion {
 	public int getNumReproducciones() {
 		return numReproducciones;
 	}
+	public int incrementaReproducciones()
+	{
+		return ++numReproducciones;
+	}
 
 	/**
 	 * @return the marcado

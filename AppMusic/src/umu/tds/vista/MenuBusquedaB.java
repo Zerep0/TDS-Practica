@@ -110,7 +110,7 @@ public class MenuBusquedaB extends JPanel {
 		panelFiltro.add(Interprete);
 		Interprete.setColumns(15);
 		
-		JComboBox<String> estilos = new JComboBox<String>(new String[] {"Estilo", "Rock", "Pop", "Regueton", "Rap"});
+		JComboBox<String> estilos = new JComboBox<String>(ControladorAppMusic.getInstancia().getEstilosMusicales().toArray(new String[0]));
 		estilos.setPreferredSize(new Dimension(85, 23));
 		estilos.setMinimumSize(new Dimension(7, 20));
 		panelFiltro.add(estilos);

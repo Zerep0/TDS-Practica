@@ -66,32 +66,6 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		return false;
 	}
 
-	/*public void borrarCliente(Usuario cliente) {
-		// No se comprueban restricciones de integridad con Venta
-		Entidad eCliente = servPersistencia.recuperarEntidad(cliente.getCodigo());
-
-		servPersistencia.borrarEntidad(eCliente);
-	}*/
-
-	/*public void modificarCliente(Usuario cliente) {
-
-		Entidad eCliente = servPersistencia.recuperarEntidad(cliente.getId());
-
-		for (Propiedad prop : eCliente.getPropiedades()) {
-			if (prop.getNombre().equals("codigo")) {
-				prop.setValor(String.valueOf(cliente.getCodigo()));
-			} else if (prop.getNombre().equals("dni")) {
-				prop.setValor(cliente.getDni());
-			} else if (prop.getNombre().equals("nombre")) {
-				prop.setValor(cliente.getNombre());
-			} else if (prop.getNombre().equals("ventas")) {
-				String ventas = obtenerCodigosVentas(cliente.getVentas());
-				prop.setValor(ventas);
-			}
-			servPersistencia.modificarPropiedad(prop);
-		}
-
-	}*/
 
 	public Usuario recuperarUsuario(int codigo) {
 
@@ -121,9 +95,13 @@ public class AdaptadorUsuarioTDS implements IAdaptadorUsuarioDAO {
 		{
 			if(!s.equals(""))
 			{
+				
 				c = AdaptadorCancionTDS.getUnicaInstancia().recuperarCancion(Integer.parseInt(s));
 				if(c != null)
-					usuario.addReciente(c);
+				{
+					usuario.addReciente(c,true);
+				}
+					
 			}
 			
 		}

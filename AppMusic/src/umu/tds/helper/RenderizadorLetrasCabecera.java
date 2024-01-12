@@ -12,11 +12,9 @@ import javax.swing.table.TableCellRenderer;
 public class RenderizadorLetrasCabecera implements TableCellRenderer {
     
     private TableCellRenderer miTabla;
-    private Font fuente;
     private Color color;
      
-    public RenderizadorLetrasCabecera(TableCellRenderer miTabla, Font fuente,Color color) {
-    	this.fuente = fuente;
+    public RenderizadorLetrasCabecera(TableCellRenderer miTabla,Color color) {
         this.miTabla = miTabla;
         this.color = color;
     }
@@ -28,8 +26,9 @@ public class RenderizadorLetrasCabecera implements TableCellRenderer {
  
         if (comp instanceof JLabel) {
             JLabel label = (JLabel) comp;
-            label.setFont(fuente);
+            label.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
             label.setForeground(color);
+            label.setBackground(new Color(193,255,245));
             label.setBorder(BorderFactory.createEtchedBorder());
         }
          

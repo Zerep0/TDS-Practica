@@ -48,6 +48,10 @@ public class PanelSeleccionPlaylist extends JPanel {
         miModelo = new ListaModelo<String>();
 		miModelo.actualizarLista(playlists);
         JList<String> playlistSeleccion = new JList<String>();
+        playlistSeleccion.setBackground(new Color(193, 255, 245));
+        playlistSeleccion.setFont(new Font("Bahnschrift", Font.PLAIN, 16));
+        playlistSeleccion.setSelectionBackground(new Color(0,128,255));
+        playlistSeleccion.setSelectionForeground(Color.WHITE);
         playlistSeleccion.setCellRenderer(alineamiento);
         playlistSeleccion.setModel(miModelo);
         add(playlistSeleccion, BorderLayout.SOUTH);

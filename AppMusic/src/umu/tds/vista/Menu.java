@@ -40,7 +40,7 @@ public class Menu extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	private JPanel home,playlist,busqueda; //Panel que te lleva al home
+	private JPanel home,playlist,busqueda,premium; //Panel que te lleva al home
 	public Menu(Window launcher) {
 		this.launcher = launcher;
 		initialize();
@@ -76,9 +76,9 @@ public class Menu extends JPanel {
 		JLabel lblNewLabel_3 = new JLabel("   ");
 		PanelBotonesMenu.add(lblNewLabel_3);
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/descargar.png")));
-		PanelBotonesMenu.add(lblNewLabel);
+		JLabel btnPremium = new JLabel("");
+		btnPremium.setIcon(new ImageIcon(Menu.class.getResource("/ImagenesMenu/diamante.png")));
+		PanelBotonesMenu.add(btnPremium);
 		
 		JPanel PanelBotonIcono = new JPanel();
 		PanelBotonIcono.setBackground(new Color(18, 156, 189));
@@ -114,11 +114,11 @@ public class Menu extends JPanel {
 		JPopupMenu popupMenu = new JPopupMenu();
 		addPopup(botonIcono, popupMenu);
 		
-		JMenuItem btnPremium = new JMenuItem("Premium");
-		popupMenu.add(btnPremium);
+		JMenuItem Premium = new JMenuItem("Premium");
+		popupMenu.add(Premium);
 		
-		JMenuItem btnLogout = new JMenuItem("Logout");
-		popupMenu.add(btnLogout);
+		JMenuItem Logout = new JMenuItem("Logout");
+		popupMenu.add(Logout);
 		
 		
 		
@@ -184,6 +184,9 @@ public class Menu extends JPanel {
 		busqueda = new MenuBusqueda();
 		PanelNavegacion.add(busqueda,"Busqueda");
 		
+		premium = new MenuPremium();
+		PanelNavegacion.add(premium, "Premium");
+		
 		// EVENTOS 
 		
 		btnHome.addMouseListener(new MouseAdapter() {
@@ -205,6 +208,13 @@ public class Menu extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
 				cardlayout.show(PanelNavegacion, "Busqueda");
+			}
+		});
+		
+		btnPremium.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				CardLayout cardlayout = (CardLayout) PanelNavegacion.getLayout();
+				cardlayout.show(PanelNavegacion, "Premium");
 			}
 		});
 		
@@ -231,7 +241,7 @@ public class Menu extends JPanel {
 			}
 		});
 		
-		btnLogout.addActionListener((e) -> {
+		Logout.addActionListener((e) -> {
 			launcher.dispose();
 			Cancion c = ControladorAppMusic.getInstancia().getCancionReproduciendose();
 			if(c != null)
@@ -249,7 +259,7 @@ public class Menu extends JPanel {
 			});
 		});
 		
-		btnPremium.addActionListener((e) -> {});
+		Premium.addActionListener((e) -> {});
 		
 		barraVolumen.addChangeListener((e) -> {
 			ControladorAppMusic.getInstancia().actualizarVolumen();

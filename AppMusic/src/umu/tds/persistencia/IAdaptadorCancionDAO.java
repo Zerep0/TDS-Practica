@@ -8,4 +8,5 @@ public interface IAdaptadorCancionDAO {
 	public int registrarCancion(Cancion cancion);
 	public Cancion recuperarCancion(int codigo);
 	public List<Cancion> recuperarTodasCanciones();
+	public int actualizarReproducciones(Cancion cancion);
 }
