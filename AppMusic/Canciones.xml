@@ -110,11 +110,7 @@ xs:schemaLocation="http://www.tds.es/canciones canciones.xsd">
 		<interprete>Steve Jobs</interprete>
 	</cancion>
 	
-	<cancion titulo="Pedro escuchala">
-		<URL><![CDATA[https://ia601206.us.archive.org/24/items/sonido-de-gemidos-troll/sonido%20de%20gemidos%20troll.mp3]]></URL>
-		<estilo>Sex</estilo>
-		<interprete>Pedro Rubio</interprete>
-	</cancion>
+	
 	
 	
 	

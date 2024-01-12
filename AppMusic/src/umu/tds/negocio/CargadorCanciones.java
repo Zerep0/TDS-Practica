@@ -32,7 +32,6 @@ public enum CargadorCanciones implements IBuscadorCanciones{
 		try {
 			canciones = MapperCancionesXMLtoJava.cargarCanciones(rutaArchivo);
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(canciones != null)

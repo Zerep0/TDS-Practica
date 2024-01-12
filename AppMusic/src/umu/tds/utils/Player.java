@@ -40,7 +40,6 @@ public enum Player {
 			try {
 				setCancionActual(cancion, sliders, labels);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			mediaPlayer.play();
@@ -63,14 +62,12 @@ public enum Player {
 			try {
 				resourceURL = new URL(rutaCancion);
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			Path mp3 = null;
 			try {
 				mp3 = Files.createTempFile("now-playing", ".mp3");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			};
 
@@ -78,7 +75,6 @@ public enum Player {
 			try (InputStream stream = resourceURL.openStream()) {
 				Files.copy(stream, mp3, StandardCopyOption.REPLACE_EXISTING);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println("finished-copy: " + mp3.getFileName());

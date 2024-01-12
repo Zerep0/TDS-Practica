@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -97,7 +96,6 @@ public class ControladorAppMusic implements ICancionesListener{
 		try {
 			dao = FactoriaDAO.getInstancia(FactoriaDAO.DAO_TDS);
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		inicializarCatalogos();
@@ -237,7 +235,6 @@ public class ControladorAppMusic implements ICancionesListener{
 	
 	@Override
 	public void actualizarCanciones(CancionEvent e) {
-		// TODO: convertir de Cancion a Cancion jaja
 		List<umu.tds.negocio.Cancion> lista = new LinkedList<umu.tds.negocio.Cancion>();
 		for (Cancion c : e.getCanciones().getCancion()) {
 			umu.tds.negocio.Cancion can = new umu.tds.negocio.Cancion(c.getTitulo(),c.getURL(),c.getEstilo(),c.getInterprete());
@@ -245,7 +242,6 @@ public class ControladorAppMusic implements ICancionesListener{
 			lista.add(can);
 		}
 		
-		// TODO: sincronizar list
 		catalogoCanciones.registrarCanciones(lista);
 		
 	}
@@ -549,7 +545,6 @@ public class ControladorAppMusic implements ICancionesListener{
 			if(!usuarioActual.isPremium())
 				simularTiempo();
 			usuarioActual.setSaldo(saldoActual);
-        	System.out.println(saldoActual);
 			usuarioActual.setPremium(true);
 			adaptadorUsuario.actualizarSaldo(usuarioActual, saldoActual);
 			adaptadorUsuario.actualizarPremium(usuarioActual, true);
@@ -557,7 +552,6 @@ public class ControladorAppMusic implements ICancionesListener{
 		}else
 		{
 			usuarioActual.setPremium(false);
-        	System.out.println("ya no " + saldoActual);
 			adaptadorUsuario.actualizarPremium(usuarioActual, false);
 			return false;
 		}

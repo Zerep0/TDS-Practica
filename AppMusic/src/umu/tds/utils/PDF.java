@@ -79,7 +79,6 @@ public enum PDF {
     	try {
 			documento.add(seccion);
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }

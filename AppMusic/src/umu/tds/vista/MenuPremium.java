@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Panel;
 import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -35,8 +34,6 @@ import umu.tds.helper.AlineamientoLista;
 import umu.tds.helper.CustomSliderUI;
 import umu.tds.negocio.Cancion;
 import umu.tds.negocio.IReproductorListener;
-import umu.tds.observer.IUsuarioListener;
-import umu.tds.observer.UsuarioEvent;
 
 public class MenuPremium extends JPanel implements IReproductorListener{
 	private static final long serialVersionUID = 1L;

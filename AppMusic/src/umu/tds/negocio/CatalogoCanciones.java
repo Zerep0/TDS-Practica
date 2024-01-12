@@ -3,7 +3,6 @@ package umu.tds.negocio;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -38,7 +37,6 @@ public class CatalogoCanciones {
 			cancionesMasEscuchadas = new LinkedList<Cancion>();
 			this.cargarCatalogo();
 		} catch (DAOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -54,7 +52,6 @@ public class CatalogoCanciones {
 	
 	public void registrarCanciones(List<Cancion> canciones)
 	{
-		// TODO: dada una lista de canciones las registra
 		for (Cancion c : canciones) {
 			registrarCancion(c);
 		}
@@ -62,7 +59,6 @@ public class CatalogoCanciones {
 	
 	public void registrarCancion(Cancion cancion)
 	{
-		// TODO: registra una cancion en el catalogo y en la base de datos
 		int id = adaptadorCancion.registrarCancion(cancion);
 		cancion.setId(id);
 		canciones.put(cancion.getInterprete() + "_" + cancion.getTitulo(), cancion);
@@ -70,7 +66,6 @@ public class CatalogoCanciones {
 	
 	public List<Cancion> getCanciones()
 	{
-		// TODO:
 		List<Cancion> listaCanciones = new LinkedList<Cancion>();
 		for(Cancion c:canciones.values())
 		{

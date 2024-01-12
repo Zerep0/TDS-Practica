@@ -214,7 +214,6 @@ public class Registro extends JPanel {
             }
 
 			public void changedUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
 				
 			}
 		});
